@@ -31,7 +31,7 @@ def doc(session):
 
     if open_doc:
         open_cmd = "xdg-open" if sys.platform == "linux" else "open"
-        session.run(open_cmd, "http://localhost:8000/systems/fillname/")
+        session.run(open_cmd, "http://localhost:8000/systems/mkdoclingo/")
         session.run("mkdocs", "serve", *options)
     else:
         session.run("mkdocs", "build", *options)
@@ -53,7 +53,7 @@ def lint_pylint(session):
     Run pylint.
     """
     session.install("-e", ".[lint_pylint]")
-    session.run("pylint", "fillname", "tests")
+    session.run("pylint", "mkdoclingo", "tests")
 
 
 @nox.session
@@ -62,7 +62,7 @@ def typecheck(session):
     Typecheck the code using mypy.
     """
     session.install("-e", ".[typecheck]")
-    session.run("mypy", "--strict", "-p", "fillname", "-p", "tests")
+    session.run("mypy", "--strict", "-p", "mkdoclingo", "-p", "tests")
 
 
 @nox.session(python=PYTHON_VERSIONS)

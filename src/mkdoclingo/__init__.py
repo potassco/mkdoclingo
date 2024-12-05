@@ -1,0 +1,3 @@
+"""
+The mkdoclingo project.
+"""

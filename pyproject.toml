@@ -3,16 +3,16 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fillname"
-authors = [{ name = "Author Fillname", email = "author@fillname.org" }]
-description = "A template project."
+name = "mkdoclingo"
+authors = [{ name = "Potassco", email = "hahnmartinlu@uni-potsdam.de" }]
+description = "Mkdocs plugin to generate documentation from clingo files"
 requires-python = ">=3.9"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://fillname.org/"
+Homepage = "https://github.com/potassco/mkdoclingo.git/"
 
 [project.optional-dependencies]
 format = ["black", "isort", "autoflake"]
@@ -20,10 +20,10 @@ lint_pylint = ["pylint"]
 typecheck = ["types-setuptools", "mypy"]
 test = ["coverage[toml]"]
 doc = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
-dev = ["fillname[test,typecheck,lint_pylint]"]
+dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 
 [project.scripts]
-fillname = "fillname.__main__:main"
+mkdoclingo = "mkdoclingo.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -66,8 +66,8 @@ variable-rgx = "^[a-z][a-z0-9]*((_[a-z0-9]+)*_?)?$"
 good-names = ["_"]
 
 [tool.coverage.run]
-source = ["fillname", "tests"]
-omit = ["*/fillname/__main__.py"]
+source = ["mkdoclingo", "tests"]
+omit = ["*/mkdoclingo/__main__.py"]
 
 [tool.coverage.report]
 exclude_lines = ["assert", "nocoverage"]

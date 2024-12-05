@@ -4,7 +4,7 @@ hide:
   - toc
 ---
 
-# fillname
+# mkdoclingo
 
 !!! info
-    *fillname* is part of the [Potassco](https://potassco.org) suite.
+    *mkdoclingo* is part of the [Potassco](https://potassco.org) suite.

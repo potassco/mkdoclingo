@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Reference
 
 Welcome to the **Reference** section! 📚

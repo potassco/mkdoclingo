@@ -1,0 +1,112 @@
+
+<h3><code> {{path}} </code></h3>
+<table>
+    <thead>
+        <tr>
+            <th>Predicate</th>
+            <th>Description</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in predicates if x.type == 'defined' %}
+        <tr>
+            <td><code>{{ x.name }}/{{x.arity}}</code></td>
+            <td>{{ x.description }}</td>
+            <td>
+                <span style="color:#9178C6" title="Defined (input)">
+                    <span class="twemoji">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M4 15V9h8V4.16L19.84 12 12 19.84V15z"></path>
+                        </svg>
+                    </span>
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+        {% for x in predicates if x.type == 'auxiliary' %}
+        <tr>
+            <td><code>{{ x.name }}/{{x.arity}}</code></td>
+            <td>{{ x.description }}</td>
+            <td>
+                <span style="color:#838383" title="Hidden (Auxiliary)"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.5c-3.8 0-7.2-2.1-8.8-5.5H1c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5h-2.2c-1.6 3.4-5 5.5-8.8 5.5"></path></svg></span>
+            </td>
+        </tr>
+        {% endfor %}
+        {% for x in predicates if x.type == 'shown' %}
+        <tr>
+            <td><code>{{ x.name }}/{{x.arity}}</code></td>
+            <td>{{ x.description }}</td>
+            <td>
+                <span style="color:#52BF54" title="Shown (Output)"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"></path></svg></span></span>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+``` mermaid
+flowchart LR
+    {% for x in predicates %}
+    {{x.name}}/{{x.arity}}(["{{x.name}}/{{x.arity}}"])
+    {% endfor %}
+    classDef all fill:#00000000
+    classDef in stroke:#9178C6,stroke-width:3px;
+    classDef out stroke:#52BF54,stroke-width:3px;
+    classDef aux stroke:#848484,stroke-width:0.2px;
+    class {% for x in predicates %}{{x.name}}/{{x.arity}},{% endfor %} all;
+    class {% for x in predicates%}{%if x.type== 'defined'%}{{x.name}}/{{x.arity}},{% endif %}{% endfor %} in;
+    class {% for x in predicates%}{%if x.type== 'shown'%}{{x.name}}/{{x.arity}},{% endif %}{% endfor %} out;
+    class {% for x in predicates%}{%if x.type== 'auxiliary'%}{{x.name}}/{{x.arity}},{% endif %}{% endfor %} aux;
+```
+
+<details class="quote">
+<summary>Source code</summary>
+<div class="highlight">
+```prolog
+{{content}}
+```
+</div>
+</details>
+
+<div class="admonition asp-doc">
+<p class="admonition-title">ASP Encoding (expanded)</p>
+<p>
+```prolog
+{{content}}
+```
+</p>
+</div>
+
+## Glossary
+
+{% for x in predicates %}
+#### <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code> `{{x.name}}/{{x.arity}}`
+
+{{x.description}}
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in x.parameters %}
+        <tr>
+            <td><code>{{ p.name }}</code></td>
+            <td>{{ p.description }}</td>
+            <td>{{ p.type }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br/>
+{% endfor %}
+
+

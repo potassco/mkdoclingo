@@ -4,7 +4,9 @@ from dataclasses import dataclass, field
 
 from tree_sitter import Tree
 
+from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
 from mkdocstrings_handlers.asp.semantics.collector import Collector
+from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
 from mkdocstrings_handlers.asp.semantics.statement import Statement
 from mkdocstrings_handlers.asp.tree_sitter.parser import ASPParser
 
@@ -19,6 +21,8 @@ class Document:
     content: str
     tree: Tree
     statements: list[Statement] = field(default_factory=list)
+    line_comments: list[LineComment] = field(default_factory=list)
+    block_comments: list[BlockComment] = field(default_factory=list)
 
     @staticmethod
     def new(title: str, content: str) -> Document:
@@ -36,7 +40,6 @@ class Document:
         # Parse content to tree
         parser = ASPParser()
         tree = parser.parse(content)
-
         # Collect data from tree
         collector = Collector()
         collector.collect(tree)
@@ -46,4 +49,6 @@ class Document:
             content=content,
             tree=tree,
             statements=collector.statements,
+            line_comments=collector.line_comments,
+            block_comments=collector.block_comments,
         )

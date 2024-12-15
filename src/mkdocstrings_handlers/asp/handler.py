@@ -7,8 +7,9 @@ from typing import Any
 
 from mkdocstrings.handlers.base import BaseHandler
 
-from mkdocstrings_handlers.asp.dependency_graph import get_dependency_graph
 from mkdocstrings_handlers.asp.document import Document
+from mkdocstrings_handlers.asp.features.dependency_graph import get_dependency_graph
+from mkdocstrings_handlers.asp.features.glossary import Glossary
 
 
 class ASPHandler(BaseHandler):
@@ -73,6 +74,7 @@ class ASPHandler(BaseHandler):
             "title": document.title,
             "encoding": document.content,
             "dependency_graph": get_dependency_graph(document),
+            "glossary": Glossary.from_document(document),
         }
 
         return data

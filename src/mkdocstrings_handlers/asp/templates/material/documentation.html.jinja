@@ -9,3 +9,9 @@
 {% if dependency_graph %}
     {% include 'dependency_graph.html.jinja' %}
 {% endif %}
+
+{% if glossary %}
+    {% include 'separator.html.jinja' %}
+
+    {% include 'glossary.html.jinja' %}
+{% endif %}

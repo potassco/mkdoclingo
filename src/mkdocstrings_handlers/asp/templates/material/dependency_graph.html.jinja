@@ -1,15 +1,15 @@
 {% set mermaid_diagram %}
 ```mermaid
 flowchart LR
-    {% for dependency in dependency_graph %}
+    {%- for dependency in dependency_graph %}
     {{dependency}}(["{{dependency}}"])
-         {% for positive in dependency_graph[dependency].positive %}
+         {%- for positive in dependency_graph[dependency].positive %}
          {{dependency}} --> {{positive}}
-         {% endfor %}
-         {% for negative in dependency_graph[dependency].negative %}
+         {%- endfor %}
+         {%- for negative in dependency_graph[dependency].negative %}
          {{dependency}} -.-> {{negative}}
-         {% endfor %}
-    {% endfor %}
+         {%- endfor %}
+    {%- endfor %}
     classDef all fill:#00000000
     classDef in stroke:#9178C6,stroke-width:3px;
     classDef out stroke:#52BF54,stroke-width:3px;

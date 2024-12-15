@@ -2,11 +2,12 @@
 Module containing the handler for ASP files.
 """
 
-import os
+from pathlib import Path
 from typing import Any
 
-import markdown
 from mkdocstrings.handlers.base import BaseHandler
+
+from mkdocstrings_handlers.asp.document import Document
 
 
 class ASPHandler(BaseHandler):
@@ -34,7 +35,7 @@ class ASPHandler(BaseHandler):
         """
         super().__init__("asp", theme)
 
-    def collect(self, identifier: str, config: dict) -> dict:
+    def collect(self, identifier: str, config: dict) -> dict | None:
         """
         Collect data from ASP files.
 
@@ -49,25 +50,30 @@ class ASPHandler(BaseHandler):
         """
 
         # All identifiers that are not valid paths to an ASP file should be ignored
-        path = identifier
+        # path = identifier
 
-        if not path.endswith(".lp"):
+        # if not path.endswith(".lp"):
+        #     return None
+
+        # if not os.path.exists(path):
+        #     return None
+
+        path = Path(identifier)
+        if path.suffix != ".lp" or not path.is_file():
             return None
 
-        if not os.path.exists(path):
-            return None
-
-        # Collect data for the associated ASP file
+        # Read ASP file
         with open(path, "r") as f:
             content = f.read()
 
-            # TODO: Implement actual data collection,
-            # this is just a basic example placeholder
-            encoding_data = {
-                "content": content,
-            }
+        document = Document.new(path, content)
 
-        return encoding_data
+        data = {
+            "title": document.title,
+            "encoding": document.content,
+        }
+
+        return data
 
     def render(self, data: dict, config: dict):
         """
@@ -86,14 +92,6 @@ class ASPHandler(BaseHandler):
         if data is None:
             return None
 
-        # Render the data using a Jinja2 template
-        # this effectively replaces all variables in the template with the provided data
-        template = self.env.get_template("example_template.html")
-        first_render = template.render(data)
-
-        # Render the result a second time to convert the markdown contained in the template to html
-        # for now this is sufficient, but other projects use this function within the templates themselves
-        # so this may have to be revised.
-        second_render = self.do_convert_markdown(first_render, 0)
-
-        return second_render
+        # Get and render the documentation template
+        template = self.env.get_template("documentation.html.jinja")
+        return template.render(data)

@@ -6,7 +6,6 @@ from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
 from mkdocstrings_handlers.asp.semantics.literal import Literal
-from mkdocstrings_handlers.asp.tree_sitter.debug import print_tree
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.parser import ASPParser
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse

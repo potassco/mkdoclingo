@@ -96,6 +96,8 @@ class ASPHandler(BaseHandler):
         if data is None:
             return None
 
+        print(config)
+
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")
-        return template.render(data)
+        return template.render(**data, config=config)

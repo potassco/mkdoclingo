@@ -45,3 +45,24 @@ Instructions to install and use `nox` can be found in
    ::: some/path/to/encoding.lp
        handler: asp
    ```
+
+## Options
+
+The output is customizable via options.
+
+For example:
+
+```
+::: some/path/to/encoding.lp
+    handler: asp
+    options:
+        source: true
+```
+
+shows the source code of the corresponding encoding.
+
+### Currently available options
+
+- `source`: Source code of the encoding
+- `dependency_graph`: Predicate dependency graph of the encoding
+- `glossary`: Sorted information about predicates

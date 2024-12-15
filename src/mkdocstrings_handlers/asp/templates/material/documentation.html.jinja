@@ -1,16 +1,16 @@
 <h3><code>{{title}}</code></h3>
 
-{% if encoding %}
+{% if config.source %}
     {% with source = encoding %}
         {% include 'source.html.jinja' %}
     {% endwith %}
 {% endif %}
 
-{% if dependency_graph %}
+{% if config.dependency_graph %}
     {% include 'dependency_graph.html.jinja' %}
 {% endif %}
 
-{% if glossary %}
+{% if config.glossary %}
     {% include 'separator.html.jinja' %}
 
     {% include 'glossary.html.jinja' %}

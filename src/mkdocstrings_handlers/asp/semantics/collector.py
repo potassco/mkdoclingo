@@ -1,5 +1,7 @@
 from tree_sitter import Node
 
+from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
+from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
 from mkdocstrings_handlers.asp.semantics.literal import Literal
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse
@@ -23,6 +25,8 @@ class Collector:
 
         # data
         self.statements: list[Statement] = []
+        self.line_comments: list[LineComment] = []
+        self.block_comments: list[BlockComment] = []
 
     def collect(self, tree):
         """
@@ -61,6 +65,12 @@ class Collector:
                     statement.add_provided(literal)
                 else:
                     statement.add_needed(literal)
+            case NodeKind.LINE_COMMENT:
+                line_comment = LineComment.from_node(node)
+                self.line_comments.append(line_comment)
+            case NodeKind.BLOCK_COMMENT:
+                block_comment = BlockComment.from_node(node)
+                self.block_comments.append(block_comment)
             case _:
                 pass
 

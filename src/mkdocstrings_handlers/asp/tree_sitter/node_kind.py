@@ -12,6 +12,8 @@ class NodeKind(Enum):
     BODY = "body"
     SYMBOLIC_ATOM = "symbolic_atom"
     LITERAL_TUPLE = "literal_tuple"
+    LINE_COMMENT = "line_comment"
+    BLOCK_COMMENT = "block_comment"
 
     @staticmethod
     def from_grammar_name(grammar_name: str):

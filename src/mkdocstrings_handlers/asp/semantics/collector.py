@@ -3,6 +3,7 @@ from tree_sitter import Node
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
 from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
 from mkdocstrings_handlers.asp.semantics.literal import Literal
+from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse
 
@@ -27,6 +28,7 @@ class Collector:
         self.statements: list[Statement] = []
         self.line_comments: list[LineComment] = []
         self.block_comments: list[BlockComment] = []
+        self.predicate_documentations: list[PredicateDocumentation] = []
 
     def collect(self, tree):
         """
@@ -71,6 +73,12 @@ class Collector:
             case NodeKind.BLOCK_COMMENT:
                 block_comment = BlockComment.from_node(node)
                 self.block_comments.append(block_comment)
+
+                # Predicate documentation
+                predicate_documentation = PredicateDocumentation.from_block_comment(block_comment)
+                if predicate_documentation is not None:
+                    self.predicate_documentations.append(predicate_documentation)
+
             case _:
                 pass
 

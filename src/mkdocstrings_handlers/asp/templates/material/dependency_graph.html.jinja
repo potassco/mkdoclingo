@@ -1,0 +1,26 @@
+{% set mermaid_diagram %}
+```mermaid
+flowchart LR
+    {% for dependency in dependency_graph %}
+    {{dependency}}(["{{dependency}}"])
+         {% for positive in dependency_graph[dependency].positive %}
+         {{dependency}} --> {{positive}}
+         {% endfor %}
+         {% for negative in dependency_graph[dependency].negative %}
+         {{dependency}} -.-> {{negative}}
+         {% endfor %}
+    {% endfor %}
+    classDef all fill:#00000000
+    classDef in stroke:#9178C6,stroke-width:3px;
+    classDef out stroke:#52BF54,stroke-width:3px;
+    classDef aux stroke:#848484,stroke-width:0.2px;
+```
+{% endset %}
+
+{% if dependency_graph %}
+<h3>Dependency graph</h3>
+{% else %}
+<h3>Dependency graph not available</h3>
+{% endif %}
+
+{{ mermaid_diagram | convert_markdown(1, "depdendency_graph") }}

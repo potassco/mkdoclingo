@@ -7,6 +7,7 @@ from typing import Any
 
 from mkdocstrings.handlers.base import BaseHandler
 
+from mkdocstrings_handlers.asp.dependency_graph import get_dependency_graph
 from mkdocstrings_handlers.asp.document import Document
 
 
@@ -71,6 +72,7 @@ class ASPHandler(BaseHandler):
         data = {
             "title": document.title,
             "encoding": document.content,
+            "dependency_graph": get_dependency_graph(document),
         }
 
         return data

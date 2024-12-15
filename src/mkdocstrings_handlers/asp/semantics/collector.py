@@ -1,5 +1,6 @@
 from tree_sitter import Node
 
+from mkdocstrings_handlers.asp.semantics.literal import Literal
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse
 

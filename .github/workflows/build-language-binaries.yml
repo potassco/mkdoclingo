@@ -1,0 +1,68 @@
+name: Build and Upload Prebuilt Binaries
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  build-linux-binaries:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone tree-sitter-clingo repository
+        run: git clone --branch refactor https://github.com/rkaminsk/tree-sitter-clingo.git
+
+      - name: Install dependencies for building the grammar (Linux)
+        run: sudo apt-get update && sudo apt-get install build-essential
+
+      - name: Build clingo-language.so (Linux)
+        run: |
+          cd tree-sitter-clingo/src
+          gcc -shared -o clingo-language.so -fPIC parser.c
+
+      - name: Upload Linux .so as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: clingo-language-linux
+          path: tree-sitter-clingo/src/clingo-language.so
+
+  build-macos-binaries:
+    runs-on: macos-latest
+
+    steps:
+      - name: Clone tree-sitter-clingo repository
+        run: git clone --branch refactor https://github.com/rkaminsk/tree-sitter-clingo.git
+
+      - name: Install dependencies for building the grammar (macOS)
+        run: brew install gcc
+
+      - name: Build clingo-language.dylib (macOS)
+        run: |
+          cd tree-sitter-clingo/src
+          gcc -shared -o clingo-language.dylib -fPIC parser.c
+
+      - name: Upload macOS .dylib as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: clingo-language-macos
+          path: tree-sitter-clingo/src/clingo-language.dylib
+
+  build-windows-binaries:
+    runs-on: windows-latest
+
+    steps:
+      - name: Clone tree-sitter-clingo repository
+        run: git clone --branch refactor https://github.com/rkaminsk/tree-sitter-clingo.git
+
+      - name: Install dependencies for building the grammar (Windows)
+        run: choco install mingw
+
+      - name: Build clingo-language.dll (Windows)
+        run: |
+          cd tree-sitter-clingo/src
+          mingw-w64-x86_64-gcc -shared -o clingo-language.dll -fPIC parser.c
+
+      - name: Upload Windows .dll as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: clingo-language-windows
+          path: tree-sitter-clingo/src/clingo-language.dll

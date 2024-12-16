@@ -19,7 +19,7 @@ jobs:
           cd tree-sitter-clingo/src
           gcc -shared -o clingo-language.so -fPIC parser.c
 
-      - name: Upload Linux .so as artifact
+      - name: Upload Linux.so as artifact
         uses: actions/upload-artifact@v3
         with:
           name: clingo-language-linux
@@ -40,7 +40,7 @@ jobs:
           cd tree-sitter-clingo/src
           gcc -shared -o clingo-language.dylib -fPIC parser.c
 
-      - name: Upload macOS .dylib as artifact
+      - name: Upload macOS.dylib as artifact
         uses: actions/upload-artifact@v3
         with:
           name: clingo-language-macos
@@ -57,17 +57,17 @@ jobs:
           install: mingw-w64-x86_64-gcc
 
       - name: Clone tree-sitter-clingo repository
-        shell: msys2 {0}
+        shell: bash
         run: |
           git clone --branch refactor https://github.com/rkaminsk/tree-sitter-clingo.git
 
       - name: Build clingo-language.dll (Windows)
-        shell: msys2 {0}
+        shell: bash
         run: |
           cd tree-sitter-clingo/src
-          gcc -shared -o clingo-language.dll -fPIC parser.c
+          x86_64-w64-mingw32-gcc -shared -o clingo-language.dll parser.c
 
-      - name: Upload Windows .dll as artifact
+      - name: Upload Windows.dll as artifact
         uses: actions/upload-artifact@v3
         with:
           name: clingo-language-windows

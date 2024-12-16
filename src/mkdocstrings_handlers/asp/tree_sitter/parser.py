@@ -16,11 +16,11 @@ class ASPParser:
         """
         # Determine the path to the shared library based on the operating system
         if platform == "linux":
-            lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.so")
+            lib_path = os.path.join(os.path.dirname(__file__), "lib/clingo-language.so")
         elif platform == "darwin":
-            lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.dylib")
+            lib_path = os.path.join(os.path.dirname(__file__), "lib/clingo-language.dylib")
         else:
-            lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.dll")
+            lib_path = os.path.join(os.path.dirname(__file__), "lib/clingo-language.dll")
 
         # Load the shared library
         clingo_lib = ctypes.cdll.LoadLibrary(lib_path)

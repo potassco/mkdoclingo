@@ -1,31 +1,59 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+
 from mkdocstrings_handlers.asp.document import Document
 
 
-def get_dependency_graph(document: Document) -> dict:
-    """
-    Get the dependency graph of the given ASP document.
+@dataclass
+class DependencyGraphNode:
+    """Dependency graph node."""
 
-    Args:
-        document: The ASP document.
+    predicate: str
+    """The predicate this node represents."""
+    positive: set[str]
+    """The positive dependencies of the predicate."""
+    negative: set[str]
+    """The negative dependencies of the predicate."""
 
-    Returns:
-        The dependency graph as a dictionary.
-    """
-    data = {}
 
-    for statement in document.statements:
-        for provided in statement.provided_literals:
-            lit_id = f"{provided.identifier}/{provided.arity}"
-            positive = set(
-                map(lambda x: f"{x.identifier}/{x.arity}", filter(lambda x: not x.negation, statement.needed_literals))
-            )
-            negative = set(
-                map(lambda x: f"{x.identifier}/{x.arity}", filter(lambda x: x.negation, statement.needed_literals))
-            )
-            if lit_id not in data:
-                data[lit_id] = {"positive": set(), "negative": set()}
+@dataclass
+class DependencyGraph:
+    """Dependency graph of an ASP document."""
 
-            data[lit_id]["positive"].update(positive)
-            data[lit_id]["negative"].update(negative)
+    nodes: list[DependencyGraphNode]
+    """The nodes of the dependency graph."""
 
-    return data
+    @staticmethod
+    def from_document(document: Document) -> DependencyGraph:
+        """
+        Create a dependency graph from an ASP document.
+
+        Args:
+            document: The ASP document.
+
+        Returns:
+            The dependency graph.
+        """
+
+        nodes: dict[str, DependencyGraphNode] = {}
+
+        for statement in document.statements:
+            for provided in statement.provided_literals:
+                predicate = f"{provided.identifier}/{provided.arity}"
+                positive = set(
+                    map(
+                        lambda x: f"{x.identifier}/{x.arity}",
+                        filter(lambda x: not x.negation, statement.needed_literals),
+                    )
+                )
+                negative = set(
+                    map(lambda x: f"{x.identifier}/{x.arity}", filter(lambda x: x.negation, statement.needed_literals))
+                )
+                if predicate not in nodes:
+                    nodes[predicate] = DependencyGraphNode(predicate, set(), set())
+
+                nodes[predicate].positive.update(positive)
+                nodes[predicate].negative.update(negative)
+
+        return DependencyGraph(list(nodes.values()))

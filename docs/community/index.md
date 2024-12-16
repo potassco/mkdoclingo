@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Community
 
 Welcome to the **Community** hub! 🚀

@@ -1,11 +1,15 @@
-:root {
-    --md-primary-fg-color: #6495ED;
+[data-md-color-scheme="default"] {
+    --md-primary-fg-color: #4378dc;
+    --md-primary-fg-color--light: #4378dc;
+    --md-primary-fg-color--dark: #4378dc;
 }
 
-[data-md-color-scheme="slate"] .md-header,
-[data-md-color-scheme="slate"] .md-tabs {
+[data-md-color-scheme="slate"] {
+    --md-typeset-a-color: #4378dc;
     --md-primary-fg-color: #253758;
+    --md-primary-fg-color--dark: #253758;
 }
+
 
 .md-grid {
     max-width: 1350px;

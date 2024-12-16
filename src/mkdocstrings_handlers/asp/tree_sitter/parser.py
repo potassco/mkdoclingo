@@ -1,5 +1,6 @@
 import ctypes
 import os
+from sys import platform
 
 from tree_sitter import Language, Parser, Tree
 
@@ -13,8 +14,13 @@ class ASPParser:
         """
         Create a new ASP parser.
         """
-        # Determine the path to the shared library
-        lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.so")
+        # Determine the path to the shared library based on the operating system
+        if platform == "linux":
+            lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.so")
+        elif platform == "darwin":
+            lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.dylib")
+        else:
+            lib_path = os.path.join(os.path.dirname(__file__), "clingo-language.dll")
 
         # Load the shared library
         clingo_lib = ctypes.cdll.LoadLibrary(lib_path)

@@ -9,6 +9,9 @@ Generate example documentation
     ``` markdown title="Simple encoding source"
     ::: examples/sudoku/encoding.lp
         handler: asp
+        options:
+            source: true
+
     ```
 
     !!! warning "Don't forget to use `handler: asp`"
@@ -18,4 +21,6 @@ Generate example documentation
 
     ::: examples/sudoku/encoding.lp
         handler: asp
-
+        options:
+            source: true
+            dependency: true

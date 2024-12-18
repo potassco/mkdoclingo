@@ -15,9 +15,14 @@ code.doc-clingo-symbol-predicate::after {
     --md-admonition-icon--asp-doc-ref: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 7h5.5L15 1.5zM8 0h8l6 6v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2M4 4v18h16v2H4a2 2 0 0 1-2-2V4z"/></svg>')
 }
 
+
 .md-typeset .admonition.asp-doc,
 .md-typeset details.asp-doc {
     border-color: var(--md-primary-fg-color);
+}
+
+.md-typeset h5 {
+    text-transform: none;
 }
 
 .md-typeset .admonition.asp-doc-ref,

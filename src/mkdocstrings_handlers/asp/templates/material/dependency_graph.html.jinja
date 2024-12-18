@@ -18,9 +18,9 @@ flowchart LR
 {% endset %}
 
 {% if dependency_graph %}
-<h3>Dependency graph</h3>
+## Dependency graph
 {% else %}
-<h3>Dependency graph not available</h3>
+Dependency graph not available
 {% endif %}
 
-{{ mermaid_diagram | convert_markdown(1, "depdendency_graph") }}
+{{ mermaid_diagram}}

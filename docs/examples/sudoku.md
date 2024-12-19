@@ -10,3 +10,4 @@ Generate example documentation
         source: true
         dependency_graph: true
         glossary: true
+        predicate_table: true

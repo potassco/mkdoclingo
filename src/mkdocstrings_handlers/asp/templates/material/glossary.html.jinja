@@ -1,10 +1,18 @@
+
 {% set glossary_block %}
-## :material-format-list-bulleted-square: Glossary
+
+{# ## :material-format-list-bulleted-square: Glossary {: data-toc-label='Glossary' } #}
+## Glossary { data-toc-label="function_name" }
 
 {% for entry in glossary.entries %}
-#### <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code> {{ entry.signature }}
+{# #### <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code> <code>{{ entry.signature }}</code> #}
+#### {{ entry.signature }}
+{# TODO: Add thi line below to link things once we have the same table #}
+{# <a name="{{ entry.name }}-{{ entry.arity }}"></a> #}
 
-{{ entry.description }}
+{{ entry.description | convert_markdown(5, html_id) }}
+
+{# {{ entry.description }} #}
 
 {%- if entry.parameters %}
 
@@ -18,4 +26,4 @@
 {% endset %}
 
 
-{{ glossary_block | convert_markdown(1, "glossary") }}
+{{ glossary_block }}

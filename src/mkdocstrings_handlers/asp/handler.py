@@ -10,6 +10,7 @@ from mkdocstrings.handlers.base import BaseHandler
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
 from mkdocstrings_handlers.asp.features.glossary import Glossary
+from mkdocstrings_handlers.asp.features.predicates import PredicateList
 
 
 class ASPHandler(BaseHandler):
@@ -75,6 +76,7 @@ class ASPHandler(BaseHandler):
             "encoding": document.content,
             "dependency_graph": DependencyGraph.from_document(document),
             "glossary": Glossary.from_document(document),
+            "predicate_list": PredicateList.from_document(document),
         }
 
         return data
@@ -96,6 +98,7 @@ class ASPHandler(BaseHandler):
         if data is None:
             return None
 
+        print(data)
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")
         return self.do_convert_markdown(template.render(**data, config=config), 0)

@@ -7,8 +7,12 @@
 {% for entry in glossary.entries %}
 {# #### <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code> <code>{{ entry.signature }}</code> #}
 #### {{ entry.signature }}
+{# TODO: Add thi line below to link things once we have the same table #}
+{# <a name="{{ entry.name }}-{{ entry.arity }}"></a> #}
 
-{{ entry.description }}
+{{ entry.description | convert_markdown(5, html_id) }}
+
+{# {{ entry.description }} #}
 
 {%- if entry.parameters %}
 

@@ -1,0 +1,34 @@
+
+{% set hidden_icon %}
+<span style="color:#838383" title="Hidden (Auxiliary)"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.5c-3.8 0-7.2-2.1-8.8-5.5H1c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5h-2.2c-1.6 3.4-5 5.5-8.8 5.5"></path></svg></span>
+{% endset %}
+{% set shown_icon %}
+<span style="color:#52BF54" title="Shown (Output)"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"></path></svg></span></span>
+{% endset %}
+{% set defined_icon %}
+<span style="color:#9178C6" title="Defined (input)"><span class="twemoji"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 15V9h8V4.16L19.84 12 12 19.84V15z"></path></svg></span></span>
+{% endset %}
+
+{% set table %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entry in predicate_list.predicates %}
+        <tr>
+            <td><a href="#{{ entry.name }}-{{ entry.arity }}"><code>{{ entry.name }}/{{ entry.arity }}</code></a></td>
+            <td>{{shown_icon}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endset %}
+
+
+{{ table }}

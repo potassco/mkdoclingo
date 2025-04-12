@@ -85,4 +85,4 @@ class ASPHandler(BaseHandler):
 
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")
-        return self.do_convert_markdown(template.render(**data, config=config), 0)
+        return template.render(**data, config=config)

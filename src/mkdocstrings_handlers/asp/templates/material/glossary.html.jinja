@@ -1,29 +1,41 @@
+{% filter heading(2, id="glossary", toc_label="Glossary") %}
+<span class="md-icon">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span> Glossary
+{% endfilter %}
 
-{% set glossary_block %}
+{% for predicate in predicate_list %}
 
-{# ## :material-format-list-bulleted-square: Glossary {: data-toc-label='Glossary' } #}
-## Glossary { data-toc-label="function_name" }
-
-{% for entry in glossary.entries %}
-{# #### <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code> <code>{{ entry.signature }}</code> #}
-#### {{ entry.signature }}
-{# TODO: Add thi line below to link things once we have the same table #}
-{# <a name="{{ entry.name }}-{{ entry.arity }}"></a> #}
-
-{{ entry.description | convert_markdown(5, html_id) }}
-
-{# {{ entry.description }} #}
-
-{%- if entry.parameters %}
-
-| Parameter | Description                        |
-| :-------- | :--------------------------------- |
-{%- for param, description in entry.parameters.items() %}
-| `{{ param }}` | {{ description }} |
-{%- endfor %}
-{% endif %}
-{% endfor %}
+{% set pred_sig %}
+<code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code>
+<code>{{ predicate.signature }}</code>
 {% endset %}
 
+{% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}
 
-{{ glossary_block }}
+{% filter heading(4, id=predicate_id, toc_label=pred_sig) %}
+{{pred_sig}}
+{% endfilter %}
+
+{%- if predicate.documentation %}
+{{ predicate.documentation.description | convert_markdown(5, html_id) }}
+{% endif %}
+
+{%- if predicate.documentation.parameter_descriptions %}
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%- for param, description in predicate.documentation.parameter_descriptions.items() %}
+    <tr>
+      <td><code>{{ param }}</code></td>
+      <td>{{ description }}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+{%- endif %}
+{%- endfor %}

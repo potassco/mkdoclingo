@@ -2,7 +2,9 @@
 
 {% if config.source %}
     {% with source = encoding %}
-        {% include 'source.html.jinja' %}
+        {% filter convert_markdown(1) %}
+            {% include 'source.html.jinja' %}
+        {% endfilter %}
     {% endwith %}
 {% endif %}
 
@@ -11,11 +13,15 @@
 {% endif %}
 
 {% if config.dependency_graph %}
-    {% include 'dependency_graph.html.jinja' %}
+    {% filter convert_markdown(1) %}
+        {% include 'dependency_graph.html.jinja' %}
+    {% endfilter %}
 {% endif %}
 
 {% if config.glossary %}
-    {% include 'separator.html.jinja' %}
+    {% filter convert_markdown(1) %}
+        {% include 'separator.html.jinja' %}
+    {% endfilter %}
 
     {% include 'glossary.html.jinja' %}
 {% endif %}

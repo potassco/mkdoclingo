@@ -1,3 +1,5 @@
+""" This module contains the classes for building a dependency graph from an ASP document."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

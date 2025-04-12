@@ -1,3 +1,5 @@
+""" This module contains the function to traverse a tree-sitter tree in a pre-order depth-first manner. """
+
 from typing import Callable
 
 from tree_sitter import Node, Tree
@@ -10,7 +12,7 @@ def traverse(tree: Tree, on_enter: Callable[[Node], None], on_exit: Callable[[No
     Args:
         tree: The tree to traverse.
         on_enter: The function to call when entering a node.
-        on_exit: The function to call when exiting a node
+        on_exit: The function to call when exiting a node.
 
     Returns:
         None

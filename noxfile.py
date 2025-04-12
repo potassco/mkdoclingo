@@ -1,3 +1,5 @@
+""" This module contains the nox configuration."""
+
 import os
 import sys
 

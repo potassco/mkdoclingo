@@ -1,3 +1,5 @@
+""" This module contains the Predicate class, which holds information about a specific ASP predicate."""
+
 from __future__ import annotations
 
 import string
@@ -10,6 +12,8 @@ from mkdocstrings_handlers.asp.semantics.predicate_documentation import Predicat
 
 @dataclass
 class Predicate:
+    """A predicate in an ASP document."""
+
     identifier: str
     """ The identifier of the predicate."""
 
@@ -22,13 +26,13 @@ class Predicate:
     @staticmethod
     def from_node(node: Node) -> Predicate:
         """
-        Create a literal from a node.
+        Create a predicate from a node.
 
         Args:
-            node: The node representing the literal.
+            node: The node representing the predicate.
 
         Returns:
-            The created literal.
+            The created predicate.
         """
         atom = node.children[0] if node.child_count == 1 else node.children[1]
 

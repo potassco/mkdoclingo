@@ -18,11 +18,7 @@ class ASPHandler(BaseHandler):
     def __init__(
         self,
         theme: str = "material",
-        config_file_path: str | None = None,
-        paths: list[str] | None = None,
-        locale: str = "en",
-        load_external_modules: bool | None = None,
-        **kwargs: Any,
+        **_kwargs: Any,
     ) -> None:
         """
         Initialize the handler.
@@ -51,21 +47,11 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        # All identifiers that are not valid paths to an ASP file should be ignored
-        # path = identifier
-
-        # if not path.endswith(".lp"):
-        #     return None
-
-        # if not os.path.exists(path):
-        #     return None
-
         path = Path(identifier)
         if path.suffix != ".lp" or not path.is_file():
             return None
 
-        # Read ASP file
-        with open(path, "r") as f:
+        with open(path, "r", encoding="utf-8") as f:
             content = f.read()
 
         document = Document.new(path, content)
@@ -97,7 +83,6 @@ class ASPHandler(BaseHandler):
         if data is None:
             return None
 
-        print(data)
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")
         return self.do_convert_markdown(template.render(**data, config=config), 0)

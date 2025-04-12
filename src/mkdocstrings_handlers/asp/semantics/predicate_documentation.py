@@ -1,3 +1,5 @@
+""" This module contains the 'PredicateDocumentation', which represents the documentation for a predicate."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

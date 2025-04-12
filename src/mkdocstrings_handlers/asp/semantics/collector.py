@@ -1,3 +1,9 @@
+""" This module contains the Collector class, which is used to collect data from an ASP document.
+
+The Collector class traverses the tree of the document and collects information about various elements,
+including statements, comments and predicates.
+"""
+
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
@@ -36,7 +42,6 @@ class Collector:
         """
 
         traverse(tree, self._on_enter, self._on_exit)
-        return
 
     def _on_enter(self, node: Node):
         """

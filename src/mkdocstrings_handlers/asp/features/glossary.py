@@ -1,9 +1,10 @@
+""" This module contains the classes for building a glossary from an ASP document."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from mkdocstrings_handlers.asp.document import Document
-from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
 
 
 @dataclass

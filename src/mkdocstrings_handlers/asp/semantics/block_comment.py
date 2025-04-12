@@ -1,3 +1,5 @@
+""" This module contains the representation of a block or multi-line comment in an ASP document."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

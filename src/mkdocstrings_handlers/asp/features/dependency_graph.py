@@ -25,7 +25,7 @@ class DependencyGraph:
     """The nodes of the dependency graph."""
 
     @staticmethod
-    def from_document(document: Document) -> DependencyGraph:
+    def from_document(document: Document) -> "DependencyGraph":
         """
         Create a dependency graph from an ASP document.
 
@@ -35,25 +35,18 @@ class DependencyGraph:
         Returns:
             The dependency graph.
         """
-
         nodes: dict[str, DependencyGraphNode] = {}
 
         for statement in document.statements:
-            for provided in statement.provided_literals:
-                predicate = f"{provided.identifier}/{provided.arity}"
-                positive = set(
-                    map(
-                        lambda x: f"{x.identifier}/{x.arity}",
-                        filter(lambda x: not x.negation, statement.needed_literals),
-                    )
-                )
-                negative = set(
-                    map(lambda x: f"{x.identifier}/{x.arity}", filter(lambda x: x.negation, statement.needed_literals))
-                )
-                if predicate not in nodes:
-                    nodes[predicate] = DependencyGraphNode(predicate, set(), set())
+            for predicate, _ in statement.provided_predicates:
+                predicate_key = str(predicate)
+                if predicate_key not in nodes:
+                    nodes[predicate_key] = DependencyGraphNode(predicate_key, set(), set())
 
-                nodes[predicate].positive.update(positive)
-                nodes[predicate].negative.update(negative)
+                # Add positive and negative dependencies from needed_predicates
+                positive = {str(p) for p, n in statement.needed_predicates if not n}
+                negative = {str(p) for p, n in statement.needed_predicates if n}
+                nodes[predicate_key].positive.update(positive)
+                nodes[predicate_key].negative.update(negative)
 
         return DependencyGraph(list(nodes.values()))

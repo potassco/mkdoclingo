@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Tuple
 
 from tree_sitter import Node
 
-from .literal import Literal
+from mkdocstrings_handlers.asp.semantics.predicate import Predicate
 
 
 @dataclass
@@ -15,19 +16,19 @@ class Statement:
     """The row in the source file where the statement is located."""
     text: str
     """The text of the statement."""
-    provided_literals: list[Literal]
-    """The literals provided by the statement."""
-    needed_literals: list[Literal]
-    """The literals needed by the statement."""
+    provided_predicates: list[Tuple[Predicate, bool]]
+    """The predicates provided by the statement."""
+    needed_predicates: list[Tuple[Predicate, bool]]
+    """The predicates needed by the statement."""
 
     @staticmethod
     def from_node(node: Node) -> Statement:
         return Statement(
-            row=node.start_point.row, text=node.text.decode("utf-8"), provided_literals=[], needed_literals=[]
+            row=node.start_point.row, text=node.text.decode("utf-8"), provided_predicates=[], needed_predicates=[]
         )
 
-    def add_provided(self, literal: Literal):
-        self.provided_literals.append(literal)
+    def add_provided(self, predicate: Predicate, negation: bool = False):
+        self.provided_predicates.append((predicate, negation))
 
-    def add_needed(self, literal: Literal):
-        self.needed_literals.append(literal)
+    def add_needed(self, predicate: Predicate, negation: bool = False):
+        self.needed_predicates.append((predicate, negation))

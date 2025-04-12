@@ -43,12 +43,19 @@ class Glossary:
 
         entries: list[GlossaryEntry] = []
 
-        for predicate_documentation in document.predicate_documentations:
-            entry = GlossaryEntry(
-                signature=predicate_documentation.literal.text,
-                description=predicate_documentation.description,
-                parameters=predicate_documentation.parameter_descriptions,
-            )
+        for predicate in document.predicates.values():
+            if predicate.documentation is None:
+                entry = GlossaryEntry(
+                    signature=predicate.signature,
+                    description="No description available.",
+                    parameters={},
+                )
+            else:
+                entry = GlossaryEntry(
+                    signature=predicate.documentation.signature,
+                    description=predicate.documentation.description,
+                    parameters=predicate.documentation.parameter_descriptions,
+                )
             entries.append(entry)
 
         entries.sort(key=lambda x: x.signature)

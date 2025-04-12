@@ -10,7 +10,6 @@ from mkdocstrings.handlers.base import BaseHandler
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
 from mkdocstrings_handlers.asp.features.glossary import Glossary
-from mkdocstrings_handlers.asp.features.predicates import PredicateList
 
 
 class ASPHandler(BaseHandler):
@@ -76,7 +75,7 @@ class ASPHandler(BaseHandler):
             "encoding": document.content,
             "dependency_graph": DependencyGraph.from_document(document),
             "glossary": Glossary.from_document(document),
-            "predicate_list": PredicateList.from_document(document),
+            "predicate_list": list(document.predicates.values()),
         }
 
         return data

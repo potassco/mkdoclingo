@@ -16,6 +16,8 @@ class NodeKind(Enum):
     LITERAL_TUPLE = "literal_tuple"
     LINE_COMMENT = "line_comment"
     BLOCK_COMMENT = "block_comment"
+    SHOW_SIGNATURE = "show_signature"
+    INCLUDE = "include"
 
     @staticmethod
     def from_grammar_name(grammar_name: str):

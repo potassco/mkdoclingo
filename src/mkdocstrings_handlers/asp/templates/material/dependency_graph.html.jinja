@@ -1,4 +1,10 @@
-{% set mermaid_diagram %}
+{% if dependency_graph %}
+## Dependency graph
+{% else %}
+Dependency graph not available
+{% endif %}
+
+{% filter convert_markdown(0) %}
 ```mermaid
 flowchart LR
     {%- for node in dependency_graph.nodes %}
@@ -15,12 +21,4 @@ flowchart LR
     classDef out stroke:#52BF54,stroke-width:3px;
     classDef aux stroke:#848484,stroke-width:0.2px;
 ```
-{% endset %}
-
-{% if dependency_graph %}
-## Dependency graph
-{% else %}
-Dependency graph not available
-{% endif %}
-
-{{ mermaid_diagram}}
+{% endfilter %}

@@ -7,6 +7,8 @@ including statements, comments and predicates.
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
+from mkdocstrings_handlers.asp.semantics.directives.include import Include
+from mkdocstrings_handlers.asp.semantics.directives.show_signature import ShowSignature
 from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
 from mkdocstrings_handlers.asp.semantics.predicate import Predicate
 from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
@@ -35,6 +37,7 @@ class Collector:
         self.line_comments: list[LineComment] = []
         self.block_comments: list[BlockComment] = []
         self.predicates: dict[str, Predicate] = {}
+        self.includes: list[Include] = []
 
     def collect(self, tree):
         """
@@ -99,6 +102,12 @@ class Collector:
                 predicate.documentation = predicate_documentation
                 predicate.documentation.node = None
 
+            case NodeKind.SHOW_SIGNATURE:
+                ShowSignature.from_node(node)
+
+            case NodeKind.INCLUDE:
+                include = Include.from_node(node)
+                self.includes.append(include)
             case _:
                 pass
 

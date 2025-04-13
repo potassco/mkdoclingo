@@ -1,8 +1,14 @@
+""" This module contains the Collector class, which is used to collect data from an ASP document.
+
+The Collector class traverses the tree of the document and collects information about various elements,
+including statements, comments and predicates.
+"""
+
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
 from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
-from mkdocstrings_handlers.asp.semantics.literal import Literal
+from mkdocstrings_handlers.asp.semantics.predicate import Predicate
 from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse
@@ -28,7 +34,7 @@ class Collector:
         self.statements: list[Statement] = []
         self.line_comments: list[LineComment] = []
         self.block_comments: list[BlockComment] = []
-        self.predicate_documentations: list[PredicateDocumentation] = []
+        self.predicates: dict[str, Predicate] = {}
 
     def collect(self, tree):
         """
@@ -36,7 +42,6 @@ class Collector:
         """
 
         traverse(tree, self._on_enter, self._on_exit)
-        return
 
     def _on_enter(self, node: Node):
         """
@@ -60,13 +65,18 @@ class Collector:
                 statement = Statement.from_node(node)
                 self.statements.append(statement)
             case NodeKind.SYMBOLIC_ATOM:
-                literal = Literal.from_node(node.parent)
+                predicate = Predicate.from_node(node.parent)
                 statement = self.statements[-1]
 
-                if self.head and not self.inside_tuple:
-                    statement.add_provided(literal)
+                if str(predicate) not in self.predicates:
+                    self.predicates[str(predicate)] = predicate
                 else:
-                    statement.add_needed(literal)
+                    predicate = self.predicates[str(predicate)]
+
+                if self.head and not self.inside_tuple:
+                    statement.add_provided(predicate)
+                else:
+                    statement.add_needed(predicate)
             case NodeKind.LINE_COMMENT:
                 line_comment = LineComment.from_node(node)
                 self.line_comments.append(line_comment)
@@ -76,8 +86,18 @@ class Collector:
 
                 # Predicate documentation
                 predicate_documentation = PredicateDocumentation.from_block_comment(block_comment)
-                if predicate_documentation is not None:
-                    self.predicate_documentations.append(predicate_documentation)
+                if predicate_documentation is None:
+                    return
+
+                predicate = Predicate.from_node(predicate_documentation.node)
+
+                if str(predicate) not in self.predicates:
+                    self.predicates[str(predicate)] = predicate
+                else:
+                    predicate = self.predicates[str(predicate)]
+
+                predicate.documentation = predicate_documentation
+                predicate.documentation.node = None
 
             case _:
                 pass

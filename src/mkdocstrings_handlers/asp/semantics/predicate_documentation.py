@@ -1,3 +1,5 @@
+""" This module contains the 'PredicateDocumentation', which represents the documentation for a predicate."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -5,7 +7,6 @@ from dataclasses import dataclass, field
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
-from mkdocstrings_handlers.asp.semantics.literal import Literal
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.parser import ASPParser
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse
@@ -18,7 +19,7 @@ class PredicateDocumentation:
 
 
     Example:
-        %*#some_predicate(B,A,C).
+        %*#some_predicate(A,B,C).
         description
         #parameters
         - A : this is  A
@@ -27,12 +28,14 @@ class PredicateDocumentation:
         *%
     """
 
-    literal: Literal
-    """ The literal representing the predicate. """
+    signature: str
+    """ The signature of the predicate. """
     description: str
     """ The description of the predicate. """
     parameter_descriptions: dict[str, str] = field(default_factory=dict)
     """ The descriptions of the parameters of the predicate. """
+    node: Node | None = None
+    """ The node representing the predicate. """
 
     @staticmethod
     def from_block_comment(comment: BlockComment) -> PredicateDocumentation | None:
@@ -52,12 +55,12 @@ class PredicateDocumentation:
         signature = comment.lines[0].removeprefix("#").strip()
 
         # Parse the signature to get the literal
-        literal = None
+        predicate_node = None
 
         def identifier_from_node(node: Node):
-            nonlocal literal
+            nonlocal predicate_node
             if NodeKind.from_grammar_name(node.grammar_name) == NodeKind.SYMBOLIC_ATOM:
-                literal = Literal.from_node(node.parent)
+                predicate_node = node.parent
 
         parser = ASPParser()
         tree = parser.parse(signature)
@@ -84,5 +87,8 @@ class PredicateDocumentation:
                     parameter_descriptions[parameter.strip()] = parameter_description.strip()
 
         return PredicateDocumentation(
-            literal=literal, description=description, parameter_descriptions=parameter_descriptions
+            signature=signature.removesuffix("."),
+            description=description,
+            parameter_descriptions=parameter_descriptions,
+            node=predicate_node,
         )

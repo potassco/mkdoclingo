@@ -9,6 +9,10 @@
 <span style="color:#9178C6" title="Defined (input)"><span class="twemoji"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 15V9h8V4.16L19.84 12 12 19.84V15z"></path></svg></span></span>
 {% endset %}
 
+{% set shown_icons %}
+<span style="color:#52BF54;background-color: #9178C6;" title="Shown (Output)">{{ ":material-eye:"|convert_markdown(0) }}</span>
+{% endset %}
+
 {% set table %}
 
 <table>
@@ -19,10 +23,10 @@
         </tr>
     </thead>
     <tbody>
-    {% for entry in predicate_list.predicates %}
+    {% for entry in predicate_list %}
         <tr>
-            <td><a href="#{{ entry.name }}-{{ entry.arity }}"><code>{{ entry.name }}/{{ entry.arity }}</code></a></td>
-            <td>{{shown_icon}}</td>
+            <td><a href="#{{ entry.identifier }}-{{ entry.arity }}"><code>{{ entry.signature }}</code></a></td>
+            <td style="padding-top: 0; padding-bottom: 0;">{{shown_icons}}</td>
         </tr>
     {% endfor %}
     </tbody>

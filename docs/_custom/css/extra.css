@@ -32,3 +32,9 @@
     height: 1.5rem;
     width: 1.5rem;
 }
+
+.md-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}

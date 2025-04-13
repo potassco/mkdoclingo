@@ -1,8 +1,6 @@
-{% set source_block %}
+{% filter convert_markdown(0) %}
 ??? quote "Source"
     ```prolog
     {{ source | indent(4) }}
     ```
-{% endset %}
-
-{{ source_block}}
+{% endfilter %}

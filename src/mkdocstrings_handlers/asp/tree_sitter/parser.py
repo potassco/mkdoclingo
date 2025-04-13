@@ -1,3 +1,5 @@
+""" This module contains the ASPParser class, which uses tree-sitter to parse ASP text."""
+
 import ctypes
 import os
 from sys import platform
@@ -30,9 +32,9 @@ class ASPParser:
         tree_sitter_clingo.restype = ctypes.c_void_p
 
         # Create a Language object using the function pointer
-        CLINGO_LANGUAGE = Language(tree_sitter_clingo())
+        clingo_language = Language(tree_sitter_clingo())
 
-        self.parser = Parser(CLINGO_LANGUAGE)
+        self.parser = Parser(clingo_language)
 
     def parse(self, text: str) -> Tree:
         """

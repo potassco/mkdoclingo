@@ -1,8 +1,6 @@
-{% if dependency_graph %}
-## Dependency graph
-{% else %}
-Dependency graph not available
-{% endif %}
+{% filter heading(2, id="dependency_graph", toc_label="Dependency Graph") %}
+<span class="md-icon">{{ ":material-graphql:"|convert_markdown(3) }}</span> Dependency Graph
+{% endfilter %}
 
 {% filter convert_markdown(0) %}
 ```mermaid

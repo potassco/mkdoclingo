@@ -1,30 +1,29 @@
 ---
-icon: material/motorbike
+icon: material/head-question
 ---
 
-# Product Configuration
+# Asplain
 
-Documentation generated automatically, showcasing the use of `mkdoclingo` for a large project
-where the documentation of predicates is in a separate file.
+Documentation generated automatically for a system generating explanation graphs.
 
 
 !!! example "Usage"
 
     ```
-    ::: examples/config/doc.lp
+    ::: examples/asplain/abduction.lp
         handler: asp
         options:
-            source: true
             glossary: true
             predicate_table: true
+            dependency_graph: true
     ```
 
 ## :material-arrow-down-box: Documentation generated
 
-::: examples/config/doc.lp
+::: examples/asplain/abduction.lp
     handler: asp
     options:
-        source: true
         glossary: true
         predicate_table: true
+        dependency_graph: true
         start_level: 2

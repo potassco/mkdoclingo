@@ -88,6 +88,10 @@ class ASPHandler(BaseHandler):
         if data is None:
             return None
 
+        if "start_level" not in config:
+            config["start_level"] = 1
+
+        print(config["start_level"])
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")
         # print("Rendering template with data:", data)

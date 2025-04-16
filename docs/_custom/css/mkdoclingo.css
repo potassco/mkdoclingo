@@ -46,17 +46,17 @@ code.doc-clingo-symbol-predicate::after {
 
 .md-typeset .admonition.asp-doc-ref,
 .md-typeset details.asp-doc-ref {
-    border-color: #ca91bf;
+    border-color: #9d9d9d;
 }
 
 .md-typeset .asp-doc>.admonition-title,
 .md-typeset .asp-doc>summary {
-    background-color: #1669B810;
+    background-color: #9d9d9d10;
 }
 
 .md-typeset .asp-doc-ref>.admonition-title,
 .md-typeset .asp-doc-ref>summary {
-    background-color: #ca91bf10;
+    background-color: #9d9d9d10;
 }
 
 .md-typeset .asp-doc>.admonition-title::before,
@@ -67,7 +67,7 @@ code.doc-clingo-symbol-predicate::after {
 }
 
 .md-typeset .asp-doc-ref>summary::before {
-    background-color: #ca91bf;
+    background-color: #9d9d9d;
     -webkit-mask-image: var(--md-admonition-icon--asp-doc-ref);
     mask-image: var(--md-admonition-icon--asp-doc-ref);
 }

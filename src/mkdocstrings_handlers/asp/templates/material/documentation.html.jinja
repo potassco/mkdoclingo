@@ -9,7 +9,7 @@
     <code>{{ title }}</code>
 {% endset %}
 
-{% filter heading(3, id=file_id, toc_label=file_sig) %}
+{% filter heading(config.start_level+1, id=file_id, toc_label=file_sig) %}
     <a href="{{project_url_tree}}{{title}}" target="_blank" rel="noopener noreferrer">
         {{git_logo}}
     </a>

@@ -1,4 +1,4 @@
-{% filter heading(2, id="glossary", toc_label="Glossary") %}
+{% filter heading(config.start_level+1, id="glossary", toc_label="Glossary") %}
 <span class="md-icon">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span> Glossary
 {% endfilter %}
 
@@ -11,7 +11,7 @@
 
 {% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}
 
-{% filter heading(4, id=predicate_id, toc_label=pred_sig) %}
+{% filter heading(config.start_level+2, id=predicate_id, toc_label=pred_sig) %}
 {{pred_sig}}
 {% endfilter %}
 

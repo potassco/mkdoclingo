@@ -1,4 +1,5 @@
 #include "base/defined.lp".
+#include "doc.lp".
 
 #include "base/structure.lp".
 #include "base/discrete.lp".

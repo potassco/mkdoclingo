@@ -122,6 +122,7 @@ nav:
   - Examples:
       - examples/index.md
       - examples/sudoku.md
+      - examples/config.md
   - Reference:
       - reference/index.md
       - Problem: reference/problem/index.md

@@ -8,15 +8,18 @@ flowchart LR
     {%- for node in dependency_graph.nodes %}
     {{node.predicate}}(["{{node.predicate}}"])
          {%- for positive in node.positive %}
-         {{node.predicate}} --> {{positive}}
+         {{positive}} --> {{node.predicate}}
          {%- endfor %}
          {%- for negative in node.negative %}
-         {{node.predicate}} -.-> {{negative}}
+         {{negative}} -.-> {{node.predicate}}
          {%- endfor %}
     {%- endfor %}
     classDef all fill:#00000000
-    classDef in stroke:#9178C6,stroke-width:3px;
+    class {% for node in dependency_graph.nodes %}{{node.predicate}},{% endfor %} all;
     classDef out stroke:#52BF54,stroke-width:3px;
+    class {% for node in dependency_graph.nodes %}{{node.predicate}},{% endfor %} out;
+    classDef in stroke:#9178C6,stroke-width:3px;
+    class {% for node in dependency_graph.nodes %}{% if node.predicate_object.is_input %}{{node.predicate}},{% endif %}{% endfor %} in;
     classDef aux stroke:#848484,stroke-width:0.2px;
 ```
 {% endfilter %}

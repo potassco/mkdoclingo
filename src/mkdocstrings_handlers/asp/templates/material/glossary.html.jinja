@@ -38,4 +38,45 @@
   </tbody>
 </table>
 {%- endif %}
+{% set test_files= ["file.lp","test.lp"]%}
+
+<details class="asp-doc-ref">
+  <summary>References</summary>
+  <div class="tabbed-set tabbed-alternate" data-tabs="1:{{test_files|length}}" style="--md-indicator-x: 0px; --md-indicator-width: 92px;">
+  {%- for file in test_files %}
+  <input {% if loop.index == 1%} checked="checked" {% endif %} id="__tabbed-{{predicate_id}}-{{loop.index}}" name="__tabbed-{{predicate_id}}" type="radio">
+  {%-endfor%}
+  <div class="tabbed-labels tabbed-labels--linked">
+  {%- for file in test_files %}
+  <label
+    for="__tabbed-{{predicate_id}}-{{loop.index}}">
+    <code>{{file}}</code></label>
+  {%-endfor%}
+  </div>
+  <div class="tabbed-content">
+  {%- for file in test_files %}
+  <div class="tabbed-block">
+  {% filter convert_markdown(0) %}
+  {% for statement in statements %}
+  {% if predicate not in statement.needed_predicates %}
+  ```prolog linenums="{{statement.row+1}}" hl_lines="1"
+    {{ statement.text| safe | indent(4) }}
+  ```
+  {% endif %}
+  {% if predicate not in statement.provided_predicates %}
+  ```prolog linenums="{{statement.row+1}}"
+    {{ statement.text| safe | indent(4) }}
+  ```
+  {% endif %}
+  {% endfor %}
+  {%endfilter%}
+  </div>
+  {%-endfor%}
+  </div>
+  <div class="tabbed-control tabbed-control--prev" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div><div class="tabbed-control tabbed-control--next" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div></div>
+
+</details>
+
+  <p><br></p>
+
 {%- endfor %}

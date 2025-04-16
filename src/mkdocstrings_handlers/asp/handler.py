@@ -90,5 +90,5 @@ class ASPHandler(BaseHandler):
 
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")
-        print("Rendering template with data:", data)
+        # print("Rendering template with data:", data)
         return template.render(**data, config=config)

@@ -38,6 +38,9 @@
   </tbody>
 </table>
 {%- endif %}
+
+{# TODO: Replace this by the actual included files, perhaps we even want to create a data structure where we only include files where it appears,
+or we can save this info while parsing all includes#}
 {% set test_files= ["file.lp","test.lp"]%}
 
 <details class="asp-doc-ref">
@@ -58,16 +61,22 @@
   <div class="tabbed-block">
   {% filter convert_markdown(0) %}
   {% for statement in statements %}
-  {% if predicate not in statement.needed_predicates %}
-  ```prolog linenums="{{statement.row+1}}" hl_lines="1"
-    {{ statement.text| safe | indent(4) }}
-  ```
-  {% endif %}
-  {% if predicate not in statement.provided_predicates %}
+  {% for pn in statement.needed_predicates %}
+  {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
+  {% if pn_id == predicate_id %}
   ```prolog linenums="{{statement.row+1}}"
     {{ statement.text| safe | indent(4) }}
   ```
   {% endif %}
+  {% endfor %}
+  {% for pn in statement.provided_predicates %}
+  {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
+  {% if pn_id == predicate_id %}
+  ```prolog linenums="{{statement.row+1}}" hl_lines="1"
+    {{ statement.text| safe | indent(4) }}
+  ```
+  {% endif %}
+  {% endfor %}
   {% endfor %}
   {%endfilter%}
   </div>

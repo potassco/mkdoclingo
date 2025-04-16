@@ -1,4 +1,4 @@
-""" This module contains the Document class, which represents a single document in the context of ASP."""
+"""This module contains the Document class, which represents a single document in the context of ASP."""
 
 from __future__ import annotations
 
@@ -26,6 +26,7 @@ class Document:
     statements: list[Statement] = field(default_factory=list)
     line_comments: list[LineComment] = field(default_factory=list)
     block_comments: list[BlockComment] = field(default_factory=list)
+    ordered_objects: list[Statement | LineComment | BlockComment] = field(default_factory=list)
     predicates: dict[str, Predicate] = field(default_factory=dict)
 
     @staticmethod
@@ -55,5 +56,6 @@ class Document:
             statements=collector.statements,
             line_comments=collector.line_comments,
             block_comments=collector.block_comments,
+            ordered_objects=collector.ordered_objects,
             predicates=collector.predicates,
         )

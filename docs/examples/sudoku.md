@@ -12,18 +12,19 @@ We showcase how to generate documentation for each available option.
     analyzing the files multiple times.
 
 
-## :material-file-document-arrow-right: Generating *"Source code documentation"*
+## :material-file-document-arrow-right: Generating *"Encodings"*
 
-Generates an section with the source code for the files
+Generates a section with the encodings used
 
-!!! example "Source code"
+!!! example "Encodings"
 
     === "Output"
 
         ::: examples/sudoku/encoding.lp
             handler: asp
             options:
-                source: true
+                encodings:
+                    source: true
                 start_level: 2
 
     === "Usage"
@@ -32,7 +33,7 @@ Generates an section with the source code for the files
         ::: examples/sudoku/encoding.lp
             handler: asp
             options:
-                source: true
+                encodings: true
                 start_level: 2
         ```
 

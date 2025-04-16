@@ -52,6 +52,7 @@ Computes the contrastive graphs using abduction. A contrastive graph will compar
         _sup(1,World,a,()) :- world(World); not _model(World,b).
         _prevents(_sup(1,World,a,()),b) :- _sup(1,World,a,()).
         _sup(2,World,b,()) :- world(World).
+        ```
 
 *%
 

@@ -1,4 +1,4 @@
-""" This module contains the Collector class, which is used to collect data from an ASP document.
+"""This module contains the Collector class, which is used to collect data from an ASP document.
 
 The Collector class traverses the tree of the document and collects information about various elements,
 including statements, comments and predicates.
@@ -15,6 +15,7 @@ from mkdocstrings_handlers.asp.semantics.predicate_documentation import Predicat
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
 from mkdocstrings_handlers.asp.tree_sitter.traverse import traverse
 
+# from mkdocstrings_handlers.asp.semantics.statement import Statement
 from .statement import Statement
 
 
@@ -36,6 +37,7 @@ class Collector:
         self.statements: list[Statement] = []
         self.line_comments: list[LineComment] = []
         self.block_comments: list[BlockComment] = []
+        self.ordered_objects: list[Statement | LineComment | BlockComment] = []
         self.predicates: dict[str, Predicate] = {}
         self.includes: list[Include] = []
 
@@ -67,6 +69,7 @@ class Collector:
             case NodeKind.STATEMENT:
                 statement = Statement.from_node(node)
                 self.statements.append(statement)
+                self.ordered_objects.append(statement)
             case NodeKind.SYMBOLIC_ATOM:
                 predicate = Predicate.from_node(node.parent)
                 statement = self.statements[-1]
@@ -83,6 +86,7 @@ class Collector:
             case NodeKind.LINE_COMMENT:
                 line_comment = LineComment.from_node(node)
                 self.line_comments.append(line_comment)
+                self.ordered_objects.append(line_comment)
             case NodeKind.BLOCK_COMMENT:
                 block_comment = BlockComment.from_node(node)
                 self.block_comments.append(block_comment)
@@ -90,6 +94,7 @@ class Collector:
                 # Predicate documentation
                 predicate_documentation = PredicateDocumentation.from_block_comment(block_comment)
                 if predicate_documentation is None:
+                    self.ordered_objects.append(block_comment)
                     return
 
                 predicate = Predicate.from_node(predicate_documentation.node)

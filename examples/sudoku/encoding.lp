@@ -7,11 +7,6 @@ val(1..dim*dim).
 pos(X,Y) :- val(X), val(Y).
 
 %*
-#anotherpred_not_used(X).
-Some definition without parameters
-*%
-
-%*
 #sudoku(X,Y,V).
 Describes a sudoku board. The value of cell (X,Y) is V.
 #parameters

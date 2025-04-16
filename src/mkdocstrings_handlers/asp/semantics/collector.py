@@ -40,6 +40,7 @@ class Collector:
         self.ordered_objects: list[Statement | LineComment | BlockComment] = []
         self.predicates: dict[str, Predicate] = {}
         self.includes: list[Include] = []
+        self.explicit_shown_predicates: list[Predicate] = []
 
     def collect(self, tree):
         """
@@ -47,6 +48,8 @@ class Collector:
         """
 
         traverse(tree, self._on_enter, self._on_exit)
+        for predicate in self.explicit_shown_predicates:
+            predicate.is_shown = True
 
     def _on_enter(self, node: Node):
         """
@@ -108,7 +111,13 @@ class Collector:
                 predicate.documentation.node = None
 
             case NodeKind.SHOW_SIGNATURE:
-                ShowSignature.from_node(node)
+                sig = ShowSignature.from_node(node)
+                if sig.signature == "":
+                    # TODO: This is not working yet, since the #show . is not collected
+                    for predicate in self.predicates.values():
+                        predicate.is_shown = False
+                if sig.signature in self.predicates:
+                    self.explicit_shown_predicates.append(self.predicates[sig.signature])
 
             case NodeKind.INCLUDE:
                 include = Include.from_node(node)

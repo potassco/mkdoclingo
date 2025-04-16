@@ -23,6 +23,9 @@ class Predicate:
     is_input: bool = False
     """ If it is an input (Not defined by any rule)."""
 
+    is_shown: bool = True
+    """ If there is a #show statement of form #show predicate/arity."""
+
     documentation: PredicateDocumentation | None = None
     """ The documentation of the predicate."""
 

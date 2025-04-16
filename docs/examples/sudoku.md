@@ -4,6 +4,8 @@ icon: material/grid
 
 # Sudoku
 
+:material-eye-off:
+:octicons-eye-closed-16:
 We showcase how to generate documentation for each available option.
 
 !!! tip

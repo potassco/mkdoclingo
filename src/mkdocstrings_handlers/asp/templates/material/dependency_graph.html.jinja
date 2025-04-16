@@ -20,11 +20,12 @@ flowchart LR
          {%- endfor %}
     {%- endfor %}
     classDef all fill:#00000000
-    class {% for node in dependency_graph.nodes %}{{node.predicate}},{% endfor %} all;
+    class __tmp,{% for node in dependency_graph.nodes %}{{node.predicate}},{% endfor %} all;
     classDef out stroke:#52BF54,stroke-width:3px;
-    class {% for node in dependency_graph.nodes %}{{node.predicate}},{% endfor %} out;
+    class __tmp,{% for node in dependency_graph.nodes %}{% if node.predicate_object.is_shown %}{{node.predicate}},{% endif %}{% endfor %} out;
+    classDef aux stroke:#848484,stroke-width:0.2px;
+    class __tmp,{% for node in dependency_graph.nodes %}{% if not node.predicate_object.is_shown %}{{node.predicate}},{% endif %}{% endfor %} aux;
     classDef in stroke:#9178C6,stroke-width:3px;
     class {% for node in dependency_graph.nodes %}{% if node.predicate_object.is_input %}{{node.predicate}},{% endif %}{% endfor %} in;
-    classDef aux stroke:#848484,stroke-width:0.2px;
 ```
 {% endfilter %}

@@ -5,15 +5,13 @@ Module containing the handler for ASP files.
 from pathlib import Path
 from typing import Any
 
+from markupsafe import Markup
 from mkdocstrings.handlers.base import BaseHandler
+from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
 
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
 from mkdocstrings_handlers.asp.features.encoding_content import EncodingContent
-from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
-
-# from mkdocs_autorefs import AutorefsHookInterface, Backlink
-from markupsafe import Markup
 
 try:
     import tomllib  # Python 3.11+

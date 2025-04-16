@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+
 from clingo import Control
 
 from mkdocstrings_handlers.asp.document import Document

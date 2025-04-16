@@ -15,7 +15,10 @@ from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
 # from mkdocs_autorefs import AutorefsHookInterface, Backlink
 from markupsafe import Markup
 
-import tomllib
+try:
+    import tomllib  # Python 3.11+
+except ModuleNotFoundError:
+    import tomli as tomllib  # Use tomli for Python < 3.11
 
 with open("pyproject.toml", "rb") as f:
     project_data = tomllib.load(f)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from tree_sitter import Node
 
@@ -11,11 +12,11 @@ from tree_sitter import Node
 class Include:
     """An include directive in an ASP document."""
 
-    path: str
+    path: Path
     """ The path of the included file."""
 
     @staticmethod
-    def from_node(node: Node) -> Include:
+    def from_node(path: Path, node: Node) -> Include:
         """
         Create an Include from the given node.
 
@@ -32,6 +33,7 @@ class Include:
         # The second child of the file path is the file path
         # as a string fragment without the quotes.
         file_path_node = node.children[1]
-        file_path = file_path_node.children[1].text.decode("utf-8")
+        file_path = Path(file_path_node.children[1].text.decode("utf-8"))
 
-        return Include(file_path)
+        # return Include(file_path)
+        return Include(path.parent.joinpath(file_path))

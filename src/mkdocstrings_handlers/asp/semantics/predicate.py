@@ -4,10 +4,21 @@ from __future__ import annotations
 
 import string
 from dataclasses import dataclass
+from enum import IntEnum
 
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
+
+
+class ShowStatus(IntEnum):
+    """Enum for predicate show status with bitwise-compatible values."""
+
+    DEFAULT = 0
+    EXPLICIT = 1
+    PARTIAL = 2
+    PARTIAL_AND_EXPLICIT = 3
+    HIDDEN = 4
 
 
 @dataclass
@@ -22,6 +33,8 @@ class Predicate:
 
     is_input: bool = False
     """ If it is an input (Not defined by any rule)."""
+
+    show_status: ShowStatus = ShowStatus.DEFAULT
 
     is_shown: bool = True
     """ If there is a #show statement of form #show predicate/arity."""
@@ -79,3 +92,15 @@ class Predicate:
             return self.documentation.signature
 
         return f"{self.identifier}({", ".join(string.ascii_uppercase[:self.arity])})"
+
+    def update_show_status(self, status: ShowStatus) -> None:
+        """
+        Update the show status of the predicate.
+
+        Args:
+            status: The new show status.
+        """
+        if self.show_status == ShowStatus.DEFAULT:
+            self.show_status = status
+        else:
+            self.show_status |= status

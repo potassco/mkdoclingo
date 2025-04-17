@@ -1,4 +1,4 @@
-""" This module contains the Predicate class, which holds information about a specific ASP predicate."""
+"""This module contains the Predicate class, which holds information about a specific ASP predicate."""
 
 from __future__ import annotations
 
@@ -19,6 +19,12 @@ class Predicate:
 
     arity: int
     """ The arity of the predicate."""
+
+    is_input: bool = False
+    """ If it is an input (Not defined by any rule)."""
+
+    is_shown: bool = True
+    """ If there is a #show statement of form #show predicate/arity."""
 
     documentation: PredicateDocumentation | None = None
     """ The documentation of the predicate."""

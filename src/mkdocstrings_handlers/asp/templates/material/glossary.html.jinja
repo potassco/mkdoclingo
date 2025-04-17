@@ -1,4 +1,9 @@
-{% filter heading(2, id="glossary", toc_label="Glossary") %}
+{% set toc_label %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 4h4v4H3zm6 1v2h12V5zm-6 5h4v4H3zm6 1v2h12v-2zm-6 5h4v4H3zm6 1v2h12v-2z"></path></svg>
+    <span class="md-ellipsis" style="vertical-align: top;">Glossary</span>
+{% endset %}
+
+{% filter heading(config.start_level+1, id="glossary", toc_label=toc_label) %}
 <span class="md-icon">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span> Glossary
 {% endfilter %}
 
@@ -11,7 +16,7 @@
 
 {% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}
 
-{% filter heading(4, id=predicate_id, toc_label=pred_sig) %}
+{% filter heading(config.start_level+2, id=predicate_id, toc_label=pred_sig) %}
 {{pred_sig}}
 {% endfilter %}
 
@@ -38,4 +43,54 @@
   </tbody>
 </table>
 {%- endif %}
+
+{# TODO: Replace this by the actual included files, perhaps we even want to create a data structure where we only include files where it appears,
+or we can save this info while parsing all includes#}
+{% set test_files= ["file.lp","test.lp"]%}
+
+<details class="asp-doc-ref">
+  <summary>References</summary>
+  <div class="tabbed-set tabbed-alternate" data-tabs="1:{{test_files|length}}" style="--md-indicator-x: 0px; --md-indicator-width: 92px;">
+  {%- for file in test_files %}
+  <input {% if loop.index == 1%} checked="checked" {% endif %} id="__tabbed-{{predicate_id}}-{{loop.index}}" name="__tabbed-{{predicate_id}}" type="radio">
+  {%-endfor%}
+  <div class="tabbed-labels tabbed-labels--linked">
+  {%- for file in test_files %}
+  <label
+    for="__tabbed-{{predicate_id}}-{{loop.index}}">
+    <code>{{file}}</code></label>
+  {%-endfor%}
+  </div>
+  <div class="tabbed-content">
+  {%- for file in test_files %}
+  <div class="tabbed-block">
+  {% filter convert_markdown(0) %}
+  {% for statement in statements %}
+  {% for pn in statement.needed_predicates %}
+  {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
+  {% if pn_id == predicate_id %}
+  ```prolog linenums="{{statement.row+1}}"
+    {{ statement.text| safe | indent(4) }}
+  ```
+  {% endif %}
+  {% endfor %}
+  {% for pn in statement.provided_predicates %}
+  {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
+  {% if pn_id == predicate_id %}
+  ```prolog linenums="{{statement.row+1}}" hl_lines="1"
+    {{ statement.text| safe | indent(4) }}
+  ```
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {%endfilter%}
+  </div>
+  {%-endfor%}
+  </div>
+  <div class="tabbed-control tabbed-control--prev" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div><div class="tabbed-control tabbed-control--next" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div></div>
+
+</details>
+
+  <p><br></p>
+
 {%- endfor %}

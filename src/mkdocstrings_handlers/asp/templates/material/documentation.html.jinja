@@ -1,9 +1,5 @@
-<h3><code>{{title}}</code></h3>
-
-{% if config.source %}
-    {% with source = encoding %}
-        {% include 'source.html.jinja' %}
-    {% endwith %}
+{% if config.encodings %}
+    {% include 'encodings.html.jinja' %}
 {% endif %}
 
 {% if config.predicate_table %}

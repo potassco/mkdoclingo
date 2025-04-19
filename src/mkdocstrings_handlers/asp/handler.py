@@ -12,7 +12,7 @@ from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
 
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
-from mkdocstrings_handlers.asp.features.encoding_content import EncodingContent
+from mkdocstrings_handlers.asp.features.encoding_info import EncodingInfo
 from mkdocstrings_handlers.asp.features.predicate_info import PredicateInfo
 from mkdocstrings_handlers.asp.semantics.document_parser import DocumentParser
 from mkdocstrings_handlers.asp.tree_sitter.parser import ASPParser
@@ -124,8 +124,8 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        if identifier != "examples/my_test/base.lp":
-            return None
+        # if identifier != "examples/my_test/base.lp":
+        #     return None
 
         start_path = Path(identifier)
         asp_parser = ASPParser()
@@ -133,15 +133,10 @@ class ASPHandler(BaseHandler):
 
         documents: dict[Path, Document] = self.parse_files(asp_parser, document_parser, [start_path])
 
-        document = documents[start_path]
-
         data = {
             "project_name": project_data["project"]["name"],
             "project_url_tree": project_data["project"]["urls"]["Homepage"].replace(".git/", "/") + "tree/master/",
-            "title": document.path,
-            "statements": document.statements,
-            "encoding": document.content,
-            "encoding_content": EncodingContent.from_document(document),
+            "encodings": EncodingInfo.from_documents(documents.values()).encodings,
             "predicate_info": PredicateInfo.from_documents(documents.values()).predicates,
             "dependency_graph": DependencyGraph.from_document(documents.values()),
         }

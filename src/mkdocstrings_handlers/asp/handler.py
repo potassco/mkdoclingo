@@ -13,8 +13,8 @@ from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
 from mkdocstrings_handlers.asp.features.encoding_content import EncodingContent
+from mkdocstrings_handlers.asp.features.predicate_info import PredicateInfo
 from mkdocstrings_handlers.asp.semantics.document_parser import DocumentParser
-from mkdocstrings_handlers.asp.semantics.predicate import Predicate
 from mkdocstrings_handlers.asp.tree_sitter.parser import ASPParser
 
 try:
@@ -124,20 +124,16 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
+        if identifier != "examples/my_test/base.lp":
+            return None
+
         start_path = Path(identifier)
         asp_parser = ASPParser()
         document_parser = DocumentParser()
 
         documents: dict[Path, Document] = self.parse_files(asp_parser, document_parser, [start_path])
 
-        predicates: dict[str, Predicate] = {}
-
-        for document in documents.values():
-            for predicate in document.predicates.values():
-                if predicate.signature not in predicates:
-                    predicates[predicate.signature] = predicate
-
-                predicates[predicate.signature].update_show_status(predicate.show_status)
+        document = documents[start_path]
 
         data = {
             "project_name": project_data["project"]["name"],
@@ -146,8 +142,8 @@ class ASPHandler(BaseHandler):
             "statements": document.statements,
             "encoding": document.content,
             "encoding_content": EncodingContent.from_document(document),
-            "predicate_list": sorted(list(predicates.values()), key=lambda x: x.signature),
-            "dependency_graph": DependencyGraph.from_document(document),
+            "predicate_info": PredicateInfo.from_documents(documents.values()).predicates,
+            "dependency_graph": DependencyGraph.from_document(documents.values()),
         }
         return data
 

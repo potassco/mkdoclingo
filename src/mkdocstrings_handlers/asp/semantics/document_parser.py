@@ -36,6 +36,8 @@ class DocumentParser:
         self.head = True
         self.inside_tuple = False
         self.current_statement: Statement | None = None
+        self.current_predicates: dict[str, Predicate] = {}
+        self.error = False
 
     def parse(self, document: Document, tree: Tree) -> Document:
         """
@@ -65,23 +67,20 @@ class DocumentParser:
                 # Data collection
                 case NodeKind.STATEMENT:
                     self.current_statement = Statement.from_node(node)
-                    document.statements.append(self.current_statement)
-                    document.ordered_objects.append(self.current_statement)
 
                 case NodeKind.SYMBOLIC_ATOM:
                     predicate = Predicate.from_node(node.parent)
-                    signature = str(predicate)
+                    signature = predicate.signature
 
-                    if signature not in document.predicates:
-                        document.predicates[signature] = predicate
+                    if signature not in self.current_predicates:
+                        self.current_predicates[signature] = predicate
                     else:
-                        predicate = document.predicates[signature]
+                        predicate = self.current_predicates[signature]
 
                     if self.head and not self.inside_tuple:
                         self.current_statement.add_provided(predicate)
                     else:
                         self.current_statement.add_needed(predicate)
-
                 case NodeKind.LINE_COMMENT:
                     line_comment = LineComment.from_node(node)
                     document.line_comments.append(line_comment)
@@ -97,25 +96,41 @@ class DocumentParser:
                         return
 
                     predicate = Predicate.from_node(predicate_documentation.node)
-                    signature = str(predicate)
+                    signature = predicate.signature
 
-                    if signature not in document.predicates:
-                        document.predicates[signature] = predicate
+                    if signature not in self.current_predicates:
+                        self.current_predicates[signature] = predicate
                     else:
-                        predicate = document.predicates[signature]
+                        predicate = self.current_predicates[signature]
 
                     predicate.documentation = predicate_documentation
                     predicate.documentation.node = None
-
                 case NodeKind.SHOW_SIGNATURE:
                     sig = ShowSignature.from_node(node)
 
-                    if sig.signature in document.predicates:
-                        document.predicates[sig.signature].update_show_status(ShowStatus.EXPLICIT)
+                    if sig.signature in self.current_predicates:
+                        predicate = self.current_predicates[sig.signature]
+                    else:
+                        identifier, arity = sig.signature.split("/")
+                        predicate = Predicate(identifier, int(arity))
+                        self.current_predicates[sig.signature] = predicate
+
+                    predicate.update_show_status(ShowStatus.EXPLICIT)
+                    document.disable_default_show = True
+                case NodeKind.SHOW:
+                    document.disable_default_show = True
+                case NodeKind.SHOW_TERM:
+                    sig = ShowSignature.from_node(node)
+
+                    if sig.signature in self.current_predicates:
+                        self.current_predicates[sig.signature].update_show_status(ShowStatus.PARTIAL)
+                        document.disable_default_show = True
 
                 case NodeKind.INCLUDE:
                     include = Include.from_node(document.path, node)
                     document.includes.append(include)
+                case NodeKind.ERROR:
+                    self.error = True
                 case _:
                     pass
 
@@ -127,6 +142,23 @@ class DocumentParser:
                 node: The node.
             """
             match NodeKind.from_grammar_name(node.grammar_name):
+                case NodeKind.STATEMENT:
+                    if self.error:
+                        self._reset()
+                        return
+
+                    # The statement is done
+                    document.statements.append(self.current_statement)
+                    document.ordered_objects.append(self.current_statement)
+
+                    for signature, predicate in self.current_predicates.items():
+                        if signature not in document.predicates:
+                            document.predicates[signature] = predicate
+                        else:
+                            document.predicates[signature].update_show_status(predicate.show_status)
+
+                    self._reset()
+
                 case NodeKind.LITERAL_TUPLE:
                     self.inside_tuple = False
                 case _:

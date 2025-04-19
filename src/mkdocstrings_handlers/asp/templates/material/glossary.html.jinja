@@ -7,11 +7,11 @@
 <span class="md-icon">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span> Glossary
 {% endfilter %}
 
-{% for predicate in predicate_list %}
+{% for predicate in predicate_info.values() %}
 
 {% set pred_sig %}
 <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code>
-<code>{{ predicate.signature }}</code>
+<code>{{ predicate }}</code>
 {% endset %}
 
 {% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}

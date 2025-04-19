@@ -12,9 +12,7 @@ from mkdocstrings_handlers.asp.semantics.predicate import Predicate
 class DependencyGraphNode:
     """Dependency graph node."""
 
-    predicate_object: Predicate
-    """The predicate object node represents."""
-    predicate: str
+    signature: str
     """The predicate this node represents."""
     positive: set[str]
     """The positive dependencies of the predicate."""
@@ -30,33 +28,38 @@ class DependencyGraph:
     """The nodes of the dependency graph."""
 
     @staticmethod
-    def from_document(document: Document) -> "DependencyGraph":
+    def from_document(documents: list[Document]) -> "DependencyGraph":
         """
-        Create a dependency graph from an ASP document.
+        Create a dependency graph from a list of ASP documents.
 
         Args:
-            document: The ASP document.
+            documents: The list of documents to create the graph from.
 
         Returns:
             The dependency graph.
         """
         nodes: dict[str, DependencyGraphNode] = {}
 
-        for statement in document.statements:
-            for predicate, _ in statement.provided_predicates:
-                predicate_key = str(predicate)
-                if predicate_key not in nodes:
-                    nodes[predicate_key] = DependencyGraphNode(predicate, predicate_key, set(), set())
+        # Find all provided predicates and their dependencies
+        for document in documents:
+            for statement in document.statements:
+                for predicate, _ in statement.provided_predicates:
+                    signature = predicate.signature
+                    if signature not in nodes:
+                        nodes[signature] = DependencyGraphNode(signature, set(), set())
 
-                # Add positive and negative dependencies from needed_predicates
-                positive = {str(p) for p, n in statement.needed_predicates if not n}
-                negative = {str(p) for p, n in statement.needed_predicates if n}
-                nodes[predicate_key].positive.update(positive)
-                nodes[predicate_key].negative.update(negative)
+                    # Add positive and negative dependencies from needed_predicates
+                    positive = {p.signature for p, n in statement.needed_predicates if not n}
+                    negative = {p.signature for p, n in statement.needed_predicates if n}
+                    nodes[signature].positive.update(positive)
+                    nodes[signature].negative.update(negative)
 
-        for predicate_key, predicate in document.predicates.items():
-            if predicate_key not in nodes:
-                nodes[predicate_key] = DependencyGraphNode(predicate, predicate_key, set(), set())
-                predicate.is_input = True
+        # Find all predicates that are not provided but are used in the document
+        # these predicates are considered inputs
+        for document in documents:
+            for signature, predicate in document.predicates.items():
+                if signature not in nodes:
+                    nodes[signature] = DependencyGraphNode(signature, set(), set())
+                    predicate.is_input = True
 
         return DependencyGraph(list(nodes.values()))

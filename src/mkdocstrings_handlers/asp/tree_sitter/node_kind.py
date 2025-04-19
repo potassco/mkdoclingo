@@ -17,7 +17,10 @@ class NodeKind(Enum):
     LINE_COMMENT = "line_comment"
     BLOCK_COMMENT = "block_comment"
     SHOW_SIGNATURE = "show_signature"
+    SHOW = "show"
+    SHOW_TERM = "show_term"
     INCLUDE = "include"
+    ERROR = "ERROR"
 
     @staticmethod
     def from_grammar_name(grammar_name: str):

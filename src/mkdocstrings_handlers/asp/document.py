@@ -26,3 +26,4 @@ class Document:
     ordered_objects: list[Statement | LineComment | BlockComment] = field(default_factory=list)
     predicates: dict[str, Predicate] = field(default_factory=dict)
     includes: list[Include] = field(default_factory=list)
+    disable_default_show: bool = False

@@ -9,9 +9,9 @@ from tree_sitter import Node, Tree
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
 from mkdocstrings_handlers.asp.semantics.directives.include import Include
-from mkdocstrings_handlers.asp.semantics.directives.show_signature import ShowSignature
+from mkdocstrings_handlers.asp.semantics.directives.show import Show
 from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
-from mkdocstrings_handlers.asp.semantics.predicate import Predicate, ShowStatus
+from mkdocstrings_handlers.asp.semantics.predicate import Predicate
 from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
 from mkdocstrings_handlers.asp.semantics.statement import Statement
 from mkdocstrings_handlers.asp.tree_sitter.node_kind import NodeKind
@@ -105,25 +105,28 @@ class DocumentParser:
 
                     predicate.documentation = predicate_documentation
                     predicate.documentation.node = None
-                case NodeKind.SHOW_SIGNATURE:
-                    sig = ShowSignature.from_node(node)
+                case NodeKind.SHOW_SIGNATURE | NodeKind.SHOW | NodeKind.SHOW_TERM:
+                    show = Show.from_node(node)
+                    if show:
+                        predicate = show.predicate
+                        if predicate.signature in self.current_predicates:
+                            predicate = self.current_predicates[predicate.signature]
+                        else:
+                            self.current_predicates[predicate.signature] = predicate
 
-                    if sig.signature in self.current_predicates:
-                        predicate = self.current_predicates[sig.signature]
+                        predicate.update_show_status(show.predicate.show_status)
+
+                        # If the show directive is not empty
+                        # default show behaviour depends on the show directive
+                        document.disable_default_show |= show.disable_default
+
+                        # We regard the found predicate as a provided predicate
+                        # in order to track its dependencies
+                        self.current_statement.add_provided(predicate)
                     else:
-                        identifier, arity = sig.signature.split("/")
-                        predicate = Predicate(identifier, int(arity))
-                        self.current_predicates[sig.signature] = predicate
-
-                    predicate.update_show_status(ShowStatus.EXPLICIT)
-                    document.disable_default_show = True
-                case NodeKind.SHOW:
-                    document.disable_default_show = True
-                case NodeKind.SHOW_TERM:
-                    sig = ShowSignature.from_node(node)
-
-                    if sig.signature in self.current_predicates:
-                        self.current_predicates[sig.signature].update_show_status(ShowStatus.PARTIAL)
+                        # If show returns None
+                        # this means that the show directive was empty
+                        # and we should disable the default show behaviour
                         document.disable_default_show = True
 
                 case NodeKind.INCLUDE:

@@ -2,6 +2,7 @@
 Module containing the handler for ASP files.
 """
 
+from collections import deque
 from pathlib import Path
 from typing import Any
 
@@ -11,7 +12,10 @@ from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
 
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
-from mkdocstrings_handlers.asp.features.encoding_content import EncodingContent
+from mkdocstrings_handlers.asp.features.encoding_info import EncodingInfo
+from mkdocstrings_handlers.asp.features.predicate_info import PredicateInfo
+from mkdocstrings_handlers.asp.semantics.document_parser import DocumentParser
+from mkdocstrings_handlers.asp.tree_sitter.parser import ASPParser
 
 try:
     import tomllib  # Python 3.11+
@@ -71,6 +75,41 @@ class ASPHandler(BaseHandler):
         self._headings = old_headings
         return md
 
+    def parse_files(
+        self, asp_parser: ASPParser, document_parser: DocumentParser, paths: list[Path]
+    ) -> dict[Path, Document]:
+        """
+        Parse the files at the given paths and return a dictionary of documents.
+
+        This also handles the inclusion of other files.
+
+        Args:
+            asp_parser: The ASP parser.
+            document_parser: The document parser.
+            paths: The paths to parse.
+
+        Returns:
+            A dictionary of documents.
+        """
+        parse_queue = deque(paths)
+        documents: dict[Path, Document] = {}
+
+        while parse_queue:
+            path = parse_queue.popleft()
+            if path.suffix != ".lp" or not path.is_file():
+                continue
+
+            with open(path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            tree = asp_parser.parse(content)
+            document = document_parser.parse(Document(path, content), tree)
+            documents[path] = document
+
+            parse_queue.extend(include.path for include in document.includes if include.path not in documents)
+
+        return documents
+
     def collect(self, identifier: str, config: dict) -> dict | None:
         """
         Collect data from ASP files.
@@ -85,24 +124,21 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        path = Path(identifier)
-        if path.suffix != ".lp" or not path.is_file():
-            return None
+        # if identifier != "examples/my_test/base.lp":
+        #     return None
 
-        with open(path, "r", encoding="utf-8") as f:
-            content = f.read()
+        start_path = Path(identifier)
+        asp_parser = ASPParser()
+        document_parser = DocumentParser()
 
-        document = Document.new(path, content)
+        documents: dict[Path, Document] = self.parse_files(asp_parser, document_parser, [start_path])
 
         data = {
             "project_name": project_data["project"]["name"],
             "project_url_tree": project_data["project"]["urls"]["Homepage"].replace(".git/", "/") + "tree/master/",
-            "title": document.title,
-            "statements": document.statements,
-            "encoding": document.content,
-            "encoding_content": EncodingContent.from_document(document),
-            "predicate_list": sorted(list(document.predicates.values()), key=lambda x: x.signature),
-            "dependency_graph": DependencyGraph.from_document(document),
+            "encodings": EncodingInfo.from_documents(documents.values()).encodings,
+            "predicate_info": PredicateInfo.from_documents(documents.values()).predicates,
+            "dependency_graph": DependencyGraph.from_document(documents.values()),
         }
         return data
 

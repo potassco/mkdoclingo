@@ -11,21 +11,21 @@
 ```mermaid
 flowchart LR
     {%- for node in dependency_graph.nodes %}
-    {{node.predicate}}(["{{node.predicate}}"])
+    {{node.signature}}(["{{node.signature}}"])
          {%- for positive in node.positive %}
-         {{positive}} --> {{node.predicate}}
+         {{positive}} --> {{node.signature}}
          {%- endfor %}
          {%- for negative in node.negative %}
-         {{negative}} -.-> {{node.predicate}}
+         {{negative}} -.-> {{node.signature}}
          {%- endfor %}
     {%- endfor %}
     classDef all fill:#00000000
-    class __tmp,{% for node in dependency_graph.nodes %}{{node.predicate}},{% endfor %} all;
+    class __tmp,{% for node in dependency_graph.nodes %}{{node.signature}},{% endfor %} all;
     classDef out stroke:#52BF54,stroke-width:3px;
-    class __tmp,{% for node in dependency_graph.nodes %}{% if node.predicate_object.is_shown %}{{node.predicate}},{% endif %}{% endfor %} out;
+    class __tmp,{% for node in dependency_graph.nodes %}{% if predicate_info.get(node.signature).show_status < 4 %}{{node.signature}},{% endif %}{% endfor %} out;
     classDef aux stroke:#848484,stroke-width:0.2px;
-    class __tmp,{% for node in dependency_graph.nodes %}{% if not node.predicate_object.is_shown %}{{node.predicate}},{% endif %}{% endfor %} aux;
+    class __tmp,{% for node in dependency_graph.nodes %}{% if predicate_info.get(node.signature).show_status == 4 %}{{node.signature}},{% endif %}{% endfor %} aux;
     classDef in stroke:#9178C6,stroke-width:3px;
-    class {% for node in dependency_graph.nodes %}{% if node.predicate_object.is_input %}{{node.predicate}},{% endif %}{% endfor %} in;
+    class {% for node in dependency_graph.nodes %}{% if predicate_info.get(node.signature).is_input %}{{node.signature}},{% endif %}{% endfor %} in;
 ```
 {% endfilter %}

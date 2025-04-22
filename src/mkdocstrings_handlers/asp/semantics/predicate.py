@@ -4,10 +4,21 @@ from __future__ import annotations
 
 import string
 from dataclasses import dataclass
+from enum import IntEnum
 
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp.semantics.predicate_documentation import PredicateDocumentation
+
+
+class ShowStatus(IntEnum):
+    """Enum for predicate show status with bitwise-compatible values."""
+
+    DEFAULT = 0
+    EXPLICIT = 1
+    PARTIAL = 2
+    PARTIAL_AND_EXPLICIT = 3
+    HIDDEN = 4
 
 
 @dataclass
@@ -23,8 +34,8 @@ class Predicate:
     is_input: bool = False
     """ If it is an input (Not defined by any rule)."""
 
-    is_shown: bool = True
-    """ If there is a #show statement of form #show predicate/arity."""
+    show_status: ShowStatus = ShowStatus.DEFAULT
+    """ The show status of the predicate."""
 
     documentation: PredicateDocumentation | None = None
     """ The documentation of the predicate."""
@@ -56,26 +67,43 @@ class Predicate:
         """
         Return the string representation of the predicate.
 
+        If the predicate has documentation, return the representation from the documentation.
+        Otherwise, return the default representation.
+
+        The default representation is of the form `identifier(A, B, C)` where `A`, `B`, and `C` are
+        the first three uppercase letters of the alphabet.
+
         Returns:
             The string representation of the predicate.
         """
-        return f"{self.identifier}/{self.arity}"
+        if self.documentation is not None:
+            return self.documentation.signature
+
+        return f"{self.identifier}({", ".join(string.ascii_uppercase[:self.arity])})"
 
     @property
     def signature(self) -> str:
         """
         Return the signature of the predicate.
 
-        If the predicate has documentation, return the signature from the documentation.
-        Otherwise, return the default signature.
-
-        The default signature is of the form `identifier(A, B, C)` where `A`, `B`, and `C` are
-        the first three uppercase letters of the alphabet.
+        The signature of a predicate is a string of the form `identifier/arity`.
 
         Returns:
             The signature of the predicate.
         """
-        if self.documentation is not None:
-            return self.documentation.signature
+        return f"{self.identifier}/{self.arity}"
 
-        return f"{self.identifier}({", ".join(string.ascii_uppercase[:self.arity])})"
+    def update_show_status(self, status: ShowStatus) -> None:
+        """
+        Update the show status of the predicate.
+
+        Args:
+            status: The new show status.
+        """
+        if self.show_status == ShowStatus.DEFAULT:
+            self.show_status = status
+        else:
+            self.show_status |= status
+
+        if self.show_status > ShowStatus.HIDDEN:
+            self.show_status &= ShowStatus.PARTIAL_AND_EXPLICIT

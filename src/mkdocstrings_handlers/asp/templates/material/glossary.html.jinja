@@ -18,7 +18,7 @@
 
 {% set pred_toc %}
 <span class="md-ellipsis" style="display: inline-flex; align-items: center; gap: 0.3rem;">
-  <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate-toc" style="font-size: 0.6rem;"></code>
+  <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate" style="font-size: 0.6rem;"></code>
   {{ input_icon_map[predicate.is_input]|safe }}
   {{ show_icon_map[predicate.show_status]|safe }}
   <code style="font-size: 0.6rem;">{{ predicate }}</code>
@@ -58,7 +58,7 @@
 
 {% set firstfile = true %}
 
-<details class="asp-doc-ref">
+<details class="asp-doc-predicate-ref">
   <summary>References</summary>
   <div class="tabbed-set tabbed-alternate" data-tabs="1:{{encodings|length}}" style="--md-indicator-x: 0px; --md-indicator-width: 92px;">
   {% for file, encoding in encodings.items() %}

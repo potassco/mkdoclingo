@@ -1,78 +1,89 @@
+/* Colors */
+:root {
+    --doc-symbol-asp-fg-color: #4378dc;
+    --doc-symbol-predicate-fg-color: #ca91bf;
+
+    --doc-symbol-asp-bg-color: #4378dc30;
+    --doc-symbol-predicate-bg-color: #ca91bf30;
+
+    --doc-admonition-symbol-predicate-ref-bg-color: #9c9c9c;
+    --doc-admonition-predicate-ref-bg-color: #9c9c9c10;
+    --doc-admonition-predicate-ref-border-color: #9c9c9c;
+
+    --doc-admonition-encoding-doc-bg-color: #9c9c9c10;
+}
+
+/* Symbols for predicates and encodings */
+
+code.doc-clingo-symbol-encoding {
+    background-color: var(--doc-symbol-asp-bg-color);
+}
+
 code.doc-clingo-symbol-encoding::after {
     content: "ASP";
-    color: var(--md-typeset-a-color);
+    color: var(--doc-symbol-asp-fg-color);
 }
 
-
-.git-logo {
-    color: var(--md-typeset-a-color);
-    margin-right: 0 !important;
+code.doc-clingo-symbol-predicate {
+    background-color: var(--doc-symbol-predicate-bg-color);
 }
-
 
 code.doc-clingo-symbol-predicate::after {
-    content: "predicate";
-    color: #ca91bf
+    content: "P";
+    color: var(--doc-symbol-predicate-fg-color);
 }
 
-code.doc-clingo-symbol-predicate-toc::after {
-    content: "p";
-    color: #ca91bf
-}
-
-.md-grid {
-    max-width: 1440px;
-}
-
-.md-sidebar--secondary {
-    width: 15rem !important;
-    left: -15rem !important;
-}
-
-.md-nav--secondary {
-    width: 15rem !important;
-    left: -15rem !important;
-}
+/* Admonitions */
 
 :root {
     --md-admonition-icon--asp-doc: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.59 7.41 9 12l4.59 4.6L15 15.18 11.82 12 15 8.82M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>');
-    --md-admonition-icon--asp-doc-ref: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 7h5.5L15 1.5zM8 0h8l6 6v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2M4 4v18h16v2H4a2 2 0 0 1-2-2V4z"/></svg>')
+    --md-admonition-icon--asp-doc-predicate-ref: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 7h5.5L15 1.5zM8 0h8l6 6v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2M4 4v18h16v2H4a2 2 0 0 1-2-2V4z"/></svg>')
 }
 
+/* ASP document */
 
 .md-typeset .admonition.asp-doc,
 .md-typeset details.asp-doc {
-    border-color: var(--md-accent-fg-color);
-}
-
-.md-typeset h5 {
-    text-transform: none;
-}
-
-.md-typeset .admonition.asp-doc-ref,
-.md-typeset details.asp-doc-ref {
-    border-color: #9d9d9d;
+    border-color: var(--doc-symbol-asp-fg-color);
 }
 
 .md-typeset .asp-doc>.admonition-title,
 .md-typeset .asp-doc>summary {
-    background-color: #9d9d9d10;
-}
-
-.md-typeset .asp-doc-ref>.admonition-title,
-.md-typeset .asp-doc-ref>summary {
-    background-color: #9d9d9d10;
+    background-color: var(--doc-admonition-encoding-doc-bg-color);
 }
 
 .md-typeset .asp-doc>.admonition-title::before,
 .md-typeset .asp-doc>summary::before {
-    background-color: var(--md-accent-fg-color);
+    background-color: var(--doc-symbol-asp-fg-color);
     -webkit-mask-image: var(--md-admonition-icon--asp-doc);
     mask-image: var(--md-admonition-icon--asp-doc);
 }
 
-.md-typeset .asp-doc-ref>summary::before {
-    background-color: #9d9d9d;
-    -webkit-mask-image: var(--md-admonition-icon--asp-doc-ref);
-    mask-image: var(--md-admonition-icon--asp-doc-ref);
+/* Predicate references */
+
+.md-typeset .admonition.asp-doc-predicate-ref,
+.md-typeset details.asp-doc-predicate-ref {
+    border-color: var(--doc-admonition-predicate-ref-border-color);
+}
+
+.md-typeset .asp-doc-predicate-ref>.admonition-title,
+.md-typeset .asp-doc-predicate-ref>summary {
+    background-color: var(--doc-admonition-predicate-ref-bg-color);
+}
+
+.md-typeset .asp-doc-predicate-ref>summary::before {
+    background-color: var(--doc-admonition-symbol-predicate-ref-bg-color);
+    -webkit-mask-image: var(--md-admonition-icon--asp-doc-predicate-ref);
+    mask-image: var(--md-admonition-icon--asp-doc-predicate-ref);
+}
+
+
+/* Extras */
+.git-logo {
+    color: var(--doc-symbol-asp-fg-color);
+    margin-right: 0 !important;
+}
+
+.md-typeset h5 {
+    text-transform: none;
 }

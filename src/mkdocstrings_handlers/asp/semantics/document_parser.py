@@ -98,10 +98,10 @@ class DocumentParser:
                     predicate = Predicate.from_node(predicate_documentation.node)
                     signature = predicate.signature
 
-                    if signature not in self.current_predicates:
-                        self.current_predicates[signature] = predicate
+                    if signature not in document.predicates:
+                        document.predicates[signature] = predicate
                     else:
-                        predicate = self.current_predicates[signature]
+                        predicate = document.predicates[signature]
 
                     predicate.documentation = predicate_documentation
                     predicate.documentation.node = None

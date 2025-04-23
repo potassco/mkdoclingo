@@ -16,7 +16,7 @@ code.doc-clingo-symbol-predicate::after {
 }
 
 code.doc-clingo-symbol-predicate-toc::after {
-    content: "P";
+    content: "p";
     color: #ca91bf
 }
 

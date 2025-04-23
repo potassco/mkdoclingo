@@ -31,6 +31,7 @@
 {{pred_sig}}
 {% endfilter %}
 
+<div >
 {%- if predicate.documentation %}
 {{ predicate.documentation.description | convert_markdown(5, html_id) }}
 {% endif %}
@@ -55,8 +56,6 @@
 </table>
 {%- endif %}
 
-{# TODO: Replace this by the actual included files, perhaps we even want to create a data structure where we only include files where it appears,
-or we can save this info while parsing all includes#}
 {% set firstfile = true %}
 
 <details class="asp-doc-ref">
@@ -103,12 +102,13 @@ or we can save this info while parsing all includes#}
   {%endfilter%}
   </div>
   {% endif %}
+
   {%-endfor%}
   </div>
   <div class="tabbed-control tabbed-control--prev" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div><div class="tabbed-control tabbed-control--next" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div></div>
 
 </details>
 
+</div>
   <p><br></p>
-
 {%- endfor %}

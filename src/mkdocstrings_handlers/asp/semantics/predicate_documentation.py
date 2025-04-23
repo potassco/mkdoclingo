@@ -1,7 +1,8 @@
-""" This module contains the 'PredicateDocumentation', which represents the documentation for a predicate."""
+"""This module contains the 'PredicateDocumentation', which represents the documentation for a predicate."""
 
 from __future__ import annotations
 
+import textwrap
 from dataclasses import dataclass, field
 
 from tree_sitter import Node
@@ -85,7 +86,7 @@ class PredicateDocumentation:
                     parameter, parameter_description = parts
                     parameters.append(parameter.strip())
                     parameter_descriptions[parameter.strip()] = parameter_description.strip()
-
+        description = textwrap.dedent(description).strip()
         return PredicateDocumentation(
             signature=signature.removesuffix("."),
             description=description,

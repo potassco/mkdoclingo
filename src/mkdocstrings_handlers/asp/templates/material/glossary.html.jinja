@@ -1,3 +1,5 @@
+{% from 'icons.html.jinja' import show_icon_map, input_icon_map %}
+
 {% set toc_label %}
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 4h4v4H3zm6 1v2h12V5zm-6 5h4v4H3zm6 1v2h12v-2zm-6 5h4v4H3zm6 1v2h12v-2z"></path></svg>
     <span class="md-ellipsis" style="vertical-align: top;">Glossary</span>
@@ -10,13 +12,22 @@
 {% for predicate in predicate_info.values() %}
 
 {% set pred_sig %}
-<code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"></code>
-<code>{{ predicate }}</code>
+<code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate" style="font-size: 0.6rem;"></code>
+<code style="font-size: 0.6rem;">{{ predicate }}</code>
+{% endset %}
+
+{% set pred_toc %}
+<span class="md-ellipsis" style="display: inline-flex; align-items: center; gap: 0.3rem;">
+  <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate-toc" style="font-size: 0.6rem;"></code>
+  {{ input_icon_map[predicate.is_input]|safe }}
+  {{ show_icon_map[predicate.show_status]|safe }}
+  <code style="font-size: 0.6rem;">{{ predicate }}</code>
+</span>
 {% endset %}
 
 {% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}
 
-{% filter heading(config.start_level+2, id=predicate_id, toc_label=pred_sig) %}
+{% filter heading(config.start_level+2, id=predicate_id, toc_label=pred_toc) %}
 {{pred_sig}}
 {% endfilter %}
 
@@ -37,7 +48,7 @@
     {%- for param, description in predicate.documentation.parameter_descriptions.items() %}
     <tr>
       <td><code>{{ param }}</code></td>
-      <td>{{ description }}</td>
+      <td>{{ description | convert_markdown(5, html_id) }}</td>
     </tr>
     {%- endfor %}
   </tbody>
@@ -46,26 +57,32 @@
 
 {# TODO: Replace this by the actual included files, perhaps we even want to create a data structure where we only include files where it appears,
 or we can save this info while parsing all includes#}
-{% set test_files= ["file.lp","test.lp"]%}
+{% set firstfile = true %}
 
 <details class="asp-doc-ref">
   <summary>References</summary>
-  <div class="tabbed-set tabbed-alternate" data-tabs="1:{{test_files|length}}" style="--md-indicator-x: 0px; --md-indicator-width: 92px;">
-  {%- for file in test_files %}
-  <input {% if loop.index == 1%} checked="checked" {% endif %} id="__tabbed-{{predicate_id}}-{{loop.index}}" name="__tabbed-{{predicate_id}}" type="radio">
+  <div class="tabbed-set tabbed-alternate" data-tabs="1:{{encodings|length}}" style="--md-indicator-x: 0px; --md-indicator-width: 92px;">
+  {% for file, encoding in encodings.items() %}
+  {%if predicate.signature in encoding.predicates%}
+  <input {% if firstfile %} checked="checked" {% endif %} id="__tabbed-{{predicate_id}}-{{loop.index}}" name="__tabbed-{{predicate_id}}" type="radio">
+  {% set firstfile = false %}
+  {%endif%}
   {%-endfor%}
   <div class="tabbed-labels tabbed-labels--linked">
-  {%- for file in test_files %}
+  {% for file, encoding in encodings.items() %}
+  {%if predicate.signature in encoding.predicates%}
   <label
     for="__tabbed-{{predicate_id}}-{{loop.index}}">
     <code>{{file}}</code></label>
+  {%endif%}
   {%-endfor%}
   </div>
   <div class="tabbed-content">
-  {%- for file in test_files %}
+  {% for file, encoding in encodings.items() %}
+  {%if predicate.signature in encoding.predicates%}
   <div class="tabbed-block">
   {% filter convert_markdown(0) %}
-  {% for statement in statements %}
+  {% for statement in encoding.statements %}
   {% for pn in statement.needed_predicates %}
   {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
   {% if pn_id == predicate_id %}
@@ -85,6 +102,7 @@ or we can save this info while parsing all includes#}
   {% endfor %}
   {%endfilter%}
   </div>
+  {% endif %}
   {%-endfor%}
   </div>
   <div class="tabbed-control tabbed-control--prev" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div><div class="tabbed-control tabbed-control--next" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div></div>

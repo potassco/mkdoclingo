@@ -15,6 +15,11 @@ code.doc-clingo-symbol-predicate::after {
     color: #ca91bf
 }
 
+code.doc-clingo-symbol-predicate-toc::after {
+    content: "P";
+    color: #ca91bf
+}
+
 .md-grid {
     max-width: 1440px;
 }
@@ -37,7 +42,7 @@ code.doc-clingo-symbol-predicate::after {
 
 .md-typeset .admonition.asp-doc,
 .md-typeset details.asp-doc {
-    border-color: var(--md-primary-fg-color);
+    border-color: var(--md-accent-fg-color);
 }
 
 .md-typeset h5 {
@@ -61,7 +66,7 @@ code.doc-clingo-symbol-predicate::after {
 
 .md-typeset .asp-doc>.admonition-title::before,
 .md-typeset .asp-doc>summary::before {
-    background-color: var(--md-primary-fg-color);
+    background-color: var(--md-accent-fg-color);
     -webkit-mask-image: var(--md-admonition-icon--asp-doc);
     mask-image: var(--md-admonition-icon--asp-doc);
 }

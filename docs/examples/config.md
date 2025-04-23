@@ -21,7 +21,7 @@ where the documentation of predicates is in a separate file.
 
 ## :material-arrow-down-box: Documentation generated
 
-::: examples/config/doc.lp
+::: examples/config/encoding-base-clingo.lp
     handler: asp
     options:
         source: true

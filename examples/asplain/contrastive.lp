@@ -37,7 +37,8 @@ Computes the contrastive graph based on the found hypothetical model
 % At the moment we are not marking the atoms that are relevant, we are just providing the full graph.
 _relevant(W, Atom) :- _model(W, Atom).
 
-%=== Firable
+%--------------------------------------------------
+%## Firable
 
 % fireable if abduced
 _fbody(_abduced, hypothetical, Atom, ()) :- _abduced(add, Atom).
@@ -56,7 +57,8 @@ _fbody(R, W, Atom, Vars) :-
 
 _f_atom(W, Atom) :- _f(_, W, Atom, _).
 
-%=== Causes and inhibitors
+%--------------------------------------------------
+%## Causes and inhibitors
 
 % Captures positive body for this graph
 _direct_cause((R,Vars), W, Effect, Cause) :-

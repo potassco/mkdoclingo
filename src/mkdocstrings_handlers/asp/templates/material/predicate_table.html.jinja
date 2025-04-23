@@ -1,42 +1,5 @@
-{% set not_defined_icon %}
-<span style="color:#9178C600" title="Defined (input)"><span class="twemoji"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 15V9h8V4.16L19.84 12 12 19.84V15z"></path></svg></span></span>
-{% endset %}
+{% from 'icons.html.jinja' import show_icon_map, input_icon_map %}
 
-{% set defined_icon %}
-<span style="color:#9178C6" title="Shown (Output)" class="twemoji">{{ ":material-arrow-right-bold:"|convert_markdown_simple(0) }}</span>
-{% endset %}
-
-{% set show_icon %}
-<span style="color:#52BF54" title="Shown (Output)" class="twemoji">{{ ":material-eye:"|convert_markdown_simple(0) }}</span>
-{% endset %}
-
-{% set show_explicit_icon %}
-<span style="color:#52BF54" title="Shown Explicitly (Output)" class="twemoji">{{ ":material-eye-plus:"|convert_markdown_simple(0) }}</span>
-{% endset %}
-
-{% set show_partial_icon %}
-<span style="color:#52BF54" title="Shown Partially (Output)" class="twemoji">{{ ":material-eye-lock:"|convert_markdown_simple(0) }}</span>
-{% endset %}
-
-{% set hidden_icon %}
-<span style="color:#838383" title="Hidden (Auxiliary)" class="twemoji">{{ ":material-eye-off:"|convert_markdown_simple(0) }}</span>
-{% endset %}
-
-
-
-
-{% set show_icon_map = {
-    0: show_icon,
-    1: show_explicit_icon,
-    2: show_partial_icon,
-    3: show_explicit_icon + show_partial_icon,
-    4: hidden_icon
-} %}
-
-{% set input_icon_map = {
-    0: not_defined_icon,
-    1: defined_icon,
-} %}
 
 {% set table %}
 
@@ -59,7 +22,7 @@
             {# TODO: Here we could use AI to make a summary that is smaller than some length and only text #}
             </td>
             <td style="padding-top: 0; padding-bottom: 0;">
-                {{show_icon_map[entry.show_status]}} {{input_icon_map[entry.is_input]}}
+                {{input_icon_map[entry.is_input]}} {{show_icon_map[entry.show_status]}}
             </td>
         </tr>
     {% endfor %}

@@ -17,8 +17,8 @@
 </div>
 {% endset %}
 {% set file_sig %}
-<code class="doc-symbol doc-symbol-heading doc-clingo-symbol-encoding"></code>
-<code>{{ title }}</code>
+<code class="doc-symbol doc-symbol-heading doc-clingo-symbol-encoding" style="font-size: 0.6rem;"></code>
+<code style="font-size: 0.6rem;">{{ title }}</code>
 {% endset %}
 
 {% filter heading(config.start_level+2, id=file_id, toc_label=file_sig) %}
@@ -53,4 +53,6 @@
 {% endfor%}
 </div>
 </div>
+<br>
+
 {% endfor%}

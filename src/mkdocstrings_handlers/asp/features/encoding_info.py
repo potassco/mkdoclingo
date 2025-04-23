@@ -60,6 +60,9 @@ class Encoding:
     source: str
     """Raw source code of the encoding."""
     content: list[EncodingLine]
+    statements: list[Statement]
+
+    predicates: list[str]
 
 
 @dataclass
@@ -103,6 +106,8 @@ class EncodingInfo:
             encodings[document.path] = Encoding(
                 source=document.content,
                 content=lines,
+                statements=document.statements,
+                predicates=[predicate.signature for predicate in document.predicates.values()],
             )
 
         return EncodingInfo(encodings)

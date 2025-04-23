@@ -11,3 +11,4 @@
 #include "base/constraints.lp".
 
 #include "base/clingo/user.lp".
+#include "base/show-clingo.lp".

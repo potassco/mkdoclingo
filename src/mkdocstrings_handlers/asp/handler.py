@@ -137,9 +137,21 @@ class ASPHandler(BaseHandler):
             "project_name": project_data["project"]["name"],
             "project_url_tree": project_data["project"]["urls"]["Homepage"].replace(".git/", "/") + "tree/master/",
             "encodings": EncodingInfo.from_documents(documents.values()).encodings,
-            "predicate_info": PredicateInfo.from_documents(documents.values()).predicates,
             "dependency_graph": DependencyGraph.from_document(documents.values()),
         }
+
+        def get_key(x):
+            key = x[1].show_status
+            if x[1].show_status == 0:
+                key = 3.5
+            if not x[1].is_input:
+                key += 0.1
+            return key
+
+        predicates = dict(sorted(PredicateInfo.from_documents(documents.values()).predicates.items(), key=get_key))
+        print(predicates)
+        data["predicate_info"] = predicates
+        # print("Collected data:", data)
         return data
 
     def render(self, data: dict, config: dict):

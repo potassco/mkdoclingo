@@ -40,13 +40,17 @@ Creates the graph based on the causes and inhibitors
 
 *%
 
-%=== Nodes
+%--------------------------------------------------
+
+%## Nodes
 node(A):-_f_atom(W, A).
 attr(node,A,origin,W):- _f_atom(W, A).
 attr(node,A,abduced,X):- node(A), _abduced(X,A).
 attr(node,A,query,X):- node(A), _query(X,A).
 
-%=== Edges
+%--------------------------------------------------
+
+%## Edges
 edge(Cause,Effect,((Cause,Effect),(RuleID,VARS))):-_direct_cause((RuleID,VARS), W, Effect, Cause).
 attr(edge,((Cause,Effect),(RuleID,VARS)),origin,W):-_direct_cause((RuleID,VARS), W, Effect, Cause).
 % attr(edge,((Cause,Effect),(RuleID,VARS)),rule,RuleID):-_direct_cause((RuleID,VARS), W, Effect, Cause).

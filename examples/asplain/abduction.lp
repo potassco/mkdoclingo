@@ -15,7 +15,7 @@ Uses the concept of abduction to find the hypothetical model
 %*
 #_abducible(T,A)
 
-Abducible atoms
+Abducible atoms full
 
 #parameters
 - T : type of abduction `add` or `rm`
@@ -66,7 +66,8 @@ Abducible atoms
 world(real;hypothetical).
 {_abduced(X,Atom)} :- _abducible(X,Atom).
 
-%### Constraints
+%--------------------------------------------------
+%## Constraints
 
 % - (C1) No sense to remove something that is not in input
 :- not _model(real,Atom), _abduced(rm,Atom).
@@ -77,7 +78,8 @@ world(real;hypothetical).
 
 _model(hypothetical,Atom) :- _abduced(add, Atom).
 
-%### Distance
+%--------------------------------------------------
+%## Distance
 
 :~ _distance(N,D,L). [D@L,N]
 

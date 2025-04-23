@@ -43,6 +43,8 @@ class PredicateInfo:
                     predicates[signatuture].update_show_status(ShowStatus.HIDDEN)
 
                 predicates[signatuture].update_show_status(predicate.show_status)
+                if predicates[signatuture].documentation is None:
+                    predicates[signatuture].documentation = predicate.documentation
 
         # Create an ordered dictionary sorted by signature
         sorted_predicates = OrderedDict(sorted(predicates.items(), key=lambda x: x[0]))

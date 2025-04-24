@@ -149,9 +149,7 @@ class ASPHandler(BaseHandler):
             return key
 
         predicates = dict(sorted(PredicateInfo.from_documents(documents.values()).predicates.items(), key=get_key))
-        print(predicates)
         data["predicate_info"] = predicates
-        # print("Collected data:", data)
         return data
 
     def render(self, data: dict, config: dict):

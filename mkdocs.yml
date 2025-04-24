@@ -34,6 +34,7 @@ theme:
     - navigation.tabs
     - content.code.copy
     - content.tooltips
+    - content.action.view
     # - navigation.instant.preview
     # - navigation.expand
   icon:
@@ -119,7 +120,12 @@ nav:
   # - Home: index.md
   - Getting Started:
       - Installation: installation.md
-      - Usage: usage.md
+      - Usage:
+          - use/index.md
+          - Predicate table: use/predicate-table.md
+          - Dependency graph: use/dependency-graph.md
+          - Encodings: use/encodings.md
+          - Glossary: use/glossary.md
   - Examples:
       - examples/index.md
       - examples/sudoku.md
@@ -127,8 +133,6 @@ nav:
       - examples/asplain.md
   - Reference:
       - reference/index.md
-      - Problem: reference/problem/index.md
-      - Encodings: reference/encodings/index.md
       - API: reference/api/index.md
   - Community:
       - community/index.md

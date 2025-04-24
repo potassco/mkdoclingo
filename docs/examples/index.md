@@ -16,8 +16,7 @@ provide step-by-step instructions.
 
 Each example includes:
 
-1. **Instructions** to run the example.
 1. **Code snippets** to demonstrate implementation.
-1. **Helpful visuals** to illustrate key concepts.
+2. **Helpful visuals** to illustrate key concepts.
 
 Dive in and start exploring!

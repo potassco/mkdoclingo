@@ -14,9 +14,6 @@ learn about specific components, or access essential resources.
 ## What’s Inside
 
 - **API Documentation:** Comprehensive details on general classes.
-- **ASP Encodings:** Explore the encodings used in our system.
-- **Problem Specifications:** Detailed description and definitions of the
-  problem.
 
 <!-- - **Advanced Topics:** Gain insights into complex use cases and integrations. -->
 

@@ -78,8 +78,8 @@ class Predicate:
         """
         if self.documentation is not None:
             return self.documentation.signature
-
-        return f"{self.identifier}({", ".join(string.ascii_uppercase[:self.arity])})"
+        args = ", ".join(string.ascii_uppercase[: self.arity])
+        return f"{self.identifier}({args})"
 
     @property
     def signature(self) -> str:

@@ -24,7 +24,13 @@ format = ["black", "isort", "autoflake"]
 lint_pylint = ["pylint"]
 typecheck = ["types-setuptools", "mypy"]
 test = ["coverage[toml]"]
-doc = ["mkdocs", "mkdocs-material", "mkdocstrings[python]", "tree-sitter"]
+doc = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "tree-sitter",
+    "pygments_clingo",
+]
 dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 
 [project.scripts]

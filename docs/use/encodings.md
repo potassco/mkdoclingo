@@ -14,7 +14,7 @@ This means that any markdown code can be rendered, including sections, admonitio
 
     === "Encoding"
 
-        ```prolog
+        ```clingo
 
         % Will skip the next comment since it is parsable
         % a:-b.
@@ -31,7 +31,7 @@ This means that any markdown code can be rendered, including sections, admonitio
     === "Output"
 
         Will skip the next comment
-        ```prolog
+        ```clingo
             c:-d,e.
         ```
 

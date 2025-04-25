@@ -85,7 +85,7 @@
   {% for pn in statement.needed_predicates %}
   {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
   {% if pn_id == predicate_id %}
-  ```prolog linenums="{{statement.row+1}}"
+  ```clingo linenums="{{statement.row+1}}"
     {{ statement.text| safe | indent(4) }}
   ```
   {% endif %}
@@ -93,7 +93,7 @@
   {% for pn in statement.provided_predicates %}
   {% set pn_id %}{{pn[0].identifier}}-{{pn[0].arity}}{% endset %}
   {% if pn_id == predicate_id %}
-  ```prolog linenums="{{statement.row+1}}" hl_lines="1"
+  ```clingo linenums="{{statement.row+1}}" hl_lines="1"
     {{ statement.text| safe | indent(4) }}
   ```
   {% endif %}

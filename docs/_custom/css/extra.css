@@ -2,6 +2,7 @@
     --md-primary-fg-color: #4378dc;
     --md-primary-fg-color--light: #4378dc;
     --md-primary-fg-color--dark: #4378dc;
+
 }
 
 [data-md-color-scheme="slate"] {
@@ -10,7 +11,22 @@
     --md-primary-fg-color--dark: #253758;
 }
 
-
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+    /* Code colors */
+    --md-code-hl-number-color: hsl(11, 80%, 45%);
+    --md-code-hl-special-color: hsl(340, 82%, 55%);
+    --md-code-hl-function-color: hsl(271, 55%, 58%);
+    --md-code-hl-constant-color: hsl(220, 70%, 60%);
+    --md-code-hl-keyword-color: var(--md-primary-fg-color);
+    --md-code-hl-string-color: hsl(160, 45%, 35%);
+    --md-code-hl-name-color: hsl(43, 100%, 40%);
+    --md-code-hl-operator-color: hsl(0, 0%, 30%);
+    --md-code-hl-punctuation-color: hsl(271, 55%, 58%);
+    --md-code-hl-comment-color: hsl(210, 15%, 50%, 0.5);
+    --md-code-hl-generic-color: hsl(210, 15%, 50%);
+    --md-code-hl-variable-color: hsl(24, 70%, 50%);
+}
 
 
 .md-header__title {

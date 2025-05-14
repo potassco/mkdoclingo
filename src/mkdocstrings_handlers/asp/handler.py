@@ -176,3 +176,6 @@ class ASPHandler(BaseHandler):
         template = self.env.get_template("documentation.html.jinja")
         # print("Rendering template with data:", data)
         return template.render(**data, config=config)
+
+    def get_templates(self) -> Path:
+        return Path(__file__).parent / "templates"

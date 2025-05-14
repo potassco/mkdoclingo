@@ -12,6 +12,7 @@ dynamic = ["version"]
 readme = "README.md"
 dependencies = [
     "clingo",
+    "mkdocstrings",
     "tomllib; python_version > '3.11'",
     "tomli; python_version < '3.11'",
 ]
@@ -35,6 +36,10 @@ dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 
 [project.scripts]
 mkdoclingo = "mkdoclingo.__main__:main"
+
+[project.entry-points."mkdocstrings.handlers"]
+clingo = "mkdocstrings_handlers.asp.handler:ASPHandler"
+
 
 [tool.setuptools.packages.find]
 where = ["src"]

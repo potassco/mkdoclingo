@@ -134,9 +134,11 @@ nav:
       - examples/sudoku.md
       - examples/config.md
       - examples/asplain.md
-  - Reference:
+  - API Reference:
       - reference/index.md
-      - API: reference/api/index.md
+      - Handler: reference/api/handler.md
+      - Features: reference/api/features.md
+      - Semantics: reference/api/semantics.md
   - Community:
       - community/index.md
       - Help: community/help.md

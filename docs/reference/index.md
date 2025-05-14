@@ -1,7 +1,8 @@
 ---
-hide:
-  - toc
+title: "API Reference"
+icon: "material/book-open-variant"
 ---
+
 
 # Reference
 
@@ -17,5 +18,5 @@ learn about specific components, or access essential resources.
 
 <!-- - **Advanced Topics:** Gain insights into complex use cases and integrations. -->
 
-Use this section to find the information you need, whether you’re debugging,
-extending functionality, or learning more about the system.
+<!-- Use this section to find the information you need, whether you’re debugging, -->
+<!-- extending functionality, or learning more about the system. -->

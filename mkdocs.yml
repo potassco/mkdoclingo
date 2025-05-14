@@ -91,6 +91,9 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.highlight:
+      use_pygments: true
+      pygments_lang_class: true
   - toc:
       permalink: true
   - footnotes

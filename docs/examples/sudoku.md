@@ -13,7 +13,7 @@ icon: material/grid
 
 ## Example instance
 
-```prolog
+```clingo
 --8<-- "examples/sudoku/instance.lp"
 ```
 

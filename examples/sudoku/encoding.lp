@@ -19,11 +19,6 @@ Describes a sudoku board. The value of cell (X,Y) is V.
 #initial(X,Y,V).
 Initial values of the sudoku board. The value of cell (X,Y) is V.
 
-!!! tip "Usage"
-
-    ```prolog
-    initial(1,1,5).
-    ```
 
 #parameters
 - X: the row of the cell

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 
 from clingo import Control
@@ -10,6 +11,8 @@ from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.semantics.block_comment import BlockComment
 from mkdocstrings_handlers.asp.semantics.line_comment import LineComment
 from mkdocstrings_handlers.asp.semantics.statement import Statement
+
+log = logging.getLogger(__name__)
 
 
 def is_clingo_code(code: str) -> bool:
@@ -101,7 +104,7 @@ class EncodingInfo:
                     if not is_code:
                         lines.append(EncodingLine(EncodingLineType.MD, oo.line))
                     else:
-                        print("Commented code ignored:", oo.line)
+                        log.debug("Commented code ignored:", oo.line)
 
             encodings[document.path] = Encoding(
                 source=document.content,

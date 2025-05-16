@@ -1,6 +1,5 @@
 ---
-title: "API Reference"
-icon: "material/book-open-variant"
+title: "Reference"
 ---
 
 
@@ -14,6 +13,8 @@ learn about specific components, or access essential resources.
 
 ## What’s Inside
 
+- **Sections:** How to create the different sections from an ASP encoding.
+- **Styling:** How to style the output.
 - **API Documentation:** Comprehensive details on general classes.
 
 <!-- - **Advanced Topics:** Gain insights into complex use cases and integrations. -->

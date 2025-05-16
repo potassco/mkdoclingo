@@ -22,9 +22,11 @@
 {% endset %}
 
 {% filter heading(config.start_level+2, id=file_id, toc_label=file_sig) %}
+{% if config.encodings.git_link %}
 <a href="{{project_url_tree}}{{title}}" target="_blank" rel="noopener noreferrer">
 {{git_logo}}
 </a>
+{% endif%}
 {{ file_sig }}
 {% endfilter %}
 

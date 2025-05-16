@@ -14,7 +14,9 @@ icon: material/head-question
     handler: asp
     options:
         encodings: true
-        glossary: true
-        predicate_table: true
+        glossary:
+            include_undocumented: false
+        predicate_table:
+            include_undocumented: false
         dependency_graph: true
         start_level: 2

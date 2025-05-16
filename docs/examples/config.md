@@ -16,6 +16,9 @@ where the documentation of predicates is in a separate file.
     handler: asp
     options:
         source: true
-        glossary: true
-        predicate_table: true
+        glossary:
+            include_undocumented: false
+            include_references: false
+        predicate_table:
+            include_undocumented: false
         start_level: 2

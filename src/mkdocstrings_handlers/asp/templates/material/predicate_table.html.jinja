@@ -13,6 +13,9 @@
     </thead>
     <tbody>
     {% for entry in predicate_info.values() %}
+        {% set hide_entry = entry.show_status == 4 and not entry.is_input and config["predicate_table"]["include_hidden"] == false %}
+        {% set hide_entry = hide_entry or  (not entry.documentation and config["predicate_table"]["include_undocumented"] == false)%}
+        {%if hide_entry==false%}
         <tr>
             <td><a href="#{{ entry.identifier }}-{{ entry.arity }}"><code>{{ entry.signature }}</code></a></td>
             <td>
@@ -25,6 +28,8 @@
                 {{input_icon_map[entry.is_input]}} {{show_icon_map[entry.show_status]}}
             </td>
         </tr>
+        {% endif %}
+
     {% endfor %}
     </tbody>
 </table>

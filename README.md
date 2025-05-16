@@ -1,68 +1,19 @@
 # mkdoclingo
 
-## Installation
+**mkdoclingo** is an automated documentation tool tailored for **Answer Set
+Programming (ASP)** code. Built on [MkDocs](https://www.mkdocs.org/) and
+[mkdocs-material](https://squidfunk.github.io/mkdocs-material/), it streamlines
+the creation of high-quality documentation with the following features:
 
-To install the project, run
+- **Render encodings**: Automatically format ASP encodings with comments
+  written in Markdown.
+- **Predicate analysis**: Collect and document predicates used across included
+  files.
+- **Navigation-friendly documentation**: Generate organized predicate
+  documentation with intuitive navigation.
+- **Input/output identification**: Detect and highlight input and output
+  predicates.
+- **Dependency graphs**: Visualize dependencies between predicates and files.
 
-```bash
-pip install .
-```
-
-## Usage
-
-Run the following for basic usage information:
-
-```bash
-mkdoclingo -h
-```
-
-To generate and open the documentation, run
-
-```bash
-nox -s doc -- serve
-```
-
-Instructions to install and use `nox` can be found in
-[DEVELOPMENT.md](./DEVELOPMENT.md)
-
-## How to use the Handler
-
-1. Add this project to your dependencies
-
-1. Add handler to `mkdocs.yml`
-
-   ```yml
-   plugins:
-   - mkdocstrings:
-       handlers:
-           asp:
-           paths: [encodings]
-   ```
-
-1. You may now use mkdocstrings identifiers like so:
-
-   ```
-   ::: some/path/to/encoding.lp
-       handler: asp
-   ```
-
-## Options
-
-The output is customizable via options.
-
-For example:
-
-```
-::: some/path/to/encoding.lp
-    handler: asp
-    options:
-        source: true
-```
-
-shows the source code of the corresponding encoding.
-
-### Currently available options
-
-- `source`: Source code of the encoding
-- `dependency_graph`: Predicate dependency graph of the encoding
-- `glossary`: Sorted information about predicates
+For installation instructions and detailed usage, visit our
+[official documentation](https://potassco.org/mkdoclingo/).

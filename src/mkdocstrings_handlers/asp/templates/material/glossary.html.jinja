@@ -4,18 +4,26 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 4h4v4H3zm6 1v2h12V5zm-6 5h4v4H3zm6 1v2h12v-2zm-6 5h4v4H3zm6 1v2h12v-2z"></path></svg>
     <span class="md-ellipsis" style="vertical-align: top;">Glossary</span>
 {% endset %}
-
 {% filter heading(config.start_level+1, id="glossary", toc_label=toc_label) %}
 <span class="md-icon">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span> Glossary
 {% endfilter %}
 
+
+
+
 {% for predicate in predicate_info.values() %}
+
+{% set hide_entry = predicate.show_status == 4 and not predicate.is_input and config["glossary"]["include_hidden"] == false %}
+{% set hide_entry = hide_entry or  (not predicate.documentation and config["glossary"]["include_undocumented"] == false)%}
+{%if hide_entry==false%}
 
 {% set pred_sig %}
 <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate" style="font-size: 0.6rem;"></code>
 <code style="font-size: 0.6rem;">{{ predicate }}</code>
 {% endset %}
+{% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}
 
+{# {%if config["glossary"]["include_navigation"] == "True"%} #}
 {% set pred_toc %}
 <span class="md-ellipsis" style="display: inline-flex; align-items: center; gap: 0.3rem;">
   <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate" style="font-size: 0.6rem;"></code>
@@ -24,12 +32,20 @@
   <code style="font-size: 0.6rem;">{{ predicate }}</code>
 </span>
 {% endset %}
-
-{% set predicate_id %}{{predicate.identifier}}-{{predicate.arity}}{% endset %}
-
 {% filter heading(config.start_level+2, id=predicate_id, toc_label=pred_toc) %}
 {{pred_sig}}
 {% endfilter %}
+{# {%else%}
+{% set pred_toc %}
+<span class="md-ellipsis" style="display: inline-flex; align-items: center; gap: 0.3rem;">
+</span>
+{% endset %}
+{% filter heading(config.start_level+2, id=predicate_id, toc_label=pred_toc) %}
+{{pred_sig}}
+{% endfilter %}
+{%endif%} #}
+
+
 
 <div >
 {%- if predicate.documentation %}
@@ -58,6 +74,9 @@
 
 {% set firstfile = true %}
 
+{# {{config["glossary"]["include_references"]}} #}
+{# {{config["glossary"]}} #}
+{%if config["glossary"]["include_references"] == true%}
 <details class="asp-doc-predicate-ref">
   <summary>References</summary>
   <div class="tabbed-set tabbed-alternate" data-tabs="1:{{encodings|length}}" style="--md-indicator-x: 0px; --md-indicator-width: 92px;">
@@ -108,7 +127,9 @@
   <div class="tabbed-control tabbed-control--prev" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div><div class="tabbed-control tabbed-control--next" hidden=""><button class="tabbed-button" tabindex="-1" aria-hidden="true"></button></div></div>
 
 </details>
+{%endif%}
 
 </div>
   <p><br></p>
+{%endif%}
 {%- endfor %}

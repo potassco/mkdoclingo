@@ -122,22 +122,27 @@ nav:
   # - Home: index.md
   - Getting Started:
       - Installation: installation.md
-      - Usage:
+      - Quick Start:
           - use/index.md
-          - Predicate table: use/predicate-table.md
-          - Dependency graph: use/dependency-graph.md
-          - Encodings: use/encodings.md
-          - Glossary: use/glossary.md
   - Examples:
       - examples/index.md
       - examples/sudoku.md
       - examples/config.md
       - examples/asplain.md
-  - API Reference:
+  - Reference:
       - reference/index.md
-      - Handler: reference/api/handler.md
-      - Features: reference/api/features.md
-      - Semantics: reference/api/semantics.md
+      - Sections:
+          - reference/sections/index.md
+          - Predicate table: reference/sections/predicate-table.md
+          - Dependency graph: reference/sections/dependency-graph.md
+          - Encodings: reference/sections/encodings.md
+          - Glossary: reference/sections/glossary.md
+      - Style: reference/style.md
+      - API:
+          - reference/api/index.md
+          - Handler: reference/api/handler.md
+          - Features: reference/api/features.md
+          - Semantics: reference/api/semantics.md
   - Community:
       - community/index.md
       - Help: community/help.md

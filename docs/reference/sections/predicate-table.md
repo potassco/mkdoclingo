@@ -13,7 +13,6 @@ and the type indicates the following:
 | Title                  | Icon                                                                 |
 |------------------------|----------------------------------------------------------------------|
 | Input (Not defined by any rule)                  | <span style="color:#9178C6; padding-top: 0; padding-bottom: 0;" title="Input" class="twemoji">:material-arrow-right-bold:</span> |
-| Shown                  | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown" class="twemoji">:material-eye:</span> |
 | Shown Explicitly (using `predicate/arity`)      | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown Explicitly" class="twemoji">:material-eye:</span> |
 | Shown Partially (using a conditional statement)       | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown Partially" class="twemoji">:material-eye-plus:</span> |
 | Hidden                 | <span style="color:#88888850; padding-top: 0; padding-bottom: 0;" title="Hidden" class="twemoji">:material-eye-off:</span> |
@@ -22,7 +21,15 @@ and the type indicates the following:
 !!! example
 
 
-    === "Usage"
+    === ":material-palette-outline: Output"
+
+        ::: examples/sudoku/encoding.lp
+            handler: asp
+            options:
+                predicate_table: true
+                start_level: 3
+
+    === ":material-code-block-tags: Usage"
 
         ```
         ::: examples/sudoku/encoding.lp
@@ -32,19 +39,39 @@ and the type indicates the following:
                 start_level: 3
         ```
 
-    === "Output"
-
-        ::: examples/sudoku/encoding.lp
-            handler: asp
-            options:
-                predicate_table: true
-                start_level: 3
 
 
 ## Configuration options
 
-- `ignore-includes` Boolean indication that the included files should not be counted for the predicates. By default all included files used when gathering predicates. (TODO)
+The option `predicate_table` can be further customized with the following options:
 
+- `include_undocumented` Boolean indicating if predicates that have no docstring should be included. Defaults to True.
+- `include_hidden` Boolean indicating if predicates that are not shown nor input should be included. Defaults to True.
+
+
+!!! example
+
+
+
+    === ":material-palette-outline: Output"
+
+        ::: examples/sudoku/encoding.lp
+            handler: asp
+            options:
+                predicate_table:
+                    include_hidden: false
+                start_level: 3
+
+    === ":material-code-block-tags: Usage"
+
+        ```
+        ::: examples/sudoku/encoding.lp
+            handler: asp
+            options:
+                predicate_table:
+                    include_hidden: false
+                start_level: 3
+        ```
 <!--
 ## IDEAS
 

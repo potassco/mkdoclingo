@@ -7,7 +7,15 @@ Generates a dependency graph between predicates. Input predicates are shown purp
 
 !!! example
 
-    === "Usage"
+    === ":material-palette-outline: Output"
+
+        ::: examples/sudoku/encoding.lp
+            handler: asp
+            options:
+                dependency_graph: true
+                start_level: 3
+
+    === ":material-code-block-tags: Usage"
 
         ```
         ::: examples/sudoku/encoding.lp
@@ -17,18 +25,9 @@ Generates a dependency graph between predicates. Input predicates are shown purp
                 start_level: 3
         ```
 
-    === "Output"
-
-        ::: examples/sudoku/encoding.lp
-            handler: asp
-            options:
-                dependency_graph: true
-                start_level: 3
 
 
 
 ## Configuration options
 
-- `ignore-undocumented` TODO
-- `ignore-hidden` This would make it not be connected TODO
-- `ignore-includes` Boolean indication that the included files should not considered TODO
+<!-- - `include-undocumented` Boolean indicating if predicates that have no docstring should be included. Defaults to True. -->

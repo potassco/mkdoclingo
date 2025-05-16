@@ -29,6 +29,19 @@ with open("pyproject.toml", "rb") as f:
 class ASPHandler(BaseHandler):
     """MKDocStrings handler for ASP files."""
 
+    DEFUALT_CONFIG = {
+        "start_level": 1,
+        "encodings": {"source": False, "git_link": False},
+        "glossary": {
+            "include_undocumented": True,
+            "include_hidden": True,
+            "include_references": True,
+            "include_navigation": True,
+        },
+        "predicate_table": {"include_undocumented": True, "include_hidden": True},
+        "dependency_graph": {"custome": True},
+    }
+
     def __init__(
         self,
         theme: str = "material",
@@ -170,7 +183,15 @@ class ASPHandler(BaseHandler):
             return None
 
         if "start_level" not in config:
-            config["start_level"] = 1
+            config["start_level"] = self.DEFUALT_CONFIG["start_level"]
+
+        sections = ["encodings", "predicate_table", "dependency_graph", "glossary"]
+        for s in sections:
+            if s in config:
+                if isinstance(config[s], bool):
+                    config[s] = {}
+                default_encodings = self.DEFUALT_CONFIG[s]
+                config[s] = {**default_encodings, **config[s]}
 
         # Get and render the documentation template
         template = self.env.get_template("documentation.html.jinja")

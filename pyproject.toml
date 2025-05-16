@@ -15,6 +15,9 @@ dependencies = [
     "mkdocstrings",
     "tree-sitter",
     "tomli; python_version < '3.11'",
+    "pygments_clingo",
+    "mkdocs",
+    "mkdocs-material",
 ]
 
 [project.urls]

@@ -137,6 +137,7 @@ nav:
           - Dependency graph: reference/sections/dependency-graph.md
           - Encodings: reference/sections/encodings.md
           - Glossary: reference/sections/glossary.md
+      - Predicate Docstring: reference/predicate-docs.md
       - Style: reference/style.md
       - API:
           - reference/api/index.md

@@ -112,11 +112,7 @@ class ASPHandler(BaseHandler):
         documents: dict[Path, Document] = {}
         while parse_queue:
             path = parse_queue.popleft()
-            if not path.is_file():
-                log.warning("\033[93mSkipping file not found: %s\033[0m", path)
-                continue
-            if path.suffix != ".lp":
-                log.warning("\033[93mSkipping non-ASP file: %s\033[0m", path)
+            if path.suffix != ".lp" or not path.is_file():
                 continue
 
             with open(path, "r", encoding="utf-8") as f:
@@ -174,7 +170,6 @@ class ASPHandler(BaseHandler):
             )
         )
         data["predicate_info"] = predicates
-
         return data
 
     def render(self, data: dict, config: dict):
@@ -192,6 +187,9 @@ class ASPHandler(BaseHandler):
         """
 
         if data is None:
+            return None
+        if len(data["encodings"]) == 0:
+            log.warning("\033[93mNo encoding found for the given path. Rendering empty template\033[0m")
             return None
 
         if "start_level" not in config:

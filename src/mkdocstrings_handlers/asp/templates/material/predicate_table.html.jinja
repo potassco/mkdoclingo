@@ -43,7 +43,8 @@
 {% endset %}
 
 {% filter heading(config.start_level+1, id="predicate_summary", toc_label=toc_label) %}
-<span class="md-icon">{{ ":material-table:"|convert_markdown(3) }}</span> Predicate Summary
+<span class="md-icon" style="vertical-align: middle; display: inline-block;">{{ ":material-table:"|convert_markdown(3) }}</span><span style="vertical-align: middle;"> Predicate Summary</span>
+
 {% endfilter %}
 
 {{ table }}

@@ -4,7 +4,8 @@
 {% endset %}
 
 {% filter heading(config.start_level+1, id="dependency_graph", toc_label=toc_label) %}
-<span class="md-icon">{{ ":material-graphql:"|convert_markdown(3) }}</span> Dependency Graph
+<span class="md-icon" style="vertical-align: middle; display: inline-block;">{{ ":material-graphql:"|convert_markdown(3) }}</span><span style="vertical-align: middle;"> Dependency Graph</span>
+
 {% endfilter %}
 
 {% filter convert_markdown(0) %}

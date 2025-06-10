@@ -25,6 +25,10 @@ except ModuleNotFoundError:
 with open("pyproject.toml", "rb") as f:
     project_data = tomllib.load(f)
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 class ASPHandler(BaseHandler):
     """MKDocStrings handler for ASP files."""
@@ -106,10 +110,13 @@ class ASPHandler(BaseHandler):
         """
         parse_queue = deque(paths)
         documents: dict[Path, Document] = {}
-
         while parse_queue:
             path = parse_queue.popleft()
-            if path.suffix != ".lp" or not path.is_file():
+            if not path.is_file():
+                log.warning("\033[93mSkipping file not found: %s\033[0m", path)
+                continue
+            if path.suffix != ".lp":
+                log.warning("\033[93mSkipping non-ASP file: %s\033[0m", path)
                 continue
 
             with open(path, "r", encoding="utf-8") as f:
@@ -118,7 +125,6 @@ class ASPHandler(BaseHandler):
             tree = asp_parser.parse(content)
             document = document_parser.parse(Document(path, content), tree)
             documents[path] = document
-
             parse_queue.extend(include.path for include in document.includes if include.path not in documents)
 
         return documents
@@ -161,8 +167,14 @@ class ASPHandler(BaseHandler):
                 key += 0.1
             return key
 
-        predicates = dict(sorted(PredicateInfo.from_documents(documents.values()).predicates.items(), key=get_key))
+        predicates = dict(
+            sorted(
+                PredicateInfo.from_documents(documents.values()).predicates.items(),
+                key=get_key,
+            )
+        )
         data["predicate_info"] = predicates
+
         return data
 
     def render(self, data: dict, config: dict):

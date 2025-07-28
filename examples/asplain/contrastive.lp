@@ -6,32 +6,32 @@ Computes the contrastive graph based on the found hypothetical model
 
 
 *%
-%*
-# _xclingo_f_atom(World, Atom)
-    Means that `Atom` is a node in the `World` explanation graph.
-#parameters
-    -Atom: a node in the graph.
-    -World: can be `real` or `hypothetical`.
+%* _xclingo_f_atom(World, Atom)
+.................
+Means that `Atom` is a node in the `World` explanation graph.
+Args:
+    Atom: a node in the graph.
+    World: can be `real` or `hypothetical`.
 
 *%
-%*
-# _xclingo_direct_cause(RuleID, World, Effect, Cause)
-    Models the directed edge `Cause -> Effect` that belongs to the graph `World`.
-#parameters
-    -RuleID: the identifier of the rule after which the edge was modeled.
-    -World: can be `real` or `hypothetical`.
-    -Effect: the destination node of the directed edge.
-    -Cause: the source node of the directed edge.
+%* _xclingo_direct_cause(RuleID, World, Effect, Cause)
+.................
+Models the directed edge `Cause -> Effect` that belongs to the graph `World`.
+Args:
+    RuleID: the identifier of the rule after which the edge was modeled.
+    World: can be `real` or `hypothetical`.
+    Effect: the destination node of the directed edge.
+    Cause: the source node of the directed edge.
 
 *%
-%*
-# _xclingo_direct_inhibitor(RuleID, World, Effect, Inhibitor)
-    Captures the Inhibitor-Effect relation between a negative literal in the body of a rule and an atom in the head. This is used for linking the Reference and the Contrastive explanation as the inhibitors of an atom that is in one graph will appear in the other graph.
-#parameters
-    -RuleID: the identifier of the rule after which the edge was modeled.
-    -World: can be `real` or `hypothetical`.
-    -Effect: the destination node of the directed edge.
-    -Inhibitor: the source node of the directed edge.
+%* _xclingo_direct_inhibitor(RuleID, World, Effect, Inhibitor)
+.................
+Captures the Inhibitor-Effect relation between a negative literal in the body of a rule and an atom in the head. This is used for linking the Reference and the Contrastive explanation as the inhibitors of an atom that is in one graph will appear in the other graph.
+Args:
+    RuleID: the identifier of the rule after which the edge was modeled.
+    World: can be `real` or `hypothetical`.
+    Effect: the destination node of the directed edge.
+    Inhibitor: the source node of the directed edge.
 *%
 
 % At the moment we are not marking the atoms that are relevant, we are just providing the full graph.

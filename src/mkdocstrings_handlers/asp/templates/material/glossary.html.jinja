@@ -52,20 +52,22 @@
 {{ predicate.documentation.description | convert_markdown(5, html_id) }}
 {% endif %}
 
-{%- if predicate.documentation.parameter_descriptions %}
+{%- if predicate.documentation.parameter_documentations %}
 
 <table>
   <thead>
     <tr>
       <th>Parameter</th>
+      <th>Type</th>
       <th>Description</th>
     </tr>
   </thead>
   <tbody>
-    {%- for param, description in predicate.documentation.parameter_descriptions.items() %}
+    {%- for param, documentation in predicate.documentation.parameter_documentations.items() %}
     <tr>
       <td><code>{{ param }}</code></td>
-      <td>{{ description | convert_markdown(5, html_id) }}</td>
+      <td>{{ documentation.type | convert_markdown(5, html_id) }}</td>
+      <td>{{ documentation.description | convert_markdown(5, html_id) }}</td>
     </tr>
     {%- endfor %}
   </tbody>

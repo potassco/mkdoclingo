@@ -21,6 +21,6 @@ class LineComment:
         """
         Create a line comment from a node.
         """
-        clean_text = node.text.decode("utf-8").removeprefix("%").strip()
+        clean_text = node.text.decode("utf-8").removeprefix("%")
 
         return LineComment(row=node.start_point.row, line=clean_text)

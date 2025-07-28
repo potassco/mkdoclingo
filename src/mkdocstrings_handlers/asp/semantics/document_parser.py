@@ -37,6 +37,7 @@ class DocumentParser:
         self.inside_tuple = False
         self.current_statement: Statement | None = None
         self.current_predicates: dict[str, Predicate] = {}
+        self.current_line_comments: list[LineComment] = []
         self.error = False
 
     def parse(self, document: Document, tree: Tree) -> Document:
@@ -54,6 +55,9 @@ class DocumentParser:
             Args:
                 node: The node.
             """
+
+            if NodeKind.from_grammar_name(node.grammar_name) != NodeKind.LINE_COMMENT:
+                self._process_line_comments(document)
 
             match NodeKind.from_grammar_name(node.grammar_name):
                 # State management
@@ -83,8 +87,13 @@ class DocumentParser:
                         self.current_statement.add_needed(predicate)
                 case NodeKind.LINE_COMMENT:
                     line_comment = LineComment.from_node(node)
-                    document.line_comments.append(line_comment)
-                    document.ordered_objects.append(line_comment)
+
+                    if self.current_line_comments and line_comment.row > self.current_line_comments[-1].row + 1:
+                        # If there is a gap between the current line comment and the last one,
+                        # we should reset the current line comments
+                        self.current_line_comments = []
+
+                    self.current_line_comments.append(line_comment)
                 case NodeKind.BLOCK_COMMENT:
                     block_comment = BlockComment.from_node(node)
                     document.block_comments.append(block_comment)
@@ -170,4 +179,57 @@ class DocumentParser:
         self._reset()
         traverse(tree, _on_enter, _on_exit)
 
+        # Process any remaining line comments after parsing
+        self._process_line_comments(document)
+
         return document
+
+    def _process_line_comments(self, document: Document) -> None:
+        """
+        Process the collected line comments and add them to the current statement.
+
+        Args:
+            document: The document to add the line comments to.
+        """
+        if not self.current_line_comments:
+            return
+
+        # collect all line comments into a block comment
+        block_comment = BlockComment(
+            row=self.current_line_comments[0].row,
+            lines=[comment.line for comment in self.current_line_comments],
+            text="\n".join(comment.line for comment in self.current_line_comments),
+        )
+
+        predicate_documentation = PredicateDocumentation.from_block_comment(block_comment)
+        if predicate_documentation is None:
+            for line_comment in self.current_line_comments:
+                document.line_comments.append(line_comment)
+                document.ordered_objects.append(line_comment)
+                self.current_line_comments = []
+            return
+
+        self.current_line_comments = []
+        document.block_comments.append(block_comment)
+        self._add_predicate_documentation(document, predicate_documentation)
+
+    def _add_predicate_documentation(self, document: Document, predicate_documentation: PredicateDocumentation) -> None:
+        """
+        Add the predicate documentation to the document.
+
+        Args:
+            document: The document to add the predicate documentation to.
+            predicate: The predicate to add the documentation for.
+            block_comment: The block comment containing the documentation.
+        """
+
+        predicate = Predicate.from_node(predicate_documentation.node)
+        signature = predicate.signature
+
+        if signature not in document.predicates:
+            document.predicates[signature] = predicate
+        else:
+            predicate = document.predicates[signature]
+
+        predicate.documentation = predicate_documentation
+        predicate.documentation.node = None

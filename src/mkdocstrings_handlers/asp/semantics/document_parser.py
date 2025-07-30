@@ -88,10 +88,16 @@ class DocumentParser:
                 case NodeKind.LINE_COMMENT:
                     line_comment = LineComment.from_node(node)
 
-                    if self.current_line_comments and line_comment.row > self.current_line_comments[-1].row + 1:
-                        # If there is a gap between the current line comment and the last one,
-                        # we should reset the current line comments
-                        self.current_line_comments = []
+                    if self.current_line_comments:
+                        # This was added as a workaround because empty line comments
+                        # currently are not collected into single nodes using the
+                        # tree sitter grammar
+                        line_span = self.current_line_comments[-1].line.count("\n")
+
+                        if line_comment.row > self.current_line_comments[-1].row + 1 + line_span:
+                            # If there is a gap between the current line comment and the last one,
+                            # we have to process the current line comments
+                            self._process_line_comments(document)
 
                     self.current_line_comments.append(line_comment)
                 case NodeKind.BLOCK_COMMENT:
@@ -200,6 +206,9 @@ class DocumentParser:
             lines=[comment.line for comment in self.current_line_comments],
             text="\n".join(comment.line for comment in self.current_line_comments),
         )
+        print("----------------------------------------")
+        print(block_comment.text)
+        print("----------------------------------------")
 
         predicate_documentation = PredicateDocumentation.from_block_comment(block_comment)
         if predicate_documentation is None:

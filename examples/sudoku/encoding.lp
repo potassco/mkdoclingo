@@ -1,4 +1,4 @@
-% # Sudoku Puzzle
+%# Sudoku Puzzle
 %   Uses the well known [puzzle](https://en.wikipedia.org/wiki/Sudoku)
 %
 

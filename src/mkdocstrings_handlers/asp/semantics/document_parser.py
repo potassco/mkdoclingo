@@ -1,7 +1,7 @@
-""" This module contains the DocumentParser class, which is responsible for parsing ASP documents.
+"""This module contains the DocumentParser class, which is responsible for parsing ASP documents.
 
-    It extracts relevant information from the Tree-sitter parse tree and populates the Document object with
-    statements, predicates, comments, and other elements.
+It extracts relevant information from the Tree-sitter parse tree and populates the Document object with
+statements, predicates, comments, and other elements.
 """
 
 from tree_sitter import Node, Tree
@@ -206,9 +206,9 @@ class DocumentParser:
             lines=[comment.line for comment in self.current_line_comments],
             text="\n".join(comment.line for comment in self.current_line_comments),
         )
-        print("----------------------------------------")
-        print(block_comment.text)
-        print("----------------------------------------")
+        # print("----------------------------------------")
+        # print(block_comment.text)
+        # print("----------------------------------------")
 
         predicate_documentation = PredicateDocumentation.from_block_comment(block_comment)
         if predicate_documentation is None:

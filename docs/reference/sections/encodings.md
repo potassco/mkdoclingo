@@ -41,6 +41,18 @@ This means that any markdown code can be rendered, including sections, admonitio
 
         The following lines will not be printed and can use in the encodings as separator
 
+!!! warning "Markdown headers"
+
+    When using `#` for markdown headers, make sure there is no trailing space between the clingo comment `%` and the `#`.
+
+    ```clingo
+
+        % # Incorrect title
+        %# Correct title
+    ```
+
+
+
 For each encoding, a section in the table of content will be created.
 
 

@@ -2,30 +2,30 @@
 
 Creates the graph based on the causes and inhibitors
 *%
-%*
-#node(A)
-    Defines a node in the graph
-#parameters
-    - A: the node identifier (atom)
+%* node(A)
+.................
+Defines a node in the graph
+Args:
+    A: the node identifier (atom)
 *%
-%*
-#edge(N,N',ID)
-    Defines an edge in the graph. They represent the causal relationships between nodes,
+%* edge(N,N',ID)
+.................
+Defines an edge in the graph. They represent the causal relationships between nodes,
     as well as negative relationships (inhibitors).
-#parameters
-    - N: the origin node
-    - N': the destination node
-    - ID: the identifier of the edge (Required for muli-edges)
+Args:
+    N: the origin node
+    N': the destination node
+    ID: the identifier of the edge (Required for muli-edges)
 *%
-%*
-#attr(T,N,A,V)
-    Defines an attribute for a node or edge.
+%* attr(T,N,A,V)
+.................
+Defines an attribute for a node or edge.
 
-#parameters
-    - T: the type of the element (`node` or `edge`)
-    - N: the node or edge identifier
-    - A: the attribute name
-    - V: the attribute value
+Args:
+    T: the type of the element (`node` or `edge`)
+    N: the node or edge identifier
+    A: the attribute name
+    V: the attribute value
 
     === "T=`node`"
 

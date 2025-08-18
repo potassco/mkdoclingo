@@ -8,12 +8,12 @@ icon: "material/file-document"
 To document predicates in ASP, use a single block comment per predicate with the following format:
 
 ```txt
-%*
-#<predicate>.
+%* <predicate>
+.................
 <description>
-#parameters
-- <parameter_1_name>: <parameter_1_description>
-- <parameter_2_name>: <parameter_2_description>
+Args:
+    <parameter_1_name> (<optional_parameter_1_type>): <parameter_1_description>
+    <parameter_2_name> (<optional_parameter_2_type>): <parameter_2_description>
 *%
 ```
 
@@ -22,13 +22,13 @@ To document predicates in ASP, use a single block comment per predicate with the
 !!! example
 
     ```txt
-    %*
-    #sudoku(X,Y,V).
+    %* sudoku(X,Y,V)
+    .................
     Represents a Sudoku board. The value of the cell at position (X, Y) is V.
-    #parameters
-    - X: The row index of the cell.
-    - Y: The column index of the cell.
-    - V: The value assigned to the cell.
+    Args:
+        X (int): The row index of the cell.
+        Y (int): The column index of the cell.
+        V (int): The value assigned to the cell.
 
     *%
     ```

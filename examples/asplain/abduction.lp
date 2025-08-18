@@ -2,52 +2,50 @@
 Finds the hypothetical model using abduction and the distance defined by the user
 
 *%
-%*
-#_abduced(T,A)
-
+%* _abduced(T,A)
+.................
 Uses the concept of abduction to find the hypothetical model
 
-#parameters
-- T : type of abduction `add` or `rm`
-- A : atom that has been abduced
+Args:
+    T : type of abduction `add` or `rm`
+    A : atom that has been abduced
 
 *%
-%*
-#_abducible(T,A)
-
+%* _abducible(T,A)
+.................
 Abducible atoms full
 
-#parameters
-- T : type of abduction `add` or `rm`
-- A : atom that can be abduced
+Args:
+    T : type of abduction `add` or `rm`
+    A : atom that can be abduced
 
 *%
-%*
-#_distance(N,D,L)
-    Distance between the real and hypothetical model.
+%* _distance(N,D,L)
+.................
+Distance between the real and hypothetical model.
 
-#parameters
-- N : Identifier for the distance, each identifier will yield one penalization
-- D : Penalization value
-- L : Level of the distance. Higher levels will be prioritized
-
-*%
-%*
-#_query(T,A)
-    Query that should hold in the hypothetical model
-
-#parameters
-- T : type of query `include` or `exclude`
-- A : atom that the user wants to include or exclude
+Args:
+    N : Identifier for the distance, each identifier will yield one penalization
+    D : Penalization value
+    L : Level of the distance. Higher levels will be prioritized
 
 *%
-%*
-#_model(T,A)
-    Atoms that are part of the model
+%* _query(T,A)
+.................
+Query that should hold in the hypothetical model
 
-#parameters
-- T : type of model `real` or `hypothetical`
-- A : atom that is part of the model
+Args:
+    T : type of query `include` or `exclude`
+    A : atom that the user wants to include or exclude
+
+*%
+%* _model(T,A)
+.................
+Atoms that are part of the model
+
+Args:
+    T : type of model `real` or `hypothetical`
+    A : atom that is part of the model
 
 *%
 
@@ -58,10 +56,10 @@ Abducible atoms full
 :- _query(exclude,Atom), _model(hypothetical,Atom).
 :- _query(include,Atom), not _model(hypothetical,Atom).
 
-%*
-#world(W).
-#parameters
-- W : W is a world; either `real` or `hypothetical`
+%* world(W)
+.................
+Args:
+    W : W is a world; either `real` or `hypothetical`
 *%
 world(real;hypothetical).
 {_abduced(X,Atom)} :- _abducible(X,Atom).

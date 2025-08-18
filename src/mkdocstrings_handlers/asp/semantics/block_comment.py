@@ -16,6 +16,9 @@ class BlockComment:
     lines: list[str]
     """ The lines of text of the block comment. """
 
+    text: str = ""
+    """ The full text of the block comment, excluding the delimiters. """
+
     @staticmethod
     def from_node(node: Node) -> BlockComment:
         """
@@ -23,5 +26,4 @@ class BlockComment:
         """
         clean_text = node.text.decode("utf-8").removeprefix("%*").removesuffix("*%").strip()
         lines = clean_text.split("\n")
-
-        return BlockComment(row=node.start_point.row, lines=lines)
+        return BlockComment(row=node.start_point.row, lines=lines, text=clean_text)

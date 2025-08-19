@@ -4,11 +4,9 @@ Module containing the handler for ASP files.
 
 from collections import deque
 from pathlib import Path
-from typing import Any
 
 from markupsafe import Markup
-from mkdocstrings.handlers.base import BaseHandler
-from mkdocstrings.handlers.rendering import HeadingShiftingTreeprocessor
+from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
 
 from mkdocstrings_handlers.asp.document import Document
 from mkdocstrings_handlers.asp.features.dependency_graph import DependencyGraph
@@ -33,6 +31,28 @@ log = logging.getLogger(__name__)
 class ASPHandler(BaseHandler):
     """MKDocStrings handler for ASP files."""
 
+    handler = "asp"
+    domain = "asp"
+    name = "asp"
+
+    # Only *extras* you want on top of mkdocstrings defaults (don’t include "autorefs" here)
+    EXTRA_MDX = [
+        "admonition",
+        "def_list",
+        "toc",
+        "pymdownx.details",
+        "pymdownx.superfences",
+    ]
+
+    EXTRA_MDX_CONFIG = {
+        "toc": {"permalink": True},
+        # If Material icons like :material-table: stop rendering, uncomment below:
+        # "pymdownx.emoji": {
+        #     "emoji_index": "materialx.emoji.twemoji",
+        #     "emoji_generator": "materialx.emoji.to_svg",
+        # },
+    }
+
     DEFUALT_CONFIG = {
         "start_level": 1,
         "encodings": {"source": False, "git_link": False},
@@ -46,24 +66,40 @@ class ASPHandler(BaseHandler):
         "dependency_graph": {"custome": True},
     }
 
-    def __init__(
-        self,
-        theme: str = "material",
-        **_kwargs: Any,
-    ) -> None:
-        """
-        Initialize the handler.
+    DEFAULT_OPTIONS = {
+        "show_symbol_type_heading": True,
+        "show_symbol_type_toc": True,
+        "show_signature_annotations": True,
+        "signature_cross_references": True,
+        "show_source": False,
+        "extra": {
+            "show_inherited_detail": True,
+            "show_inherited_detail_toc": True,
+            "show_inherited_detail_tree": True,
+        },
+    }
 
-        Args:
-            theme: The theme to use for the handler.
-            config_file_path: The path to the configuration file.
-            paths: A list of paths to search for ASP files.
-            locale: The locale to use for the handler.
-            load_external_modules: Whether to load external modules.
-            **kwargs: Keyword arguments.
-        """
-        super().__init__("asp", theme)
+    def __init__(self, theme: str = "material", **kwargs):
+        mdx = kwargs.pop("mdx", list(self.EXTRA_MDX))
+        mdx_config = kwargs.pop("mdx_config", dict(self.EXTRA_MDX_CONFIG))
+
+        try:
+            from mkdocs_autorefs.extension import AutorefsExtension
+
+            mdx.append(AutorefsExtension())
+        except ImportError:
+            pass
+
+        super().__init__(theme=theme, mdx=mdx, mdx_config=mdx_config, **kwargs)
+
         self.env.filters["convert_markdown_simple"] = self.do_convert_markdown_simple
+
+    def get_options(self, config=None, **kwargs):
+        """Return the options for this handler, merging defaults and user-provided options."""
+        user_options = kwargs.get("options", {})
+        merged = dict(self.DEFAULT_OPTIONS)
+        merged.update(user_options)
+        return merged
 
     def do_convert_markdown_simple(
         self,

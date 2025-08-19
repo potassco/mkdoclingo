@@ -18,6 +18,7 @@ dependencies = [
     "pygments_clingo",
     "mkdocs",
     "mkdocs-material",
+    "mkdocs-autorefs",
 ]
 
 [project.urls]

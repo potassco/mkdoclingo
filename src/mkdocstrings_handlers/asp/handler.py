@@ -53,7 +53,7 @@ class ASPHandler(BaseHandler):
         # },
     }
 
-    DEFUALT_CONFIG = {
+    DEFAULT_CONFIG = {
         "start_level": 1,
         "encodings": {"source": False, "git_link": False},
         "glossary": {
@@ -63,43 +63,26 @@ class ASPHandler(BaseHandler):
             "include_navigation": True,
         },
         "predicate_table": {"include_undocumented": True, "include_hidden": True},
-        "dependency_graph": {"custome": True},
-    }
-
-    DEFAULT_OPTIONS = {
-        "show_symbol_type_heading": True,
-        "show_symbol_type_toc": True,
-        "show_signature_annotations": True,
-        "signature_cross_references": True,
-        "show_source": False,
-        "extra": {
-            "show_inherited_detail": True,
-            "show_inherited_detail_toc": True,
-            "show_inherited_detail_tree": True,
-        },
+        "dependency_graph": {"custom": True},
     }
 
     def __init__(self, theme: str = "material", **kwargs):
         mdx = kwargs.pop("mdx", list(self.EXTRA_MDX))
         mdx_config = kwargs.pop("mdx_config", dict(self.EXTRA_MDX_CONFIG))
 
-        try:
-            from mkdocs_autorefs.extension import AutorefsExtension
+        # try:
+        #     import mkdocs_autorefs  # just to check it's installed
 
-            mdx.append(AutorefsExtension())
-        except ImportError:
-            pass
-
+        #     mdx.append("mkdocs_autorefs")
+        # except ImportError:
+        #     pass
         super().__init__(theme=theme, mdx=mdx, mdx_config=mdx_config, **kwargs)
 
         self.env.filters["convert_markdown_simple"] = self.do_convert_markdown_simple
 
-    def get_options(self, config=None, **kwargs):
-        """Return the options for this handler, merging defaults and user-provided options."""
-        user_options = kwargs.get("options", {})
-        merged = dict(self.DEFAULT_OPTIONS)
-        merged.update(user_options)
-        return merged
+    def get_default_options(self) -> dict:
+        """Return default options for this handler (mkdocstrings will merge user options into these)."""
+        return dict(self.DEFUALT_CONFIG)
 
     def do_convert_markdown_simple(
         self,
@@ -174,10 +157,8 @@ class ASPHandler(BaseHandler):
         Returns:
             The collected data as a dictionary.
         """
-
         # if identifier != "examples/my_test/base.lp":
         #     return None
-
         start_path = Path(identifier)
         asp_parser = ASPParser()
         document_parser = DocumentParser()
@@ -210,39 +191,49 @@ class ASPHandler(BaseHandler):
 
     def render(self, data: dict, config: dict):
         """
-        Render the collected data to html.
-
-        This function will be called for all `data` collected by the collect function.
+        Render the collected data to HTML safely.
 
         Args:
-            data: The data collected by the collect function.
-            config: The configuration dictionary.
+            data: Collected data from the handler.
+            config: Configuration dictionary.
 
         Returns:
-            The rendered data as a string
+            Rendered HTML string.
         """
+        if not data or all(len(v) == 0 for v in data.values()):
+            log.warning("\033[93mNo data to render, returning empty HTML.\033[0m")
+            return "<p>No documentation available.</p>"
 
-        if data is None:
-            return None
-        if len(data["encodings"]) == 0:
-            log.warning("\033[93mNo encoding found for the given path. Rendering empty template\033[0m")
-            return None
+        # Ensure start_level is an int
+        if "start_level" not in config or not isinstance(config["start_level"], int):
+            config["start_level"] = self.DEFAULT_CONFIG["start_level"]
 
-        if "start_level" not in config:
-            config["start_level"] = self.DEFUALT_CONFIG["start_level"]
-
+        # Merge default config safely
         sections = ["encodings", "predicate_table", "dependency_graph", "glossary"]
         for s in sections:
             if s in config:
                 if isinstance(config[s], bool):
                     config[s] = {}
-                default_encodings = self.DEFUALT_CONFIG[s]
+                default_encodings = self.DEFAULT_CONFIG[s]
                 config[s] = {**default_encodings, **config[s]}
 
-        # Get and render the documentation template
-        template = self.env.get_template("documentation.html.jinja")
-        # print("Rendering template with data:", data)
-        return template.render(**data, config=config)
+        # Initialize Jinja2 environment if not already
+        if not hasattr(self, "env"):
+            from jinja2 import Environment, FileSystemLoader
+
+            self.env = Environment(loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
+
+        # Load template
+        try:
+            template = self.env.get_template("documentation.html.jinja")
+        except Exception:
+            return "<p>Template not found.</p>"
+
+        # Render safely
+        try:
+            return template.render(**data, config=config)
+        except Exception:
+            return "<p>Rendering failed.</p>"
 
     def get_templates(self) -> Path:
         return Path(__file__).parent / "templates"

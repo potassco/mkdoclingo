@@ -237,3 +237,13 @@ class ASPHandler(BaseHandler):
 
     def get_templates(self) -> Path:
         return Path(__file__).parent / "templates"
+
+
+def get_handler(**kwargs):
+    """
+    Return an instance of the ASPHandler class.
+
+    This is required by mkdocstrings to load the handler.
+    """
+
+    return ASPHandler(**kwargs)

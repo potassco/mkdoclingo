@@ -1,6 +1,9 @@
+from pathlib import Path
+
 from mkdocstrings import BaseHandler
 
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
+from mkdocstrings_handlers.asp._internal.parser import ASPParser
 
 
 class ASPHandler(BaseHandler):
@@ -9,6 +12,11 @@ class ASPHandler(BaseHandler):
     handler = "asp"
     domain = "asp"
     name = "asp"
+
+    def __init__(self, *, theme, custom_templates, mdx, mdx_config):
+        super().__init__(theme=theme, custom_templates=custom_templates, mdx=mdx, mdx_config=mdx_config)
+
+        self._parser = ASPParser()
 
     def get_options(self, local_options: dict) -> dict:
         """
@@ -36,9 +44,9 @@ class ASPHandler(BaseHandler):
         Returns:
             The collected data as a dictionary.
         """
-        print("collect")
-        print(identifier)
-        print(options)
+
+        self._parser.parse_files([Path(identifier)])
+
         return {"bla": 1}
 
     def render(self, data: dict, options: ASPOptions) -> dict:
@@ -52,9 +60,6 @@ class ASPHandler(BaseHandler):
         Returns:
             The rendered data as a dictionary.
         """
-        print("render")
-        print(data)
-        print(options)
 
 
 def get_handler(theme: str, handler_config: dict, tool_config: dict, **kwargs):
@@ -63,7 +68,4 @@ def get_handler(theme: str, handler_config: dict, tool_config: dict, **kwargs):
 
     This is required by mkdocstrings to load the handler.
     """
-
-    print("handler config:", handler_config)
-    print("tool config:", tool_config)
     return ASPHandler(theme=theme or "material", **kwargs)

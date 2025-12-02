@@ -80,7 +80,7 @@ class EncodingInfo:
         Create a encoding content from an ASP document.
 
         Args:
-            document: The ASP document.
+            documents: The ASP document.
 
         Returns:
             The encoding content.

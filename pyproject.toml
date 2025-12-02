@@ -6,15 +6,16 @@ build-backend = "setuptools.build_meta"
 name = "mkdoclingo"
 authors = [{ name = "Potassco", email = "hahnmartinlu@uni-potsdam.de" }]
 description = "Mkdocs plugin to generate documentation from clingo files"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 readme = "README.md"
 dependencies = [
     "clingo",
-    "mkdocstrings>=0.30",
+    "mkdocstrings>=1.0.0",
     "tree-sitter",
-    "tomli; python_version < '3.11'",
+    "tree-sitter-clingo",
+    "pydantic",
     "pygments_clingo",
     "mkdocs>=1.5",
     "mkdocs-material>=9.5",
@@ -30,11 +31,7 @@ lint_pylint = ["pylint"]
 typecheck = ["types-setuptools", "mypy"]
 test = ["coverage[toml]"]
 doc = [
-    "mkdocs",
-    "mkdocs-material",
     "mkdocstrings[python]",
-    "tree-sitter",
-    "pygments_clingo",
 ]
 dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 

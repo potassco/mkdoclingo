@@ -43,14 +43,25 @@ def extract_statement(node: Node) -> Statement:
     head_node = node.child_by_field_name("head")
     body_node = node.child_by_field_name("body")
 
+    captures = {}
+
     if head_node:
-        captures = Queries.HEAD.captures(head_node)
+        # We don't use the head_node here
+        # because `head` is a supertype in the current grammar
+        # which leads to query difficulties with literals
+        head_captures = Queries.HEAD.captures(node)
+        captures.update(head_captures)
 
     if body_node:
-        captures = Queries.BODY.captures(body_node)
+        body_captures = Queries.BODY.captures(body_node)
+        captures.update(body_captures)
 
-    print(captures)
+    provided_predicates = [extract_predicate(node) for node in captures.get("provided", [])]
+    needed_predicates = [extract_predicate(node) for node in captures.get("needed", [])]
 
     return Statement(
-        row=node.start_point.row, text=node.text.decode("utf-8"), provided_predicates=[], needed_predicates=[]
+        row=node.start_point.row,
+        text=node.text.decode("utf-8"),
+        provided_predicates=provided_predicates,
+        needed_predicates=needed_predicates,
     )

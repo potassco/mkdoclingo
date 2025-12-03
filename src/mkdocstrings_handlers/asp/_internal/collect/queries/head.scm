@@ -1,30 +1,38 @@
 ; -----------------------------------------------------------------------------
-; PROVIDED
+; This gathers the provided and needed predicates in the head of a statement
 ; -----------------------------------------------------------------------------
-; Single literal in head
+
 (head/literal) @provided
 
-; Single literal in disjunction
 (disjunction
     (literal) @provided
 )
 
-; Literal in head of conditional literal
 (conditional_literal
     (literal) @provided
-)
-
-; -----------------------------------------------------------------------------
-; NEEDED
-; -----------------------------------------------------------------------------
-(conditional_literal
-  (condition
-    (literal) @needed
-  )
+    (condition
+        (literal) @needed
+    )?
 )
 
 (head_aggregate
   (head_aggregate_elements
-    (_) @needed
+    (head_aggregate_element
+            (literal) @needed
+            (condition
+                (literal) @needed
+            )?
+        )
   )
+)
+
+(head/set_aggregate
+    (set_aggregate_elements
+        (set_aggregate_element
+            (literal) @provided
+            (condition
+                (literal) @needed
+            )?
+        )
+    )
 )

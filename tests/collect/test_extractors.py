@@ -2,8 +2,7 @@ from typing import Callable
 
 from tree_sitter import Tree
 
-from mkdocstrings_handlers.asp._internal.collect.debug import print_tree
-from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include, extract_predicate
+from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include, extract_predicate, extract_statement
 
 
 def test_extract_include(tmp_path, parse_string: Callable[[str], Tree]):
@@ -55,7 +54,6 @@ def test_extract_predicate_without_terms(parse_string: Callable[[str], Tree]) ->
 def test_extract_predicate_negative(parse_string: Callable[[str], Tree]) -> None:
     source = "not p(X, Y)."
     tree = parse_string(source)
-    print_tree(tree.root_node, bytes(source, "utf8"), depth=1)
     rule_node = tree.root_node.child(0)
     literal_node = rule_node.child(0)
     predicate = extract_predicate(literal_node)
@@ -68,7 +66,6 @@ def test_extract_predicate_negative(parse_string: Callable[[str], Tree]) -> None
 def test_extract_predicate_from_body_literal(parse_string: Callable[[str], Tree]) -> None:
     source = ":- not q(Y, Z)."
     tree = parse_string(source)
-    print_tree(tree.root_node, bytes(source, "utf8"), depth=2)
     rule_node = tree.root_node.child(0)
     body_node = rule_node.child_by_field_name("body")
     literal_node = body_node.child(0)
@@ -77,3 +74,111 @@ def test_extract_predicate_from_body_literal(parse_string: Callable[[str], Tree]
     assert predicate.identifier == "q"
     assert predicate.arity == 2
     assert predicate.negation == True
+
+
+def test_extract_statement_head_literal(parse_string: Callable[[str], Tree]) -> None:
+    source = "p(1)."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 0
+
+
+def test_extract_statement_head_disjunction(parse_string: Callable[[str], Tree]) -> None:
+    source = "p(1); q(2)."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 2
+    assert len(statement.needed_predicates) == 0
+
+
+def test_extract_statement_head_conditional(parse_string: Callable[[str], Tree]) -> None:
+    source = "p(1):q, not r(2)."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 2
+
+
+def test_extract_statement_with_body(parse_string: Callable[[str], Tree]) -> None:
+    source = "p(X) :- q(X), not r(X)."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 2
+
+
+def test_extract_statement_with_body_aggregate(parse_string: Callable[[str], Tree]) -> None:
+    source = "p(X) :- X = #count { Y : q(Y), not r(Y) } > 2."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 2
+
+
+def test_extract_statement_with_body_set_aggregate(parse_string: Callable[[str], Tree]) -> None:
+    source = "p :- 0 < { q(Y) : not r(Y) }."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 2
+
+
+def test_extract_statement_with_head_aggregate(parse_string: Callable[[str], Tree]) -> None:
+    source = "1{p(X):q(X)}."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 1
+
+
+def test_extract_statement_with_head_set_aggregate1(parse_string: Callable[[str], Tree]) -> None:
+    source = "1{p(X):q(X)}."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 1
+
+
+def test_extract_statement_with_head_aggregate2(parse_string: Callable[[str], Tree]) -> None:
+    source = "#sum {X:q(X):r(X)}."
+    tree = parse_string(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.text == source
+    assert len(statement.provided_predicates) == 0
+    assert len(statement.needed_predicates) == 2

@@ -1,11 +1,9 @@
-
-
-(body_literal
-  !sign
-  (symbolic_atom) @pos_dep
-)
+; -----------------------------------------------------------------------------
+; This gathers needed predicates in the body of a statement
+; -----------------------------------------------------------------------------
 
 (body_literal
-  sign: (_)
-  (symbolic_atom) @neg_dep
-)
+    atom: (simple_atom)
+) @needed
+
+(literal) @needed

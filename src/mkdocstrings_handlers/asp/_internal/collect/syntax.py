@@ -86,3 +86,4 @@ class Queries:
     BODY = AspQuery("body.scm")
     HEAD = AspQuery("head.scm")
     PREDICATE = AspQuery("predicate.scm")
+    STATEMENT = AspQuery("statement.scm")

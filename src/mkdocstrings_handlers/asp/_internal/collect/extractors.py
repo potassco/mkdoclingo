@@ -3,10 +3,10 @@ from pathlib import Path
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp._internal.collect.syntax import Queries
-from mkdocstrings_handlers.asp._internal.domain import Include, Statement
+from mkdocstrings_handlers.asp._internal.domain import Include, Predicate, Statement
 
 
-def extract_include(node: Node, base_path: Path) -> Include:
+def extract_include(node: Node, parent_file_path: Path) -> Include:
     """
     Extract an Include from a node.
 
@@ -26,16 +26,30 @@ def extract_include(node: Node, base_path: Path) -> Include:
     file_path_node = node.children[1]
     file_path = Path(file_path_node.children[1].text.decode("utf-8"))
 
-    return Include((base_path.parent / file_path).resolve())
+    return Include((parent_file_path.parent / file_path).resolve())
+
+
+def extract_predicate(node: Node) -> Predicate:
+    captures = Queries.PREDICATE.captures(node)
+
+    return Predicate(
+        identifier=captures["identifier"][0].text.decode("utf-8"),
+        arity=len(captures.get("term", [])),
+        negation=len(captures.get("negation", [])) > 0,
+    )
 
 
 def extract_statement(node: Node) -> Statement:
-    node.child_by_field_name("head")
+    head_node = node.child_by_field_name("head")
     body_node = node.child_by_field_name("body")
+
+    if head_node:
+        captures = Queries.HEAD.captures(head_node)
 
     if body_node:
         captures = Queries.BODY.captures(body_node)
-        print(captures)
+
+    print(captures)
 
     return Statement(
         row=node.start_point.row, text=node.text.decode("utf-8"), provided_predicates=[], needed_predicates=[]

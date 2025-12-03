@@ -29,10 +29,8 @@ Homepage = "https://github.com/potassco/mkdoclingo.git/"
 format = ["black", "isort", "autoflake"]
 lint_pylint = ["pylint"]
 typecheck = ["types-setuptools", "mypy"]
-test = ["coverage[toml]"]
-doc = [
-    "mkdocstrings[python]",
-]
+test = ["coverage[toml]", "pytest"]
+doc = ["mkdocstrings[python]"]
 dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 
 [project.scripts]

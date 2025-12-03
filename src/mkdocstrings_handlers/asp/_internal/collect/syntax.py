@@ -84,3 +84,5 @@ class Queries:
     """Registry of available Semantic Queries."""
 
     BODY = AspQuery("body.scm")
+    HEAD = AspQuery("head.scm")
+    PREDICATE = AspQuery("predicate.scm")

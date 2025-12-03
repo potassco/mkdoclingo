@@ -10,7 +10,9 @@ class NodeKind(Enum):
 
     UNKNOWN = auto()
     RULE = "rule"
+    INTEGRITY_CONSTRAINT = "integrity_constraint"
     INCLUDE = "include"
+    ATOM = "symbolic_atom"
     ERROR = "ERROR"
 
     @staticmethod

@@ -116,6 +116,8 @@ plugins:
               show_inherited_detail: true
               show_inherited_detail_toc: true
               show_inherited_detail_tree: true
+        # asp:
+        # paths: [examples] # path to your ASP source files
 
 nav:
   # - Home: index.md

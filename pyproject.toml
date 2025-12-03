@@ -12,13 +12,13 @@ dynamic = ["version"]
 readme = "README.md"
 dependencies = [
     "clingo",
-    "mkdocstrings",
+    "mkdocstrings>=0.30",
     "tree-sitter",
     "tomli; python_version < '3.11'",
     "pygments_clingo",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-autorefs",
+    "mkdocs>=1.5",
+    "mkdocs-material>=9.5",
+    "mkdocs-autorefs>=1.4",
 ]
 
 [project.urls]

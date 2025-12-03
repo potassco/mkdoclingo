@@ -5,20 +5,20 @@ from pathlib import Path
 import tree_sitter_clingo
 from tree_sitter import Language, Parser
 
-from mkdocstrings_handlers.asp._internal.document import Document
-from mkdocstrings_handlers.asp._internal.semantics.directives.include import Include
-from mkdocstrings_handlers.asp._internal.tree_sitter.debug import print_tree
-from mkdocstrings_handlers.asp._internal.tree_sitter.node_kind import NodeKind
+from mkdocstrings_handlers.asp._internal.collect.debug import print_tree
+from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include
+from mkdocstrings_handlers.asp._internal.collect.node_kind import NodeKind
+from mkdocstrings_handlers.asp._internal.domain import Document, Include
 
 log = logging.getLogger(__name__)
 
 
-class ASPParser:
+class DocumentCollector:
     def __init__(self):
         language = Language(tree_sitter_clingo.language())
         self._parser = Parser(language)
 
-    def parse_files(self, paths: list[Path]) -> list[Document]:
+    def collect_from_files(self, paths: list[Path]) -> list[Document]:
         parse_queue = deque(paths)
         documents: dict[Path, Document] = {}
         while parse_queue:
@@ -26,13 +26,13 @@ class ASPParser:
             if path.suffix != ".lp" or not path.is_file():
                 log.warning(f"skip file {path}, not a valid ASP file.")
                 continue
-            document = self.parse_file(path)
+            document = self.collect_from_file(path)
             documents[path] = document
             parse_queue.extend(include.path for include in document.includes if include.path not in documents)
 
         return documents.values()
 
-    def parse_file(self, file_path: Path) -> Document:
+    def collect_from_file(self, file_path: Path) -> Document:
         with open(file_path, "rb") as f:
             source_bytes = f.read()
 
@@ -46,8 +46,7 @@ class ASPParser:
                 case NodeKind.RULE:
                     pass
                 case NodeKind.INCLUDE:
-                    include = Include.from_node(node)
-                    include.resolve_path(file_path)
+                    include = extract_include(node, file_path)
                     document.includes.append(include)
 
         return document

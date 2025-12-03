@@ -2,7 +2,8 @@ from pathlib import Path
 
 from tree_sitter import Node
 
-from mkdocstrings_handlers.asp._internal.domain import Include
+from mkdocstrings_handlers.asp._internal.collect.syntax import Queries
+from mkdocstrings_handlers.asp._internal.domain import Include, Statement
 
 
 def extract_include(node: Node, base_path: Path) -> Include:
@@ -26,3 +27,16 @@ def extract_include(node: Node, base_path: Path) -> Include:
     file_path = Path(file_path_node.children[1].text.decode("utf-8"))
 
     return Include((base_path.parent / file_path).resolve())
+
+
+def extract_statement(node: Node) -> Statement:
+    node.child_by_field_name("head")
+    body_node = node.child_by_field_name("body")
+
+    if body_node:
+        captures = Queries.BODY.captures(body_node)
+        print(captures)
+
+    return Statement(
+        row=node.start_point.row, text=node.text.decode("utf-8"), provided_predicates=[], needed_predicates=[]
+    )

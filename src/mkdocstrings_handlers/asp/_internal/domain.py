@@ -13,6 +13,29 @@ class Include:
 
 
 @dataclass
+class Predicate:
+    """A predicate in an ASP program."""
+
+    identifier: str
+    arity: int
+    negation: bool = False
+
+
+@dataclass
+class Statement:
+    """A statement in an ASP program."""
+
+    row: int
+    """The row in the source file where the statement is located."""
+    text: str
+    """The text of the statement."""
+    provided_predicates: list[Predicate]
+    """The predicates provided by the statement."""
+    needed_predicates: list[Predicate]
+    """The predicates needed by the statement."""
+
+
+@dataclass
 class Document:
     path: Path
     content: str

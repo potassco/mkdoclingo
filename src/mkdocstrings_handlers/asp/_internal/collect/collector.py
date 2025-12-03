@@ -6,9 +6,9 @@ import tree_sitter_clingo
 from tree_sitter import Language, Parser
 
 from mkdocstrings_handlers.asp._internal.collect.debug import print_tree
-from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include
-from mkdocstrings_handlers.asp._internal.collect.node_kind import NodeKind
-from mkdocstrings_handlers.asp._internal.domain import Document, Include
+from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include, extract_statement
+from mkdocstrings_handlers.asp._internal.collect.syntax import NodeKind
+from mkdocstrings_handlers.asp._internal.domain import Document
 
 log = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class DocumentCollector:
         for node in tree.root_node.children:
             match NodeKind.from_grammar_name(node.grammar_name):
                 case NodeKind.RULE:
-                    pass
+                    extract_statement(node)
                 case NodeKind.INCLUDE:
                     include = extract_include(node, file_path)
                     document.includes.append(include)

@@ -42,7 +42,7 @@ def extract_predicate(node: Node) -> Predicate:
 def extract_line_comment(node: Node) -> LineComment:
     return LineComment(
         row=node.start_point.row,
-        line=node.text.decode("utf-8").removeprefix("%"),
+        content=node.text.decode("utf-8").removeprefix("%"),
     )
 
 

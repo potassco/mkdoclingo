@@ -27,7 +27,7 @@ class LineComment:
 
     row: int
     """ The row in the source file where the comment is located."""
-    line: str
+    content: str
     """ The content of the line comment."""
 
 

@@ -34,6 +34,13 @@ repos:
       additional_dependencies:
       - mdformat-gfm
 
+  - repo: https://github.com/djlint/djLint
+    rev: v1.36.4
+    hooks:
+      - id: djlint-reformat-jinja
+        files: \.html\.jinja$
+        types_or: [html, jinja]
+
   - repo: local
     hooks:
       - id: mypy

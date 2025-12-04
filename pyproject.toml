@@ -27,7 +27,7 @@ Homepage = "https://github.com/potassco/mkdoclingo.git/"
 
 [project.optional-dependencies]
 format = ["black", "isort", "autoflake"]
-lint_pylint = ["pylint"]
+lint_pylint = ["pylint", "djlint"]
 typecheck = ["types-setuptools", "mypy"]
 test = ["coverage[toml]", "pytest"]
 doc = ["mkdocstrings[python]"]
@@ -89,3 +89,10 @@ omit = ["*/mkdoclingo/__main__.py"]
 
 [tool.coverage.report]
 exclude_lines = ["assert", "nocoverage"]
+
+[tool.djlint]
+profile = "jinja"
+indent = 2
+blank_line_after_tag = "load,extends,include"
+format_css = true
+format_js = true

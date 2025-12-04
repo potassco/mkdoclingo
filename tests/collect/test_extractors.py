@@ -90,7 +90,7 @@ def test_extract_line_comment(parse_string: Callable[[str], Tree]) -> None:
     line_comment = extract_line_comment(comment_node)
 
     assert line_comment.row == 0
-    assert line_comment.line == " This is a comment"
+    assert line_comment.content == " This is a comment"
 
 
 def test_extract_statement_head_literal(parse_string: Callable[[str], Tree]) -> None:

@@ -5,8 +5,11 @@ from pathlib import Path
 import tree_sitter_clingo
 from tree_sitter import Language, Parser
 
-from mkdocstrings_handlers.asp._internal.collect.debug import print_tree
-from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include, extract_statement
+from mkdocstrings_handlers.asp._internal.collect.extractors import (
+    extract_include,
+    extract_line_comment,
+    extract_statement,
+)
 from mkdocstrings_handlers.asp._internal.collect.syntax import NodeKind
 from mkdocstrings_handlers.asp._internal.domain import Document
 
@@ -44,6 +47,10 @@ class DocumentCollector:
                 case NodeKind.RULE:
                     statement = extract_statement(node)
                     document.statements.append(statement)
+                    document.ordered_elements.append(statement)
+                case NodeKind.LineComment:
+                    comment = extract_line_comment(node)
+                    document.ordered_elements.append(comment)
                 case NodeKind.INCLUDE:
                     include = extract_include(node, file_path)
                     document.includes.append(include)

@@ -51,3 +51,4 @@ class Document:
     content: str
     includes: list[Include] = field(default_factory=list)
     statements: list[Statement] = field(default_factory=list)
+    ordered_elements: list[Statement | LineComment] = field(default_factory=list)

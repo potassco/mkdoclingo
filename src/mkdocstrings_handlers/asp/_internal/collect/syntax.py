@@ -26,6 +26,7 @@ class NodeKind(Enum):
     INCLUDE = "include"
     ATOM = "symbolic_atom"
     ERROR = "ERROR"
+    LINE_COMMENT = "line_comment"
 
     @staticmethod
     def from_grammar_name(grammar_name: str):

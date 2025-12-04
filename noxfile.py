@@ -4,7 +4,7 @@
 import os
 import sys
 
-import nox 
+import nox
 
 nox.options.sessions = "lint_pylint", "typecheck", "test"
 

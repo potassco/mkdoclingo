@@ -3,7 +3,7 @@ from pathlib import Path
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp._internal.collect.syntax import Queries
-from mkdocstrings_handlers.asp._internal.domain import Include, Predicate, Statement
+from mkdocstrings_handlers.asp._internal.domain import Include, LineComment, Predicate, Statement
 
 
 def extract_include(node: Node, parent_file_path: Path) -> Include:
@@ -36,6 +36,13 @@ def extract_predicate(node: Node) -> Predicate:
         identifier=captures["identifier"][0].text.decode("utf-8"),
         arity=len(captures.get("term", [])),
         negation=len(captures.get("negation", [])) > 0,
+    )
+
+
+def extract_line_comment(node: Node) -> LineComment:
+    return LineComment(
+        row=node.start_point.row,
+        line=node.text.decode("utf-8").removeprefix("%"),
     )
 
 

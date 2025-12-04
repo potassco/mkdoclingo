@@ -22,6 +22,16 @@ class Predicate:
 
 
 @dataclass
+class LineComment:
+    """A line comment in an ASP program."""
+
+    row: int
+    """ The row in the source file where the comment is located."""
+    line: str
+    """ The content of the line comment."""
+
+
+@dataclass
 class Statement:
     """A statement in an ASP program."""
 

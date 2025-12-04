@@ -2,7 +2,13 @@ from typing import Callable
 
 from tree_sitter import Tree
 
-from mkdocstrings_handlers.asp._internal.collect.extractors import extract_include, extract_predicate, extract_statement
+from mkdocstrings_handlers.asp._internal.collect.extractors import (
+    extract_include,
+    extract_line_comment,
+    extract_predicate,
+    extract_statement,
+)
+from mkdocstrings_handlers.asp.tree_sitter.debug import print_tree
 
 
 def test_extract_include(tmp_path, parse_string: Callable[[str], Tree]):
@@ -74,6 +80,17 @@ def test_extract_predicate_from_body_literal(parse_string: Callable[[str], Tree]
     assert predicate.identifier == "q"
     assert predicate.arity == 2
     assert predicate.negation == True
+
+
+def test_extract_line_comment(parse_string: Callable[[str], Tree]) -> None:
+    source = "% This is a comment"
+    tree = parse_string(source)
+    comment_node = tree.root_node.child(0)
+    print_tree(tree.root_node, source, 0)
+    line_comment = extract_line_comment(comment_node)
+
+    assert line_comment.row == 0
+    assert line_comment.line == " This is a comment"
 
 
 def test_extract_statement_head_literal(parse_string: Callable[[str], Tree]) -> None:

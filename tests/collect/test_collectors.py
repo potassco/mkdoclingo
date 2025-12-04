@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from mkdocstrings_handlers.asp._internal.collect.collectors import collect_from_file, collect_from_files
+from mkdocstrings_handlers.asp._internal.collect.load import load_document, load_documents
 
 
 def test_collect_from_file(tmp_path: Path) -> None:
@@ -10,7 +10,7 @@ def test_collect_from_file(tmp_path: Path) -> None:
     file_content = "q(X) :- p(X, Y)."
     file_path.write_bytes(file_content.encode("utf-8"))
 
-    document = collect_from_file(file_path)
+    document = load_document(file_path)
     
     assert document.path == file_path
     assert document.content == file_content
@@ -25,7 +25,7 @@ def test_collect_from_file_empty(tmp_path: Path) -> None:
     file_content = ""
     file_path.write_bytes(file_content.encode("utf-8"))
 
-    document = collect_from_file(file_path)
+    document = load_document(file_path)
     
     assert document.path == file_path
     assert document.content == file_content
@@ -57,7 +57,7 @@ def test_collect_from_files(tmp_path: Path) -> None:
     included_file_content = "q(X) :- p(X, Y)."
     included_file_path.write_text(included_file_content)
 
-    documents = collect_from_files([file_path])
+    documents = load_documents([file_path])
     assert len(documents) == 2
 
     document = next(doc for doc in documents if doc.path == file_path)
@@ -98,7 +98,7 @@ def test_collect_from_files_invalid_include(tmp_path: Path) -> None:
     included_file_content = "q(X) :- p(X, Y)."
     included_file_path.write_text(included_file_content)
 
-    documents = collect_from_files([file_path])
+    documents = load_documents([file_path])
     assert len(documents) == 1
 
     document = documents[0]

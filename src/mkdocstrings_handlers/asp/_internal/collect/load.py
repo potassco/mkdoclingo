@@ -13,7 +13,7 @@ from mkdocstrings_handlers.asp._internal.domain import Document
 
 log = logging.getLogger(__name__)
 
-def collect_from_files(paths: list[Path]) -> list[Document]:
+def load_documents(paths: list[Path]) -> list[Document]:
     parse_queue = deque(paths)
     documents: dict[Path, Document] = {}
     while parse_queue:
@@ -21,13 +21,13 @@ def collect_from_files(paths: list[Path]) -> list[Document]:
         if path.suffix != ".lp" or not path.is_file():
             log.warning(f"skip file {path}, not a valid ASP file.")
             continue
-        document = collect_from_file(path)
+        document = load_document(path)
         documents[path] = document
         parse_queue.extend(include.path for include in document.includes if include.path not in documents)
 
     return list(documents.values())
 
-def collect_from_file(file_path: Path) -> Document:
+def load_document(file_path: Path) -> Document:
     with open(file_path, "rb") as f:
         source_bytes = f.read()
 

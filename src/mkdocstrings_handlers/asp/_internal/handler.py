@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from mkdocstrings import BaseHandler
-from mkdocstrings_handlers.asp._internal.collect.collectors import collect_from_files
+from mkdocstrings_handlers.asp._internal.collect.load import load_documents
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 
 
@@ -39,7 +39,7 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        collect_from_files([Path(identifier)])
+        load_documents([Path(identifier)])
 
         return {"bla": 1}
 

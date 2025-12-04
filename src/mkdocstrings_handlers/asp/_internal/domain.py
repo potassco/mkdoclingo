@@ -20,6 +20,18 @@ class Predicate:
     arity: int
     negation: bool = False
 
+    @property
+    def signature(self) -> str:
+        """
+        Return the signature of the predicate.
+
+        The signature of a predicate is a string of the form `identifier/arity`.
+
+        Returns:
+            The signature of the predicate.
+        """
+        return f"{self.identifier}/{self.arity}"
+
 
 @dataclass
 class LineComment:
@@ -47,8 +59,8 @@ class Statement:
 
     row: int
     """The row in the source file where the statement is located."""
-    text: str
-    """The text of the statement."""
+    content: str
+    """The content of the statement."""
     provided_predicates: list[Predicate]
     """The predicates provided by the statement."""
     needed_predicates: list[Predicate]
@@ -61,4 +73,4 @@ class Document:
     content: str
     includes: list[Include] = field(default_factory=list)
     statements: list[Statement] = field(default_factory=list)
-    ordered_elements: list[Statement | LineComment] = field(default_factory=list)
+    ordered_elements: list[Statement | LineComment | BlockComment] = field(default_factory=list)

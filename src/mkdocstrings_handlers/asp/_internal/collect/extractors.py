@@ -75,7 +75,7 @@ def extract_statement(node: Node) -> Statement:
 
     return Statement(
         row=node.start_point.row,
-        text=node.text.decode("utf-8"),
+        content=node.text.decode("utf-8"),
         provided_predicates=provided_predicates,
         needed_predicates=needed_predicates,
     )

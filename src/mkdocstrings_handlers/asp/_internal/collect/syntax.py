@@ -27,6 +27,7 @@ class NodeKind(Enum):
     ATOM = "symbolic_atom"
     ERROR = "ERROR"
     LINE_COMMENT = "line_comment"
+    BLOCK_COMMENT = "block_comment"
 
     @staticmethod
     def from_grammar_name(grammar_name: str):

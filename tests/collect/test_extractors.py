@@ -3,6 +3,7 @@ from typing import Callable
 from tree_sitter import Tree
 
 from mkdocstrings_handlers.asp._internal.collect.extractors import (
+    extract_block_comment,
     extract_include,
     extract_line_comment,
     extract_predicate,
@@ -91,6 +92,17 @@ def test_extract_line_comment(parse_string: Callable[[str], Tree]) -> None:
 
     assert line_comment.row == 0
     assert line_comment.content == " This is a comment"
+
+
+def test_extract_block_comment(parse_string: Callable[[str], Tree]) -> None:
+    source = "%* This\n is\n a\n block\n comment.*%"
+    tree = parse_string(source)
+    comment_node = tree.root_node.child(0)
+    print_tree(tree.root_node, source, 0)
+    block_comment = extract_block_comment(comment_node)
+
+    assert block_comment.row == 0
+    assert block_comment.content == " This\n is\n a\n block\n comment."
 
 
 def test_extract_statement_head_literal(parse_string: Callable[[str], Tree]) -> None:

@@ -6,6 +6,7 @@ import tree_sitter_clingo
 from tree_sitter import Language, Parser
 
 from mkdocstrings_handlers.asp._internal.collect.extractors import (
+    extract_block_comment,
     extract_include,
     extract_line_comment,
     extract_statement,
@@ -48,8 +49,11 @@ class DocumentCollector:
                     statement = extract_statement(node)
                     document.statements.append(statement)
                     document.ordered_elements.append(statement)
-                case NodeKind.LineComment:
+                case NodeKind.LINE_COMMENT:
                     comment = extract_line_comment(node)
+                    document.ordered_elements.append(comment)
+                case NodeKind.BLOCK_COMMENT:
+                    comment = extract_block_comment(node)
                     document.ordered_elements.append(comment)
                 case NodeKind.INCLUDE:
                     include = extract_include(node, file_path)

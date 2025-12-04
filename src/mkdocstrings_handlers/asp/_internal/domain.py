@@ -32,6 +32,16 @@ class LineComment:
 
 
 @dataclass
+class BlockComment:
+    """A block comment in an ASP program."""
+
+    row: int
+    """ The row in the source file where the comment starts."""
+    content: str
+    """ The content of the block comment."""
+
+
+@dataclass
 class Statement:
     """A statement in an ASP program."""
 

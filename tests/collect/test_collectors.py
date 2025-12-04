@@ -16,7 +16,8 @@ def test_collect_from_file(tmp_path: Path) -> None:
     assert document.content == file_content
     assert len(document.includes) == 0
     assert len(document.statements) == 1
-    assert len(document.ordered_elements) == 1
+    assert len(document.line_comments) == 0
+    assert len(document.block_comments) == 0
 
 def test_collect_from_file_empty(tmp_path: Path) -> None:
     """Test collecting a Document from an empty file."""
@@ -31,7 +32,8 @@ def test_collect_from_file_empty(tmp_path: Path) -> None:
     assert document.content == file_content
     assert len(document.includes) == 0
     assert len(document.statements) == 0
-    assert len(document.ordered_elements) == 0
+    assert len(document.line_comments) == 0
+    assert len(document.block_comments) == 0
 
 def test_collect_from_files(tmp_path: Path) -> None:
     """
@@ -65,13 +67,15 @@ def test_collect_from_files(tmp_path: Path) -> None:
     assert document.content == file_content
     assert len(document.includes) == 1
     assert len(document.statements) == 2
-    assert len(document.ordered_elements) == 5
+    assert len(document.line_comments) == 2
+    assert len(document.block_comments) == 1
     assert document.includes[0].path == included_file_path
 
     included_document = next(doc for doc in documents if doc.path == included_file_path)
     assert included_document.content == included_file_content
     assert len(included_document.statements) == 1
-    assert len(included_document.ordered_elements) == 1
+    assert len(included_document.line_comments) == 0
+    assert len(included_document.block_comments) == 0
     assert included_document.content == included_file_content
 
 def test_collect_from_files_invalid_include(tmp_path: Path) -> None:
@@ -106,4 +110,5 @@ def test_collect_from_files_invalid_include(tmp_path: Path) -> None:
     assert document.content == file_content
     assert len(document.includes) == 1
     assert len(document.statements) == 2
-    assert len(document.ordered_elements) == 5
+    assert len(document.line_comments) == 2
+    assert len(document.block_comments) == 1

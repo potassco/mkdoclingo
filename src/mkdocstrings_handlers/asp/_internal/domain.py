@@ -73,4 +73,5 @@ class Document:
     content: str
     includes: list[Include] = field(default_factory=list)
     statements: list[Statement] = field(default_factory=list)
-    ordered_elements: list[Statement | LineComment | BlockComment] = field(default_factory=list)
+    line_comments: list[LineComment] = field(default_factory=list)
+    block_comments: list[BlockComment] = field(default_factory=list)

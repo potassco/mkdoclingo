@@ -18,7 +18,7 @@
 (head_aggregate
   (head_aggregate_elements
     (head_aggregate_element
-            (literal) @needed
+            (literal) @provided
             (condition
                 (literal) @needed
             )?

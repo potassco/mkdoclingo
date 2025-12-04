@@ -33,12 +33,8 @@ test = ["coverage[toml]", "pytest"]
 doc = ["mkdocstrings[python]"]
 dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 
-[project.scripts]
-mkdoclingo = "mkdoclingo.__main__:main"
-
 [project.entry-points."mkdocstrings.handlers"]
-clingo = "mkdocstrings_handlers.asp.handler:ASPHandler"
-
+clingo = "mkdocstrings_handlers.asp._internal.handler:ASPHandler"
 
 [tool.setuptools.package-data]
 "mkdocstrings_handlers.asp" = ["templates/**/*.css"]
@@ -84,8 +80,7 @@ variable-rgx = "^[a-z][a-z0-9]*((_[a-z0-9]+)*_?)?$"
 good-names = ["_"]
 
 [tool.coverage.run]
-source = ["mkdoclingo", "tests"]
-omit = ["*/mkdoclingo/__main__.py"]
+source = ["src/mkdocstrings_handlers/asp", "tests"]
 
 [tool.coverage.report]
 exclude_lines = ["assert", "nocoverage"]

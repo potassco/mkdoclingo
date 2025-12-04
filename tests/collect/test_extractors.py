@@ -178,6 +178,18 @@ def test_extract_statement_with_body_set_aggregate(parse_to_tree: Callable[[str]
 
 
 def test_extract_statement_with_head_aggregate(parse_to_tree: Callable[[str], Tree]) -> None:
+    source = "0 <#sum {X:p(X):q(X)}."
+    tree = parse_to_tree(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+
+    assert statement.row == 0
+    assert statement.content == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 1
+
+
+def test_extract_statement_with_head_set_aggregate(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "1{p(X):q(X)}."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
@@ -189,22 +201,11 @@ def test_extract_statement_with_head_aggregate(parse_to_tree: Callable[[str], Tr
     assert len(statement.needed_predicates) == 1
 
 
-def test_extract_statement_with_head_set_aggregate1(parse_to_tree: Callable[[str], Tree]) -> None:
-    source = "1{p(X):q(X)}."
+def test_extract_statement_with_comparison(parse_to_tree: Callable[[str], Tree]) -> None:
+    source = ":- q(X), r(Y), X!=Y."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
-    statement = extract_statement(rule_node)
-
-    assert statement.row == 0
-    assert statement.content == source
-    assert len(statement.provided_predicates) == 1
-    assert len(statement.needed_predicates) == 1
-
-
-def test_extract_statement_with_head_aggregate2(parse_to_tree: Callable[[str], Tree]) -> None:
-    source = "#sum {X:q(X):r(X)}."
-    tree = parse_to_tree(source)
-    rule_node = tree.root_node.child(0)
+    print_tree(tree.root_node, source, 0)
     statement = extract_statement(rule_node)
 
     assert statement.row == 0

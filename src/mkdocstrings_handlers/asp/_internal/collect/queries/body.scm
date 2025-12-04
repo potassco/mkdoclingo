@@ -3,7 +3,7 @@
 ; -----------------------------------------------------------------------------
 
 (body_literal
-    atom: (simple_atom)
+    (symbolic_atom)
 ) @needed
 
 (literal) @needed

@@ -1,8 +1,7 @@
 from pathlib import Path
 
 from mkdocstrings import BaseHandler
-
-from mkdocstrings_handlers.asp._internal.collect.collector import DocumentCollector
+from mkdocstrings_handlers.asp._internal.collect.collectors import collect_from_files
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 
 
@@ -12,11 +11,6 @@ class ASPHandler(BaseHandler):
     handler = "asp"
     domain = "asp"
     name = "asp"
-
-    def __init__(self, *, theme, custom_templates, mdx, mdx_config):
-        super().__init__(theme=theme, custom_templates=custom_templates, mdx=mdx, mdx_config=mdx_config)
-
-        self._collector = DocumentCollector()
 
     def get_options(self, local_options: dict) -> dict:
         """
@@ -45,7 +39,7 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        self._collector.collect_from_files([Path(identifier)])
+        collect_from_files([Path(identifier)])
 
         return {"bla": 1}
 

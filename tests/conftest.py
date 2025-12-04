@@ -28,7 +28,7 @@ def parse_to_tree(parser: Parser) -> Callable[[str], Tree]:
 
 
 @pytest.fixture
-def parse_to_docstring() -> Callable[[str], str]:
+def parse_to_documents() -> Callable[[str], str]:
     """Helper to parse a file and return the collected Documents."""
 
     def _parse(path: Path) -> str:

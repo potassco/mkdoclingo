@@ -1,4 +1,4 @@
-""" This module contains the ASPParser class, which uses tree-sitter to parse ASP text."""
+"""This module contains the ASPParser class, which uses tree-sitter to parse ASP text."""
 
 import ctypes
 import os

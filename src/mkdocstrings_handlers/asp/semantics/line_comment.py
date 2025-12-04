@@ -1,4 +1,4 @@
-""" This module contains the LineComment class, which represents a single line comment in an ASP document."""
+"""This module contains the LineComment class, which represents a single line comment in an ASP document."""
 
 from __future__ import annotations
 

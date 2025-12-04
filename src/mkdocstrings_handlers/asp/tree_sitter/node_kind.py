@@ -1,4 +1,4 @@
-""" This module contains the NodeKind class, which represents the kind of a node in the abstract syntax tree."""
+"""This module contains the NodeKind class, which represents the kind of a node in the abstract syntax tree."""
 
 from __future__ import annotations
 

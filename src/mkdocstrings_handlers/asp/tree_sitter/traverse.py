@@ -1,4 +1,4 @@
-""" This module contains the function to traverse a tree-sitter tree in a pre-order depth-first manner. """
+"""This module contains the function to traverse a tree-sitter tree in a pre-order depth-first manner."""
 
 from typing import Callable
 

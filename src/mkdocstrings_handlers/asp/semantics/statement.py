@@ -1,4 +1,4 @@
-""" This module contains the Statement class, which represents a statement in an ASP program."""
+"""This module contains the Statement class, which represents a statement in an ASP program."""
 
 from __future__ import annotations
 

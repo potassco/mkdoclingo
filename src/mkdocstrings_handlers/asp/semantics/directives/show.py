@@ -1,4 +1,4 @@
-""" This module contains the representation of a show directive in ASP."""
+"""This module contains the representation of a show directive in ASP."""
 
 from __future__ import annotations
 

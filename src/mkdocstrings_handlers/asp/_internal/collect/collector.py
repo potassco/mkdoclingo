@@ -39,12 +39,11 @@ class DocumentCollector:
         document = Document(path=file_path, content=source_bytes.decode("utf-8"))
         tree = self._parser.parse(source_bytes)
 
-        # print_tree(tree.root_node, source_bytes, depth=1)
-
         for node in tree.root_node.children:
             match NodeKind.from_grammar_name(node.grammar_name):
                 case NodeKind.RULE:
-                    extract_statement(node)
+                    statement = extract_statement(node)
+                    document.statements.append(statement)
                 case NodeKind.INCLUDE:
                     include = extract_include(node, file_path)
                     document.includes.append(include)

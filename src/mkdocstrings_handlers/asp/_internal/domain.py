@@ -40,3 +40,4 @@ class Document:
     path: Path
     content: str
     includes: list[Include] = field(default_factory=list)
+    statements: list[Statement] = field(default_factory=list)

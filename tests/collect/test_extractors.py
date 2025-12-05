@@ -88,7 +88,6 @@ def test_extract_line_comment(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "% This is a comment"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
-    print_tree(tree.root_node, source, 0)
     line_comment = extract_line_comment(comment_node)
 
     assert line_comment.row == 0
@@ -99,7 +98,6 @@ def test_extract_block_comment(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "%* This\n is\n a\n block\n comment.*%"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
-    print_tree(tree.root_node, source, 0)
     block_comment = extract_block_comment(comment_node)
 
     assert block_comment.row == 0

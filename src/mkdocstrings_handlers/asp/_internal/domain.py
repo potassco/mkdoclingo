@@ -87,3 +87,4 @@ class Document:
     statements: list[Statement] = field(default_factory=list)
     line_comments: list[LineComment] = field(default_factory=list)
     block_comments: list[BlockComment] = field(default_factory=list)
+    predicate_documentations: list[PredicateDocumentation] = field(default_factory=list)

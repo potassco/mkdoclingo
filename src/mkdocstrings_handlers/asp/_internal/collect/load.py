@@ -1,3 +1,5 @@
+"""This module handles loading and parsing ASP documents."""
+
 import logging
 from collections import deque
 from pathlib import Path
@@ -14,6 +16,15 @@ from mkdocstrings_handlers.asp._internal.domain import Document
 log = logging.getLogger(__name__)
 
 def load_documents(paths: list[Path]) -> list[Document]:
+    """
+    Load and parse multiple ASP documents from the given file paths.
+
+    Args:
+        paths: List of paths to ASP files.
+
+    Returns:
+        List of parsed Document objects.
+    """
     parse_queue = deque(paths)
     documents: dict[Path, Document] = {}
     while parse_queue:
@@ -28,6 +39,15 @@ def load_documents(paths: list[Path]) -> list[Document]:
     return list(documents.values())
 
 def load_document(file_path: Path) -> Document:
+    """
+    Load and parse an ASP document from the given file path.
+
+    Args:
+        file_path: Path to the ASP file.
+    
+    Returns:
+        The parsed Document object.
+    """
     with open(file_path, "rb") as f:
         source_bytes = f.read()
 

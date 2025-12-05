@@ -66,6 +66,18 @@ class Statement:
     needed_predicates: list[Predicate]
     """The predicates needed by the statement."""
 
+@dataclass
+class ArgumentDocumentation:
+    identifier: str
+    description: str
+
+@dataclass
+class PredicateDocumentation:
+    row: int
+    content: str
+    signature: str
+    description:str
+    arguments: list[ArgumentDocumentation]
 
 @dataclass
 class Document:

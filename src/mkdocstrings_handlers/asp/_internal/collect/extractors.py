@@ -3,7 +3,7 @@ from pathlib import Path
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp._internal.collect.syntax import Queries
-from mkdocstrings_handlers.asp._internal.domain import BlockComment, Include, LineComment, Predicate, Statement
+from mkdocstrings_handlers.asp._internal.domain import ArgumentDocumentation, BlockComment, Include, LineComment, Predicate, PredicateDocumentation, Statement
 
 
 def extract_include(node: Node, parent_file_path: Path) -> Include:
@@ -78,4 +78,31 @@ def extract_statement(node: Node) -> Statement:
         content=node.text.decode("utf-8"),
         provided_predicates=provided_predicates,
         needed_predicates=needed_predicates,
+    )
+
+def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
+    captures = Queries.DOC_ARGUMENT.captures(node)
+
+    identifier = captures["identifier"][0].text.decode("utf-8")
+    description = captures.get("description")[0].text.decode("utf-8").strip() if captures.get("description") else ""
+
+    return ArgumentDocumentation(
+        identifier=identifier,
+        description=description,
+    )
+
+def extract_predicate_documentation(node: Node) -> PredicateDocumentation:
+    captures = Queries.DOC_PREDICATE.captures(node)
+
+    identifier = captures["identifier"][0].text.decode("utf-8")
+    arguments = [arg.text.decode("utf-8") for arg in captures.get("argument", [])]
+    description = captures["description"][0].text.decode("utf-8").removeprefix("%*!").removesuffix("*%").strip() if captures.get("description") else ""
+    argument_documentations = [extract_argument_documentation(arg_node) for arg_node in captures.get("arg.documentation", [])]
+
+    return PredicateDocumentation(
+        row=node.start_point.row,
+        content=node.text.decode("utf-8"),
+        signature=f"{identifier}/{len(arguments)}",
+        description=description,
+        arguments=argument_documentations,
     )

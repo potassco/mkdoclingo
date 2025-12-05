@@ -68,17 +68,15 @@ class AspQuery:
                     self._query = Query(_LANGUAGE, f.read())
             except FileNotFoundError:
                 raise RuntimeError(
-                    f"Missing SCM file: {self.filename}. " "Ensure it is included in pyproject.toml package-data."
+                    f"Missing SCM file: {self.filename}. "
                 )
         return self._query
 
     def captures(self, node: Node) -> dict[str, list[Node]]:
         """
         Run the query on a node and return a clean dictionary of captures.
-        Hides the 'QueryCursor' complexity from the rest of the app.
         """
         cursor = QueryCursor(self.query)
-        # Tree-sitter >0.22 returns dict {name: [nodes]}
         return cursor.captures(node)
 
 
@@ -88,4 +86,5 @@ class Queries:
     BODY = AspQuery("body.scm")
     HEAD = AspQuery("head.scm")
     PREDICATE = AspQuery("predicate.scm")
-    STATEMENT = AspQuery("statement.scm")
+    DOC_PREDICATE = AspQuery("documentation_predicate.scm")
+    DOC_ARGUMENT = AspQuery("documentation_argument.scm")

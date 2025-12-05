@@ -14,7 +14,7 @@ dependencies = [
     "clingo",
     "mkdocstrings>=1.0.0",
     "tree-sitter",
-    "tree-sitter-clingo",
+    "tree-sitter-clingo>=1.0.3",
     "pydantic",
     "pygments_clingo",
     "mkdocs>=1.5",

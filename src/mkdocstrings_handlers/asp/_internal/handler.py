@@ -1,11 +1,13 @@
 from pathlib import Path
+from typing import Any
 
+from markupsafe import Markup
 from mkdocstrings import BaseHandler
 from mkdocstrings_handlers.asp._internal.collect.load import load_documents
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document
 from mkdocstrings_handlers.asp._internal.render import get_render_context
-
+from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
 
 class ASPHandler(BaseHandler):
     """MKDocStrings handler for ASP files."""
@@ -66,6 +68,27 @@ class ASPHandler(BaseHandler):
             return template.render(context=context, options=options)
         except Exception:
             return "<p>Rendering failed.</p>"
+    
+    def update_env(self, config: Any) -> None:
+        self.env.filters["convert_markdown_simple"] = self.do_convert_markdown_simple
+
+    def do_convert_markdown_simple(
+        self,
+        text: str,
+        heading_level: int,
+    ) -> Markup:
+        old_headings = [e for e in self._headings]
+        treeprocessors = self._md.treeprocessors
+        treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = heading_level  # type: ignore[attr-defined]
+
+        try:
+            md = Markup(self._md.convert(text))
+        finally:
+            treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = 0  # type: ignore[attr-defined]
+            self._md.reset()
+
+        self._headings = old_headings
+        return md
 
 def get_handler(theme: str, handler_config: dict, tool_config: dict, **kwargs):
     """

@@ -89,3 +89,4 @@ class Queries:
     PREDICATE = AspQuery("predicate.scm")
     DOC_PREDICATE = AspQuery("documentation_predicate.scm")
     DOC_ARGUMENT = AspQuery("documentation_argument.scm")
+    SHOW = AspQuery("show.scm")

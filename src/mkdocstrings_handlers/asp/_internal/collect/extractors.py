@@ -3,7 +3,7 @@ from pathlib import Path
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp._internal.collect.syntax import Queries
-from mkdocstrings_handlers.asp._internal.domain import ArgumentDocumentation, BlockComment, Include, LineComment, Predicate, PredicateDocumentation, Statement
+from mkdocstrings_handlers.asp._internal.domain import ArgumentDocumentation, BlockComment, Include, LineComment, Predicate, PredicateDocumentation, Show, ShowStatus, Statement
 
 
 def extract_include(node: Node, parent_file_path: Path) -> Include:
@@ -38,6 +38,32 @@ def extract_predicate(node: Node) -> Predicate:
         negation=len(captures.get("negation", [])) > 0,
     )
 
+def extract_show(node: Node) -> Show:
+    captures = Queries.SHOW.captures(node)
+
+    raw_identifier = captures.get("identifier",[])
+    raw_arity = captures.get("arity",[])
+    raw_terms = captures.get("term",[])
+
+    identifier: str | None = raw_identifier[0].text.decode("utf-8") if raw_identifier else None
+    arity: int | None = int(raw_arity[0].text.decode("utf-8")) if raw_arity else None
+    predicate: Predicate | None = None
+    status = ShowStatus.EXPLICIT
+
+    if raw_terms:
+        status = ShowStatus.PARTIAL
+        arity = len(raw_terms)
+
+    if identifier is not None and arity is not None:
+        predicate = Predicate(
+            identifier=identifier,
+            arity=arity,
+        )
+    
+    return Show(
+        predicate=predicate,
+        status=status,
+    )
 
 def extract_line_comment(node: Node) -> LineComment:
     return LineComment(

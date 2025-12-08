@@ -9,8 +9,10 @@ from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_include,
     extract_line_comment,
     extract_predicate,
+    extract_show,
     extract_statement,
 )
+from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 
 
 def test_extract_include(tmp_path, parse_to_tree: Callable[[str], Tree]):
@@ -103,6 +105,34 @@ def test_extract_block_comment(parse_to_tree: Callable[[str], Tree]) -> None:
     assert block_comment.row == 0
     assert block_comment.content == " This\n is\n a\n block\n comment."
 
+def test_extract_show_empty(parse_to_tree: Callable[[str], Tree]) -> None:
+    source = "#show ."
+    tree = parse_to_tree(source)
+    show_node = tree.root_node.child(0)
+    show = extract_show(show_node)
+
+    assert show.predicate == None
+    assert show.status == ShowStatus.EXPLICIT
+
+def test_extract_show_signature(parse_to_tree: Callable[[str], Tree]) -> None:
+    source = "#show p/2."
+    tree = parse_to_tree(source)
+    show_node = tree.root_node.child(0)
+    show = extract_show(show_node)
+
+    assert show.predicate.identifier == "p"
+    assert show.predicate.arity == 2
+    assert show.status == ShowStatus.EXPLICIT
+
+def test_extract_show_term_function(parse_to_tree: Callable[[str], Tree]) -> None:
+    source = "#show p(1,2)."
+    tree = parse_to_tree(source)
+    show_node = tree.root_node.child(0)
+    show = extract_show(show_node)
+
+    assert show.predicate.identifier == "p"
+    assert show.predicate.arity == 2
+    assert show.status == ShowStatus.PARTIAL
 
 def test_extract_statement_head_literal(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "p(1)."

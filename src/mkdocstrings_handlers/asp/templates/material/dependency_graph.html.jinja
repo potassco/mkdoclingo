@@ -5,38 +5,29 @@
   </svg>
   <span class="md-ellipsis" style="vertical-align: top;">Dependency Graph</span>
 {% endset %}
-{% filter heading(config.start_level+1, id="dependency_graph", toc_label=toc_label) %}
+{% filter heading(options.start_level+1, id="dependency_graph", toc_label=toc_label) %}
   <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-graphql:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Dependency Graph</span>
 {% endfilter %}
+{% include 'dependency_graph.mermaid.jinja' %}
+
+{# djlint:off #}
 {% filter convert_markdown(0) %}
-  ```mermaid
-  flowchart LR
-  {%- for node in dependency_graph.nodes %}
-    {{ node.signature }}(["{{ node.signature }}"])
-    {%- for positive in node.positive %}{{ positive }} --> {{ node.signature }}{%- endfor %}
-      {%- for negative in node.negative %}{{ negative }} -.-> {{ node.signature }}{%- endfor %}
-      {%- endfor %}
-      classDef all fill:#00000000
-      class __tmp,
-      {% for node in dependency_graph.nodes %}{{ node.signature }},{% endfor %}
-      all;
-      classDef out stroke:#52BF54,stroke-width:3px;
-      class __tmp,
-      {% for node in dependency_graph.nodes %}
-        {% if predicate_info.get(node.signature).show_status < 4 %}{{ node.signature }},{% endif %}
-      {% endfor %}
-      out;
-      classDef aux stroke:#848484,stroke-width:0.2px;
-      class __tmp,
-      {% for node in dependency_graph.nodes %}
-        {% if predicate_info.get(node.signature).show_status == 4 %}{{ node.signature }},{% endif %}
-      {% endfor %}
-      aux;
-      classDef in stroke:#9178C6,stroke-width:3px;
-      class
-      {% for node in dependency_graph.nodes %}
-        {% if predicate_info.get(node.signature).is_input %}{{ node.signature }},{% endif %}
-      {% endfor %}
-      in;
-      ```
-    {% endfilter %}
+```mermaid
+flowchart LR
+    {%- for predicate in context.predicates %}
+    {{ predicate.signature }}(["{{ predicate.signature }}"])
+    {%- for positive in predicate.positive_dependencies %}
+    {{ positive }} --> {{ predicate.signature }}
+    {%- endfor %}
+    {%- for negative in predicate.negative_dependencies %}
+    {{ negative }} -.-> {{ predicate.signature }}
+    {%- endfor %}
+    {%- endfor %}
+    classDef all fill:#00000000;
+    classDef out stroke:#52BF54,stroke-width:3px;
+    classDef aux stroke:#848484,stroke-width:0.2px;
+    classDef in stroke:#9178C6,stroke-width:3px;
+    class {% for predicate in context.predicates %}{{ predicate.signature }}{% if not loop.last %},{% endif %}{%- endfor %} all;
+```
+{% endfilter %}
+{# djlint:on #}

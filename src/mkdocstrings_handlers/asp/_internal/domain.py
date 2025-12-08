@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import IntEnum
 from pathlib import Path
 
 
@@ -11,6 +12,26 @@ class Include:
     path: Path
     """ The path of the included file."""
 
+
+class ShowStatus(IntEnum):
+    """Enum for predicate show status with bitwise-compatible values."""
+
+    DEFAULT = 0
+    EXPLICIT = 1
+    PARTIAL = 2
+    PARTIAL_AND_EXPLICIT = 3
+    HIDDEN = 4
+
+
+@dataclass
+class Show:
+    """A show directive in an ASP document."""
+
+    predicate: Predicate
+    """ The predicate supposed to be shown."""
+
+    status: ShowStatus = ShowStatus.DEFAULT
+    """ The show status of the predicate."""
 
 @dataclass
 class Predicate:

@@ -240,6 +240,16 @@ def test_extract_statement_with_head_set_aggregate_and_body(parse_to_tree: Calla
     assert len(statement.provided_predicates) == 1
     assert len(statement.needed_predicates) == 2
 
+def test_extract_statement_with_head_set_aggregate_with_comparison(parse_to_tree: Callable[[str], Tree]) -> None:
+    source = "{ p(V) : V = Min..Max } = 1 :- q(Min,Max)."
+    tree = parse_to_tree(source)
+    rule_node = tree.root_node.child(0)
+    statement = extract_statement(rule_node)
+    assert statement.row == 0
+    assert statement.content == source
+    assert len(statement.provided_predicates) == 1
+    assert len(statement.needed_predicates) == 1
+
 def test_extract_statement_with_comparison(parse_to_tree: Callable[[str], Tree]) -> None:
     source = ":- q(X), r(Y), X!=Y."
     tree = parse_to_tree(source)

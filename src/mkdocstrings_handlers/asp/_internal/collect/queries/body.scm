@@ -6,4 +6,6 @@
     (symbolic_atom)
 ) @needed
 
-(literal) @needed
+(literal
+    (symbolic_atom)
+) @needed

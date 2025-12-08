@@ -91,7 +91,7 @@ def get_render_context(documents: list[Document]) -> RenderContext:
                 info = get_info(show.predicate.signature)
                 info.show_status |= show.status
 
-                if info.show_status == ShowStatus.HIDDEN:
+                if info.show_status > ShowStatus.HIDDEN:
                     info.show_status &= ShowStatus.PARTIAL_AND_EXPLICIT
 
     for info in registry.values():

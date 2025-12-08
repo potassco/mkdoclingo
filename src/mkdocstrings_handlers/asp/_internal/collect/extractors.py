@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 
 from tree_sitter import Node
@@ -83,21 +84,24 @@ def extract_statement(node: Node) -> Statement:
     head_node = node.child_by_field_name("head")
     body_node = node.child_by_field_name("body")
 
-    captures = {}
+    captures = defaultdict(list)
 
     if head_node:
         # We don't use the head_node here
         # because `head` is a supertype in the current grammar
         # which leads to query difficulties with literals
         head_captures = Queries.HEAD.captures(node)
-        captures.update(head_captures)
+        for key, nodes in head_captures.items():
+            captures[key].extend(nodes)
 
     if body_node:
         body_captures = Queries.BODY.captures(body_node)
-        captures.update(body_captures)
+        for key, nodes in body_captures.items():
+            captures[key].extend(nodes)
 
     provided_predicates = [extract_predicate(node) for node in captures.get("provided", [])]
     needed_predicates = [extract_predicate(node) for node in captures.get("needed", [])]
+
 
     return Statement(
         row=node.start_point.row,

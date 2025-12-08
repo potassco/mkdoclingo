@@ -1,6 +1,17 @@
 {% from 'icons.html.jinja' import show_icon_map, input_icon_map %}
-{% set table %}
-  <table>
+{% set toc_label %}
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 4v4h6V8zm8 0v4h6V8zm-8 6v4h6v-4zm8 0v4h6v-4z">
+    </path>
+  </svg>
+  <span class="md-ellipsis" style="vertical-align: top;">Predicate Summary</span>
+{% endset %}
+{% filter heading(context.options.start_level+1, id="predicate_summary", toc_label=toc_label) %}
+  <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-table:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Predicate Summary</span>
+{% endfilter %}
+{% set table = context.predicate_table %}
+{% if table.predicates %}
+<table>
     <thead>
       <tr>
         <th>Name</th>
@@ -9,35 +20,19 @@
       </tr>
     </thead>
     <tbody>
-      {% for entry in predicate_info.values() %}
-        {% set hide_entry = entry.show_status == 4 and not entry.is_input and config["predicate_table"]["include_hidden"] == false %}
-        {% set hide_entry = hide_entry or  (not entry.documentation and config["predicate_table"]["include_undocumented"] == false) %}
-        {% if hide_entry==false %}
+      {% for predicate in table.predicates %}
           <tr>
             <td>
-              <a href="#{{ entry.identifier }}-{{ entry.arity }}"><code>{{ entry.signature }}</code></a>
+              <a href="#{{ predicate.identifier }}-{{ predicate.arity }}"><code>{{ predicate.signature }}</code></a>
             </td>
             <td>
-              {%- if entry.documentation %}{{ entry.documentation.description | convert_markdown(5, html_id) }}{% endif %}
-              {# TODO: Here we could use AI to make a summary that is smaller than some length and only text #}
+              {{ predicate.description | convert_markdown(5, html_id) }}
             </td>
             <td style="padding-top: 0; padding-bottom: 0;">
-              {{ input_icon_map[entry.is_input] }} {{ show_icon_map[entry.show_status] }}
+              {{ input_icon_map[predicate.is_input] }} {{ show_icon_map[predicate.show_status] }}
             </td>
           </tr>
-        {% endif %}
       {% endfor %}
     </tbody>
   </table>
-{% endset %}
-{% set toc_label %}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 4v4h6V8zm8 0v4h6V8zm-8 6v4h6v-4zm8 0v4h6v-4z">
-    </path>
-  </svg>
-  <span class="md-ellipsis" style="vertical-align: top;">Predicate Summary</span>
-{% endset %}
-{% filter heading(config.start_level+1, id="predicate_summary", toc_label=toc_label) %}
-  <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-table:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Predicate Summary</span>
-{% endfilter %}
-{{ table }}
+{% endif %}

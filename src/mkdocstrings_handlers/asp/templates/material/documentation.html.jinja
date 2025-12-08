@@ -1,6 +1,6 @@
-{# {% if config.predicate_table %}
+{% if context.options.predicate_table %}
   {% include 'predicate_table.html.jinja' %}
-{% endif %} #}
+{% endif %}
 {% if context.options.dependency_graph %}
   {% include 'dependency_graph.html.jinja' %}
 {% endif %}

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from functools import cached_property
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus
 
@@ -29,6 +30,10 @@ class PredicateInfo:
     is_input: bool = True
 
 @dataclass
+class PredicateTableContext:
+    predicates: list[PredicateInfo]
+
+@dataclass
 class DependencyGraphContext:
     positives: list[tuple[str, str]] = field(default_factory=list)
     negatives: list[tuple[str, str]] = field(default_factory=list)
@@ -39,10 +44,42 @@ class DependencyGraphContext:
 
 @dataclass
 class RenderContext:
-    _predicates: list[PredicateInfo] = field(default_factory=list)
     options: ASPOptions
+    _predicates: list[PredicateInfo] = field(default_factory=list)
 
-    @property
+    @cached_property
+    def predicate_table(self) -> PredicateTableContext:
+        predicates: list[PredicateInfo] = []
+
+        for predicate in self._predicates:
+            is_hidden = predicate.show_status == ShowStatus.HIDDEN
+            is_undocumented = not predicate.description
+
+            allow_hidden = predicate.is_input or self.options.predicate_table.include_hidden
+            allow_undocumented = self.options.predicate_table.include_undocumented
+
+            if (not is_hidden or allow_hidden) and (not is_undocumented or allow_undocumented):
+                predicates.append(predicate)
+
+        def get_sort_priority(predicate: PredicateInfo) -> tuple[int, str]:
+            is_input = predicate.is_input
+            is_hidden = predicate.show_status == ShowStatus.HIDDEN
+
+            match (is_input, is_hidden):
+                case (True, False):
+                    return (0, predicate.signature)
+                case (True, True):
+                    return (1, predicate.signature)
+                case (False, False):
+                    return (2, predicate.signature)
+                case (False, True):
+                    return (3, predicate.signature)
+
+        predicates.sort(key=get_sort_priority)
+
+        return PredicateTableContext(predicates=predicates)
+
+    @cached_property
     def dependency_graph(self) -> DependencyGraphContext:
         positives = []
         negatives = []
@@ -143,4 +180,4 @@ def get_render_context(documents: list[Document], options: ASPOptions) -> Render
         if info.show_status == ShowStatus.DEFAULT:
             info.show_status = default_show
 
-    return RenderContext(_predicates=list(registry.values()), options=options)
+    return RenderContext(options=options, _predicates=list(registry.values()))

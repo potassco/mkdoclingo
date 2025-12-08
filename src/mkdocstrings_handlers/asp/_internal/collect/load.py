@@ -9,10 +9,11 @@ from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_include,
     extract_line_comment,
     extract_predicate_documentation,
+    extract_show,
     extract_statement,
 )
 from mkdocstrings_handlers.asp._internal.collect.syntax import NodeKind, get_parser
-from mkdocstrings_handlers.asp._internal.domain import Document
+from mkdocstrings_handlers.asp._internal.domain import Document, Statement
 
 log = logging.getLogger(__name__)
 
@@ -69,6 +70,15 @@ def load_document(file_path: Path) -> Document:
             case NodeKind.INCLUDE:
                 include = extract_include(node, file_path)
                 document.includes.append(include)
+            case NodeKind.SHOW | NodeKind.SHOW_SIGNATURE | NodeKind.SHOW_TERM:
+                show = extract_show(node)
+                statement = extract_statement(node)
+
+                if show.predicate:
+                    statement.provided_predicates.append(show.predicate)
+
+                document.shows.append(show)
+                document.statements.append(statement)
             case NodeKind.DOC_COMMENT:
                 predicate_documentation = extract_predicate_documentation(node)
                 document.predicate_documentations.append(predicate_documentation)

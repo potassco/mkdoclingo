@@ -109,3 +109,4 @@ class Document:
     line_comments: list[LineComment] = field(default_factory=list)
     block_comments: list[BlockComment] = field(default_factory=list)
     predicate_documentations: list[PredicateDocumentation] = field(default_factory=list)
+    shows: list[Show] = field(default_factory=list)

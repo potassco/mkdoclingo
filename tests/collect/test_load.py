@@ -13,7 +13,8 @@ def test_load_from_file(tmp_path: Path) -> None:
         "Args:\n"
         "   - X: This is a description of X\n"
         "*%\n"
-        "q(X) :- p(X, Y)."
+        "q(X) :- p(X, Y).\n"
+        "#show q/1."
         )
     file_path.write_bytes(file_content.encode("utf-8"))
 
@@ -22,10 +23,11 @@ def test_load_from_file(tmp_path: Path) -> None:
     assert document.path == file_path
     assert document.content == file_content
     assert len(document.includes) == 0
-    assert len(document.statements) == 1
+    assert len(document.statements) == 2
     assert len(document.line_comments) == 0
     assert len(document.block_comments) == 0
     assert len(document.predicate_documentations) == 1
+    assert len(document.shows) == 1
 
 def test_load_from_file_empty(tmp_path: Path) -> None:
     """Test loading a Document from an empty file."""

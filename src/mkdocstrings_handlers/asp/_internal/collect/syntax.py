@@ -29,6 +29,9 @@ class NodeKind(Enum):
     LINE_COMMENT = "line_comment"
     BLOCK_COMMENT = "block_comment"
     DOC_COMMENT = "doc_comment"
+    SHOW = "show"
+    SHOW_SIGNATURE = "show_signature"
+    SHOW_TERM = "show_term"
 
     @staticmethod
     def from_grammar_name(grammar_name: str):

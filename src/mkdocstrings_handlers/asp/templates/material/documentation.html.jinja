@@ -1,17 +1,13 @@
-{% if config.predicate_table %}
+{# {% if config.predicate_table %}
   {% include 'predicate_table.html.jinja' %}
-
-{% endif %}
-{% if config.dependency_graph %}
+{% endif %} #}
+{% if options.dependency_graph %}
   {% include 'dependency_graph.html.jinja' %}
-
 {% endif %}
-{% if config.encodings %}
+{# {% if config.encodings %}
   {% include 'encodings.html.jinja' %}
-
 {% endif %}
 {% if config.glossary %}
   {% include 'separator.html.jinja' %}
   {% include 'glossary.html.jinja' %}
-
-{% endif %}
+{% endif %} #}

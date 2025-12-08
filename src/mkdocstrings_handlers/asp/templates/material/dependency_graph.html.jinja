@@ -8,8 +8,6 @@
 {% filter heading(options.start_level+1, id="dependency_graph", toc_label=toc_label) %}
   <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-graphql:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Dependency Graph</span>
 {% endfilter %}
-{% include 'dependency_graph.mermaid.jinja' %}
-
 {# djlint:off #}
 {% filter convert_markdown(0) %}
 ```mermaid
@@ -28,6 +26,9 @@ flowchart LR
     classDef aux stroke:#848484,stroke-width:0.2px;
     classDef in stroke:#9178C6,stroke-width:3px;
     class {% for predicate in context.predicates %}{{ predicate.signature }}{% if not loop.last %},{% endif %}{%- endfor %} all;
+    class {% for predicate in context.predicates %}{% if predicate.show_status < 4 %}{{predicate.signature}},{% endif %}{% endfor %} out;
+    class {% for predicate in context.predicates %}{% if predicate.show_status == 4 %}{{predicate.signature}},{% endif %}{% endfor %} aux;
+    class {% for predicate in context.predicates %}{% if predicate.is_input %}{{predicate.signature}},{% endif %}{% endfor %} in;
 ```
 {% endfilter %}
 {# djlint:on #}

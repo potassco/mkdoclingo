@@ -3,6 +3,8 @@ from pathlib import Path
 from mkdocstrings import BaseHandler
 from mkdocstrings_handlers.asp._internal.collect.load import load_documents
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
+from mkdocstrings_handlers.asp._internal.domain import Document
+from mkdocstrings_handlers.asp._internal.render import get_render_context
 
 
 class ASPHandler(BaseHandler):
@@ -24,7 +26,7 @@ class ASPHandler(BaseHandler):
         """
         return ASPOptions.from_dict(local_options)
 
-    def collect(self, identifier: str, options: ASPOptions) -> dict:
+    def collect(self, identifier: str, options: ASPOptions) -> list[Document]:
         """
         Collect data from ASP files.
 
@@ -39,22 +41,31 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        load_documents([Path(identifier)])
+        return load_documents([Path(identifier)])
 
-        return {"bla": 1}
-
-    def render(self, data: dict, options: ASPOptions) -> dict:
+    def render(self, documents: list[Document], options: ASPOptions) -> str:
         """
         Render the collected data into a format suitable for mkdocstrings.
 
         Args:
-            data: The collected data from `collect`.
+            
             options: Options provided by `get_options`.
 
         Returns:
             The rendered data as a dictionary.
         """
 
+        context = get_render_context(documents)
+
+        try:
+            template = self.env.get_template("documentation.html.jinja")
+        except Exception:
+            return "<p>Template not found.</p>"
+
+        try:
+            return template.render(context=context, options=options)
+        except Exception:
+            return "<p>Rendering failed.</p>"
 
 def get_handler(theme: str, handler_config: dict, tool_config: dict, **kwargs):
     """

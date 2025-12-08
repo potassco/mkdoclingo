@@ -88,6 +88,5 @@ exclude_lines = ["assert", "nocoverage"]
 [tool.djlint]
 profile = "jinja"
 indent = 2
-blank_line_after_tag = "load,extends,include"
 format_css = true
 format_js = true

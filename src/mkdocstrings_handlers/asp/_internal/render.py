@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus
 
 @dataclass
@@ -39,6 +40,7 @@ class DependencyGraphContext:
 @dataclass
 class RenderContext:
     _predicates: list[PredicateInfo] = field(default_factory=list)
+    options: ASPOptions
 
     @property
     def dependency_graph(self) -> DependencyGraphContext:
@@ -74,7 +76,7 @@ class RenderContext:
         )
         
 
-def get_render_context(documents: list[Document]) -> RenderContext:
+def get_render_context(documents: list[Document], options: ASPOptions) -> RenderContext:
     
     registry: dict[str, PredicateInfo] = {}
 
@@ -141,4 +143,4 @@ def get_render_context(documents: list[Document]) -> RenderContext:
         if info.show_status == ShowStatus.DEFAULT:
             info.show_status = default_show
 
-    return RenderContext(_predicates=list(registry.values()))
+    return RenderContext(_predicates=list(registry.values()), options=options)

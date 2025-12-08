@@ -57,7 +57,7 @@ class ASPHandler(BaseHandler):
             The rendered data as a dictionary.
         """
 
-        context = get_render_context(documents)
+        context = get_render_context(documents, options)
 
         try:
             template = self.env.get_template("documentation.html.jinja")
@@ -65,7 +65,7 @@ class ASPHandler(BaseHandler):
             return "<p>Template not found.</p>"
 
         try:
-            return template.render(context=context, options=options)
+            return template.render(context=context)
         except Exception:
             return "<p>Rendering failed.</p>"
     

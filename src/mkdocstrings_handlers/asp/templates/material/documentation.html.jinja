@@ -1,7 +1,7 @@
 {# {% if config.predicate_table %}
   {% include 'predicate_table.html.jinja' %}
 {% endif %} #}
-{% if options.dependency_graph %}
+{% if context.options.dependency_graph %}
   {% include 'dependency_graph.html.jinja' %}
 {% endif %}
 {# {% if config.encodings %}

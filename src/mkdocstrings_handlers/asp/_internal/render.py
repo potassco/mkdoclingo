@@ -28,8 +28,51 @@ class PredicateInfo:
     is_input: bool = True
 
 @dataclass
+class DependencyGraphContext:
+    positives: list[tuple[str, str]] = field(default_factory=list)
+    negatives: list[tuple[str, str]] = field(default_factory=list)
+    all: list[str] = field(default_factory=list)
+    outputs: list[str] = field(default_factory=list)
+    auxiliaries: list[str] = field(default_factory=list)
+    inputs: list[str] = field(default_factory=list)
+
+@dataclass
 class RenderContext:
-    predicates: list[PredicateInfo] = field(default_factory=list)
+    _predicates: list[PredicateInfo] = field(default_factory=list)
+
+    @property
+    def dependency_graph(self) -> DependencyGraphContext:
+        positives = []
+        negatives = []
+        outputs = []
+        auxiliaries = []
+        inputs = []
+
+        for predicate in self._predicates:
+            if predicate.is_input:
+                inputs.append(predicate.signature)
+            
+            if predicate.show_status != ShowStatus.HIDDEN:
+                outputs.append(predicate.signature)
+            else:
+                auxiliaries.append(predicate.signature)
+
+            for dep in predicate.positive_dependencies:
+                positives.append((dep, predicate.signature))
+            for dep in predicate.negative_dependencies:
+                negatives.append((dep, predicate.signature))
+
+        all_preds = [predicate.signature for predicate in self._predicates]
+    
+        return DependencyGraphContext(
+            positives=positives,
+            negatives=negatives,
+            all=all_preds,
+            outputs=outputs,
+            auxiliaries=auxiliaries,
+            inputs=inputs,
+        )
+        
 
 def get_render_context(documents: list[Document]) -> RenderContext:
     
@@ -98,4 +141,4 @@ def get_render_context(documents: list[Document]) -> RenderContext:
         if info.show_status == ShowStatus.DEFAULT:
             info.show_status = default_show
 
-    return RenderContext(predicates=list(registry.values()))
+    return RenderContext(_predicates=list(registry.values()))

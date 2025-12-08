@@ -10,25 +10,44 @@
 {% endfilter %}
 {# djlint:off #}
 {% filter convert_markdown(0) %}
+{% set graph = context.dependency_graph %}
 ```mermaid
 flowchart LR
-    {%- for predicate in context.predicates %}
-    {{ predicate.signature }}(["{{ predicate.signature }}"])
-    {%- for positive in predicate.positive_dependencies %}
-    {{ positive }} --> {{ predicate.signature }}
+    {# Nodes (predicates) #}
+    {%- for predicate in graph.all %}
+    {{ predicate }}(["{{ predicate }}"])
     {%- endfor %}
-    {%- for negative in predicate.negative_dependencies %}
-    {{ negative }} -.-> {{ predicate.signature }}
+
+    {# Edges (dependencies) #}
+    {% for (from, to) in graph.positives %}
+    {{ from }} --> {{ to }}
     {%- endfor %}
+    {% for (from, to) in graph.negatives %}
+    {{ from }} -.-> {{ to }}
     {%- endfor %}
     classDef all fill:#00000000;
     classDef out stroke:#52BF54,stroke-width:3px;
     classDef aux stroke:#848484,stroke-width:0.2px;
     classDef in stroke:#9178C6,stroke-width:3px;
-    class {% for predicate in context.predicates %}{{ predicate.signature }}{% if not loop.last %},{% endif %}{%- endfor %} all;
-    class {% for predicate in context.predicates %}{% if predicate.show_status < 4 %}{{predicate.signature}},{% endif %}{% endfor %} out;
-    class {% for predicate in context.predicates %}{% if predicate.show_status == 4 %}{{predicate.signature}},{% endif %}{% endfor %} aux;
-    class {% for predicate in context.predicates %}{% if predicate.is_input %}{{predicate.signature}},{% endif %}{% endfor %} in;
+    {# Some coloring for all nodes #}
+    {% if graph.all %}
+    class {% for predicate in graph.all %}{{ predicate }}{% if not loop.last %},{% endif %}{%- endfor %} all;
+    {% endif %}
+
+    {# Predicates that are shown #}
+    {% if graph.outputs %}
+    class {% for predicate in graph.outputs %}{{ predicate }}{% if not loop.last %},{% endif %}{%- endfor %} out;
+    {% endif %}
+
+    {# Predicates that are generated in the encoding but are not shown #}
+    {% if graph.auxiliaries %}
+    class {% for predicate in graph.auxiliaries %}{{ predicate }}{% if not loop.last %},{% endif %}{%- endfor %} aux;
+    {% endif %}
+
+    {# Predicates that are used in the encoding but aren't generated in it. They're provided by input files. #}
+    {% if graph.inputs %}
+    class {% for predicate in graph.inputs %}{{ predicate }}{% if not loop.last %},{% endif %}{%- endfor %} in;
+    {% endif %}
 ```
 {% endfilter %}
 {# djlint:on #}

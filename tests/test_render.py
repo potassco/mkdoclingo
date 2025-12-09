@@ -2,7 +2,7 @@ from pathlib import Path
 
 from mkdocstrings_handlers.asp._internal.collect.load import load_documents
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
-from mkdocstrings_handlers.asp._internal.render import get_render_context
+from mkdocstrings_handlers.asp._internal.render.render_context import RenderContext
 
 
 def test_dependency_graph_structure(tmp_path: Path):
@@ -12,7 +12,7 @@ def test_dependency_graph_structure(tmp_path: Path):
     file_path.write_text("p(X) :- q(X), not r(X).", encoding="utf-8")
     
     documents = load_documents([file_path])
-    context = get_render_context(documents, ASPOptions())
+    context = RenderContext(_documents=documents, options=ASPOptions())
     
     graph = context.dependency_graph
     
@@ -32,7 +32,7 @@ def test_dependency_graph_classification(tmp_path: Path):
     """, encoding="utf-8")
     
     documents = load_documents([file_path])
-    context = get_render_context(documents, ASPOptions())
+    context = RenderContext(_documents=documents, options=ASPOptions())
     graph = context.dependency_graph
 
 
@@ -53,7 +53,7 @@ def test_predicate_table_sorting(tmp_path: Path):
 
     options = ASPOptions()
     options.predicate_table.include_hidden = True
-    context = get_render_context(documents, options)
+    context = RenderContext(_documents=documents, options=options)
     table = context.predicate_table
 
     sorted_signatures = [pred.signature for pred in table.predicates]
@@ -80,7 +80,7 @@ def test_predicate_table_not_show_hidden(tmp_path: Path):
 
     options = ASPOptions()
     options.predicate_table.include_hidden = False
-    context = get_render_context(documents, options)
+    context = RenderContext(_documents=documents, options=options)
     table = context.predicate_table
 
     assert len(table.predicates) == 2
@@ -100,7 +100,7 @@ def test_predicate_table_not_show_undocumented(tmp_path: Path):
     options = ASPOptions()
     options.predicate_table.include_undocumented = False
 
-    context = get_render_context(documents, options)
+    context = RenderContext(_documents=documents, options=options)
     table = context.predicate_table
 
     assert len(table.predicates) == 0

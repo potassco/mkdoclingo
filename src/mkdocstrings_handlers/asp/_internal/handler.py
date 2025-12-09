@@ -6,8 +6,9 @@ from mkdocstrings import BaseHandler
 from mkdocstrings_handlers.asp._internal.collect.load import load_documents
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document
-from mkdocstrings_handlers.asp._internal.render import get_render_context
 from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
+
+from mkdocstrings_handlers.asp._internal.render.render_context import RenderContext
 
 class ASPHandler(BaseHandler):
     """MKDocStrings handler for ASP files."""
@@ -57,17 +58,18 @@ class ASPHandler(BaseHandler):
             The rendered data as a dictionary.
         """
 
-        context = get_render_context(documents, options)
+        context = RenderContext(_documents=documents, options=options)
 
         try:
             template = self.env.get_template("documentation.html.jinja")
         except Exception:
             return "<p>Template not found.</p>"
 
-        try:
-            return template.render(context=context)
-        except Exception:
-            return "<p>Rendering failed.</p>"
+        # try:
+        return template.render(context=context)
+        # except Exception:
+
+        #     return "<p>Rendering failed.</p>"
     
     def update_env(self, config: Any) -> None:
         self.env.filters["convert_markdown_simple"] = self.do_convert_markdown_simple

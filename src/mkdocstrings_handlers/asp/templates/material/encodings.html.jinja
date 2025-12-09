@@ -17,7 +17,7 @@
     </svg>
   </div>
 {% endset %}
-{% for encoding in context.encodings %}
+{% for encoding in context.encodings.encodings %}
   {% set file_id %}
     {{ encoding.path }}
   {% endset %}

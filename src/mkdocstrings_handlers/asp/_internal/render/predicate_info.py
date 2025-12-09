@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import string
 
 from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus
 
@@ -25,6 +26,27 @@ class PredicateInfo:
     negative_dependencies: set[str] = field(default_factory=set)
     show_status: ShowStatus = ShowStatus.DEFAULT
     is_input: bool = True
+
+    def __str__(self) -> str:
+        """
+        Return the string representation of the predicate.
+
+        If the predicate has arguments, their identifiers are used in the representation.
+        Otherwise, generic argument names based on the arity are used.
+
+        The default representation is of the form `identifier(A, B, C)` where `A`, `B`, and `C` are
+        the first three uppercase letters of the alphabet.
+
+        Returns:
+            The string representation of the predicate.
+        """
+        identifier, arity_str = self.signature.split("/")
+        
+        if self.arguments:
+            args = ", ".join(arg.identifier for arg in self.arguments)
+        else:
+            args = ", ".join(string.ascii_uppercase[: int(arity_str)])
+        return f"{identifier}({args})"
 
 
 def get_predicate_infos(documents: list[Document]) -> list[PredicateInfo]:

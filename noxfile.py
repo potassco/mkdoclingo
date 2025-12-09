@@ -1,4 +1,5 @@
 # type: ignore
+# pylint: skip-file
 """This module contains the nox configuration."""
 
 import os

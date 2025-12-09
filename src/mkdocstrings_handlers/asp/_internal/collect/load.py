@@ -13,7 +13,7 @@ from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_statement,
 )
 from mkdocstrings_handlers.asp._internal.collect.syntax import NodeKind, get_parser
-from mkdocstrings_handlers.asp._internal.domain import Document, Statement
+from mkdocstrings_handlers.asp._internal.domain import Document
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ def load_documents(paths: list[Path]) -> list[Document]:
     while parse_queue:
         path = parse_queue.popleft()
         if path.suffix != ".lp" or not path.is_file():
-            log.warning(f"skip file {path}, not a valid ASP file.")
+            log.warning("skip file %s, not a valid ASP file.", path)
             continue
         document = load_document(path)
         documents[path] = document

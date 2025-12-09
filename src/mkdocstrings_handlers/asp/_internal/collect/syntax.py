@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
 
@@ -68,10 +69,10 @@ class AspQuery:
         """Lazy load the query on first access."""
         if self._query is None:
             try:
-                with open(_QUERY_DIR / self.filename, "r") as f:
+                with open(_QUERY_DIR / self.filename, "r", encoding="utf-8") as f:
                     self._query = Query(_LANGUAGE, f.read())
-            except FileNotFoundError:
-                raise RuntimeError(f"Missing SCM file: {self.filename}. ")
+            except FileNotFoundError as err:
+                raise RuntimeError(f"Missing SCM file: {self.filename}. ") from err
         return self._query
 
     def captures(self, node: Node) -> dict[str, list[Node]]:
@@ -82,6 +83,7 @@ class AspQuery:
         return cursor.captures(node)
 
 
+@dataclass
 class Queries:
     """Registry of available Semantic Queries."""
 

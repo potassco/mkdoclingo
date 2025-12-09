@@ -1,3 +1,5 @@
+"""This module contains tests for the rendering context."""
+
 from pathlib import Path
 
 from mkdocstrings_handlers.asp._internal.collect.load import load_documents

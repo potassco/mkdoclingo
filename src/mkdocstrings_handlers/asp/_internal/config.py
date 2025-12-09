@@ -1,3 +1,5 @@
+"""This module defines the configuration options for the ASP handler."""
+
 from __future__ import annotations
 
 from typing import Any, Dict, Mapping, Type
@@ -6,24 +8,45 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
 class EncodingOptions(BaseModel):
+    """Options for encoding outputs."""
+
     source: bool = False
+    """ Whether to encode source code blocks. """
     git_link: bool = False
+    """
+    Whether to include git links.
+
+    This requires a repository link to be set.
+    """
 
 
 class GlossaryOptions(BaseModel):
+    """Options for glossary generation."""
+
     include_undocumented: bool = True
+    """ Whether to include undocumented predicates in the glossary. """
     include_hidden: bool = True
+    """ Whether to include hidden predicates in the glossary. """
     include_references: bool = True
+    """ Whether to include references in the glossary. """
     include_navigation: bool = True
+    """ Whether to include navigation links in the glossary. """
 
 
 class PredicateTableOptions(BaseModel):
+    """Options for predicate table generation."""
+
     include_undocumented: bool = True
+    """ Whether to include undocumented predicates in the predicate table. """
     include_hidden: bool = True
+    """ Whether to include hidden predicates in the predicate table. """
 
 
 class DependencyGraphOptions(BaseModel):
-    custom: bool = True
+    """Options for dependency graph generation."""
+
+    enable: bool = True
+    """ Whether to generate dependency graphs. """
 
 
 class ASPOptions(BaseModel):

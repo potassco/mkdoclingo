@@ -1,3 +1,5 @@
+"""This module contains tests for loading ASP documents."""
+
 from pathlib import Path
 
 from mkdocstrings_handlers.asp._internal.collect.load import load_document, load_documents

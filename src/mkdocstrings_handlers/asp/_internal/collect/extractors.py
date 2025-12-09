@@ -1,3 +1,5 @@
+"""Extractors for various ASP constructs from Tree-sitter nodes."""
+
 from collections import defaultdict
 from pathlib import Path
 
@@ -21,7 +23,15 @@ from mkdocstrings_handlers.asp._internal.error import ExtractionError
 def get_node_text(node: Node | None) -> str:
     """
     Safely extracts and decodes text from a Tree-sitter node.
-    Raises an error if the node is missing or has no text.
+
+    Args:
+        node: The Tree-sitter node.
+
+    Returns:
+        The decoded text content of the node.
+
+    Raises:
+        ExtractionError: If the node is None or has no text.
     """
     if node is None:
         raise ExtractionError("Expected a node, but got None.")
@@ -41,6 +51,13 @@ def get_capture_text(captures: dict[str, list[Node]], key: str, index: int = 0) 
         captures: The dictionary of captured nodes.
         key: The capture group name (e.g., "identifier").
         index: Which item in the capture list to retrieve (default 0).
+
+    Returns:
+        The decoded text content of the specified capture.
+
+    Raises:
+        ExtractionError: If the capture group is missing, empty, or the index is out of
+        bounds.
     """
     nodes = captures.get(key)
 
@@ -78,6 +95,15 @@ def extract_include(node: Node, parent_file_path: Path) -> Include:
 
 
 def extract_predicate(node: Node) -> Predicate:
+    """
+    Extract a Predicate from a node.
+
+    Args:
+        node: A `literal` node representing the predicate.
+
+    Returns:
+        The created Predicate.
+    """
     captures = Queries.PREDICATE.captures(node)
 
     return Predicate(
@@ -88,6 +114,15 @@ def extract_predicate(node: Node) -> Predicate:
 
 
 def extract_show(node: Node) -> Show:
+    """
+    Extract a Show directive from a node.
+
+    Args:
+        node: A `show_signature` or `show_term` node representing the show directive.
+
+    Returns:
+        The created Show directive.
+    """
     captures = Queries.SHOW.captures(node)
 
     raw_identifier = captures.get("identifier", [])
@@ -116,6 +151,15 @@ def extract_show(node: Node) -> Show:
 
 
 def extract_line_comment(node: Node) -> LineComment:
+    """
+    Extract a LineComment from a node.
+
+    Args:
+        node: A `line_comment` node representing the line comment.
+
+    Returns:
+        The created LineComment.
+    """
     return LineComment(
         row=node.start_point.row,
         content=get_node_text(node).removeprefix("%"),
@@ -123,6 +167,15 @@ def extract_line_comment(node: Node) -> LineComment:
 
 
 def extract_block_comment(node: Node) -> BlockComment:
+    """
+    Extract a BlockComment from a node.
+
+    Args:
+        node: A `block_comment` node representing the block comment.
+
+    Returns:
+        The created BlockComment.
+    """
     return BlockComment(
         row=node.start_point.row,
         content=get_node_text(node).removeprefix("%*").removesuffix("*%"),
@@ -130,6 +183,15 @@ def extract_block_comment(node: Node) -> BlockComment:
 
 
 def extract_statement(node: Node) -> Statement:
+    """
+    Extract a Statement from a node.
+
+    Args:
+        node: A node representing the statement.
+
+    Returns:
+        The created Statement.
+    """
     head_node = node.child_by_field_name("head")
     body_node = node.child_by_field_name("body")
 
@@ -160,6 +222,15 @@ def extract_statement(node: Node) -> Statement:
 
 
 def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
+    """
+    Extract an ArgumentDocumentation from a node.
+
+    Args:
+        node: The node representing the argument documentation.
+
+    Returns:
+        The created ArgumentDocumentation.
+    """
     captures = Queries.DOC_ARGUMENT.captures(node)
 
     identifier = get_capture_text(captures, "identifier", 0)
@@ -172,6 +243,15 @@ def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
 
 
 def extract_predicate_documentation(node: Node) -> PredicateDocumentation:
+    """
+    Extract a PredicateDocumentation from a node.
+
+    Args:
+        node: The node representing the predicate documentation.
+
+    Returns:
+        The created PredicateDocumentation.
+    """
     captures = Queries.DOC_PREDICATE.captures(node)
 
     identifier = get_capture_text(captures, "identifier", 0)

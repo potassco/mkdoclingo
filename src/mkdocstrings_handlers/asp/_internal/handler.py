@@ -1,3 +1,5 @@
+"""This module defines the ASP handler for mkdocstrings."""
+
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -46,7 +48,7 @@ class ASPHandler(BaseHandler):
 
         return load_documents([Path(identifier)])
 
-    def render(self, data: list[Document], options: ASPOptions, **kwargs: Any) -> str:
+    def render(self, data: list[Document], options: ASPOptions, **_kwargs: Any) -> str:
         """
         Render the collected data into a format suitable for mkdocstrings.
 
@@ -60,18 +62,17 @@ class ASPHandler(BaseHandler):
 
         context = RenderContext(_documents=data, options=options)
 
-        try:
-            template = self.env.get_template("documentation.html.jinja")
-        except Exception:
-            return "<p>Template not found.</p>"
+        template = self.env.get_template("documentation.html.jinja")
 
-        # try:
         return template.render(context=context)
-        # except Exception:
-
-        #     return "<p>Rendering failed.</p>"
 
     def update_env(self, config: Any) -> None:
+        """
+        Update the Jinja2 environment with custom filters.
+
+        Args:
+            config: The mkdocs config object.
+        """
         self.env.filters["convert_markdown_simple"] = self.do_convert_markdown_simple
 
     def do_convert_markdown_simple(
@@ -79,7 +80,17 @@ class ASPHandler(BaseHandler):
         text: str,
         heading_level: int,
     ) -> Markup:
-        old_headings = [e for e in self._headings]
+        """
+        Convert the given text from Markdown to HTML, shifting headings by the given level.
+
+        Args:
+            text: The Markdown text to convert.
+            heading_level: The level to shift headings by.
+
+        Returns:
+            The converted HTML as Markup.
+        """
+        old_headings = list(self._headings)
 
         if self._md is None:
             raise RuntimeError("Markdown instance is not initialized.")
@@ -97,10 +108,14 @@ class ASPHandler(BaseHandler):
         return md
 
 
-def get_handler(theme: str, handler_config: dict[str, Any], tool_config: dict[str, Any], **kwargs: Any) -> ASPHandler:
+def get_handler(theme: str, **kwargs: Any) -> ASPHandler:
     """
     Return an instance of `ASPHandler`.
 
     This is required by mkdocstrings to load the handler.
     """
+    # For now, drop the configurations since we don't use them
+    kwargs.pop("handler_config", None)
+    kwargs.pop("tool_config", None)
+
     return ASPHandler(theme=theme or "material", **kwargs)

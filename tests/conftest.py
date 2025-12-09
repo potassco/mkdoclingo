@@ -1,3 +1,5 @@
+"""This module contains common pytest fixtures for tests."""
+
 from typing import Callable
 
 import pytest
@@ -6,8 +8,8 @@ from tree_sitter import Parser, Tree
 from mkdocstrings_handlers.asp._internal.collect.syntax import get_parser
 
 
-@pytest.fixture(scope="session")
-def parser() -> Parser:
+@pytest.fixture(name="parser", scope="session")
+def parser_fixture() -> Parser:
     """
     Session-scoped parser.
     Initialized only once for the entire test suite run. Fast!

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateInfo
@@ -7,6 +8,7 @@ from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateI
 @dataclass
 class PredicateTableContext:
     predicates: list[PredicateInfo]
+
 
 def get_predicate_table_context(predicates: list[PredicateInfo], options: ASPOptions) -> PredicateTableContext:
     result: list[PredicateInfo] = []

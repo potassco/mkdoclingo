@@ -2,13 +2,13 @@ from pathlib import Path
 from typing import Any
 
 from markupsafe import Markup
-from mkdocstrings import BaseHandler
+from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
+
 from mkdocstrings_handlers.asp._internal.collect.load import load_documents
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document
-from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
-
 from mkdocstrings_handlers.asp._internal.render.render_context import RenderContext
+
 
 class ASPHandler(BaseHandler):
     """MKDocStrings handler for ASP files."""
@@ -51,7 +51,7 @@ class ASPHandler(BaseHandler):
         Render the collected data into a format suitable for mkdocstrings.
 
         Args:
-            
+
             options: Options provided by `get_options`.
 
         Returns:
@@ -70,7 +70,7 @@ class ASPHandler(BaseHandler):
         # except Exception:
 
         #     return "<p>Rendering failed.</p>"
-    
+
     def update_env(self, config: Any) -> None:
         self.env.filters["convert_markdown_simple"] = self.do_convert_markdown_simple
 
@@ -91,6 +91,7 @@ class ASPHandler(BaseHandler):
 
         self._headings = old_headings
         return md
+
 
 def get_handler(theme: str, handler_config: dict, tool_config: dict, **kwargs):
     """

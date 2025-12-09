@@ -33,6 +33,7 @@ class Show:
     status: ShowStatus = ShowStatus.DEFAULT
     """ The show status of the predicate."""
 
+
 @dataclass
 class Predicate:
     """A predicate in an ASP program."""
@@ -87,18 +88,21 @@ class Statement:
     needed_predicates: list[Predicate]
     """The predicates needed by the statement."""
 
+
 @dataclass
 class ArgumentDocumentation:
     identifier: str
     description: str
+
 
 @dataclass
 class PredicateDocumentation:
     row: int
     content: str
     signature: str
-    description:str
+    description: str
     arguments: list[ArgumentDocumentation]
+
 
 @dataclass
 class Document:

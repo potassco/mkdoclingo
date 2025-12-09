@@ -17,6 +17,7 @@ from mkdocstrings_handlers.asp._internal.domain import Document, Statement
 
 log = logging.getLogger(__name__)
 
+
 def load_documents(paths: list[Path]) -> list[Document]:
     """
     Load and parse multiple ASP documents from the given file paths.
@@ -40,13 +41,14 @@ def load_documents(paths: list[Path]) -> list[Document]:
 
     return list(documents.values())
 
+
 def load_document(file_path: Path) -> Document:
     """
     Load and parse an ASP document from the given file path.
 
     Args:
         file_path: Path to the ASP file.
-    
+
     Returns:
         The parsed Document object.
     """

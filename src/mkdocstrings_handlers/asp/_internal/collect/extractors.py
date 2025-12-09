@@ -4,6 +4,18 @@ from pathlib import Path
 from tree_sitter import Node
 
 from mkdocstrings_handlers.asp._internal.collect.syntax import Queries
+from mkdocstrings_handlers.asp._internal.domain import (
+    ArgumentDocumentation,
+    BlockComment,
+    Include,
+    LineComment,
+    Predicate,
+    PredicateDocumentation,
+    Show,
+    ShowStatus,
+    Statement,
+)
+
 from mkdocstrings_handlers.asp._internal.domain import ArgumentDocumentation, BlockComment, Include, LineComment, Predicate, PredicateDocumentation, Show, ShowStatus, Statement
 
 
@@ -39,12 +51,13 @@ def extract_predicate(node: Node) -> Predicate:
         negation=len(captures.get("negation", [])) > 0,
     )
 
+
 def extract_show(node: Node) -> Show:
     captures = Queries.SHOW.captures(node)
 
-    raw_identifier = captures.get("identifier",[])
-    raw_arity = captures.get("arity",[])
-    raw_terms = captures.get("term",[])
+    raw_identifier = captures.get("identifier", [])
+    raw_arity = captures.get("arity", [])
+    raw_terms = captures.get("term", [])
 
     identifier: str | None = raw_identifier[0].text.decode("utf-8") if raw_identifier else None
     arity: int | None = int(raw_arity[0].text.decode("utf-8")) if raw_arity else None
@@ -60,11 +73,12 @@ def extract_show(node: Node) -> Show:
             identifier=identifier,
             arity=arity,
         )
-    
+
     return Show(
         predicate=predicate,
         status=status,
     )
+
 
 def extract_line_comment(node: Node) -> LineComment:
     return LineComment(
@@ -102,13 +116,13 @@ def extract_statement(node: Node) -> Statement:
     provided_predicates = [extract_predicate(node) for node in captures.get("provided", [])]
     needed_predicates = [extract_predicate(node) for node in captures.get("needed", [])]
 
-
     return Statement(
         row=node.start_point.row,
         content=node.text.decode("utf-8"),
         provided_predicates=provided_predicates,
         needed_predicates=needed_predicates,
     )
+
 
 def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
     captures = Queries.DOC_ARGUMENT.captures(node)
@@ -121,13 +135,20 @@ def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
         description=description,
     )
 
+
 def extract_predicate_documentation(node: Node) -> PredicateDocumentation:
     captures = Queries.DOC_PREDICATE.captures(node)
 
     identifier = captures["identifier"][0].text.decode("utf-8")
     arguments = [arg.text.decode("utf-8") for arg in captures.get("argument", [])]
-    description = captures["description"][0].text.decode("utf-8").removeprefix("%*!").removesuffix("*%").strip() if captures.get("description") else ""
-    argument_documentations = [extract_argument_documentation(arg_node) for arg_node in captures.get("arg.documentation", [])]
+    description = (
+        captures["description"][0].text.decode("utf-8").removeprefix("%*!").removesuffix("*%").strip()
+        if captures.get("description")
+        else ""
+    )
+    argument_documentations = [
+        extract_argument_documentation(arg_node) for arg_node in captures.get("arg.documentation", [])
+    ]
 
     return PredicateDocumentation(
         row=node.start_point.row,

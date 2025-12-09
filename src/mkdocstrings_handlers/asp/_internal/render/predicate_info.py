@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
 import string
+from dataclasses import dataclass, field
 
 from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus
 
@@ -10,14 +10,16 @@ class Occurrence:
     row: int
     content: str
 
+
 @dataclass
 class ArgumentInfo:
     identifier: str
     description: str
 
+
 @dataclass
 class PredicateInfo:
-    signature:str
+    signature: str
     description: str = ""
     arguments: list[ArgumentInfo] = field(default_factory=list)
     definitions: list[Occurrence] = field(default_factory=list)
@@ -41,7 +43,7 @@ class PredicateInfo:
             The string representation of the predicate.
         """
         identifier, arity_str = self.signature.split("/")
-        
+
         if self.arguments:
             args = ", ".join(arg.identifier for arg in self.arguments)
         else:
@@ -50,7 +52,7 @@ class PredicateInfo:
 
 
 def get_predicate_infos(documents: list[Document]) -> list[PredicateInfo]:
-    
+
     registry: dict[str, PredicateInfo] = {}
 
     def get_info(signature: str) -> PredicateInfo:
@@ -96,7 +98,6 @@ def get_predicate_infos(documents: list[Document]) -> list[PredicateInfo]:
                         get_info(provided.signature).negative_dependencies.add(needed.signature)
                     else:
                         get_info(provided.signature).positive_dependencies.add(needed.signature)
-    
 
     default_show = ShowStatus.DEFAULT
 
@@ -104,7 +105,7 @@ def get_predicate_infos(documents: list[Document]) -> list[PredicateInfo]:
         for show in document.shows:
             if show.status == ShowStatus.EXPLICIT:
                 default_show = ShowStatus.HIDDEN
-            
+
             if show.predicate is not None:
                 info = get_info(show.predicate.signature)
                 info.show_status |= show.status

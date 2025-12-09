@@ -71,9 +71,7 @@ class AspQuery:
                 with open(_QUERY_DIR / self.filename, "rb") as f:
                     self._query = Query(_LANGUAGE, f.read())
             except FileNotFoundError:
-                raise RuntimeError(
-                    f"Missing SCM file: {self.filename}. "
-                )
+                raise RuntimeError(f"Missing SCM file: {self.filename}. ")
         return self._query
 
     def captures(self, node: Node) -> dict[str, list[Node]]:

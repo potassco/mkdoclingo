@@ -1,20 +1,29 @@
 """This module defines the RenderContext dataclass containing various rendering contexts for ASP documentation."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from functools import cached_property
+
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document
-from mkdocstrings_handlers.asp._internal.render.dependency_graph_context import DependencyGraphContext, get_dependency_graph_context
+from mkdocstrings_handlers.asp._internal.render.dependency_graph_context import (
+    DependencyGraphContext,
+    get_dependency_graph_context,
+)
 from mkdocstrings_handlers.asp._internal.render.encodings_context import EncodingContext, get_encoding_context
 from mkdocstrings_handlers.asp._internal.render.glossary_context import GlossaryContext, get_glossary_context
 from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateInfo, get_predicate_infos
-from mkdocstrings_handlers.asp._internal.render.predicate_table_context import PredicateTableContext, get_predicate_table_context
+from mkdocstrings_handlers.asp._internal.render.predicate_table_context import (
+    PredicateTableContext,
+    get_predicate_table_context,
+)
 
 
 @dataclass
 class RenderContext:
     """Dataclass containing various rendering contexts for ASP documentation."""
+
     options: ASPOptions
     _documents: list[Document]
 
@@ -29,11 +38,11 @@ class RenderContext:
     @cached_property
     def dependency_graph(self) -> DependencyGraphContext:
         return get_dependency_graph_context(self._predicates)
-    
+
     @cached_property
     def encodings(self) -> EncodingContext:
         return get_encoding_context(self._documents)
-    
+
     @cached_property
     def glossary(self) -> GlossaryContext:
         return get_glossary_context(self._predicates, self.options)

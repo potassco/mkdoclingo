@@ -8,10 +8,12 @@ class BlockType(Enum):
     CODE = auto()
     MARKDOWN = auto()
 
+
 @dataclass
 class EncodingBlock:
     type: BlockType
     content: str
+
 
 @dataclass
 class EncodingInfo:
@@ -19,9 +21,11 @@ class EncodingInfo:
     source: str
     blocks: list[EncodingBlock] = field(default_factory=list)
 
+
 @dataclass
 class EncodingContext:
     encodings: list[EncodingInfo] = field(default_factory=list)
+
 
 def get_encoding_context(documents: list[Document]) -> EncodingContext:
     encodings = []
@@ -49,7 +53,7 @@ def get_encoding_context(documents: list[Document]) -> EncodingContext:
                     current_block_type = BlockType.CODE
 
                 current_block_content += element.content + "\n"
-            
+
             else:
                 if current_block_type != BlockType.MARKDOWN:
                     if current_block_content:
@@ -63,7 +67,7 @@ def get_encoding_context(documents: list[Document]) -> EncodingContext:
                     current_block_type = BlockType.MARKDOWN
 
                 current_block_content += element.content + "\n"
-        
+
         if current_block_content:
             encoding.blocks.append(
                 EncodingBlock(
@@ -71,7 +75,7 @@ def get_encoding_context(documents: list[Document]) -> EncodingContext:
                     content=current_block_content,
                 )
             )
-        
+
         encodings.append(encoding)
-    
+
     return EncodingContext(encodings=encodings)

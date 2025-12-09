@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
+
 from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateInfo
+
 
 @dataclass
 class DependencyGraphContext:
@@ -10,6 +12,7 @@ class DependencyGraphContext:
     outputs: list[str] = field(default_factory=list)
     auxiliaries: list[str] = field(default_factory=list)
     inputs: list[str] = field(default_factory=list)
+
 
 def get_dependency_graph_context(predicates: list[PredicateInfo]) -> DependencyGraphContext:
     positives = []
@@ -21,7 +24,7 @@ def get_dependency_graph_context(predicates: list[PredicateInfo]) -> DependencyG
     for predicate in predicates:
         if predicate.is_input:
             inputs.append(predicate.signature)
-        
+
         if predicate.show_status != ShowStatus.HIDDEN:
             outputs.append(predicate.signature)
         else:

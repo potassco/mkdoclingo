@@ -2,50 +2,50 @@
 Finds the hypothetical model using abduction and the distance defined by the user
 
 *%
-%* _abduced(T,A)
-.................
+%*! _abduced(T,A)
+
 Uses the concept of abduction to find the hypothetical model
 
 Args:
-    T : type of abduction `add` or `rm`
-    A : atom that has been abduced
+    - T : type of abduction `add` or `rm`
+    - A : atom that has been abduced
 
 *%
-%* _abducible(T,A)
-.................
+%*! _abducible(T,A)
+
 Abducible atoms full
 
 Args:
-    T : type of abduction `add` or `rm`
-    A : atom that can be abduced
+    - T : type of abduction `add` or `rm`
+    - A : atom that can be abduced
 
 *%
-%* _distance(N,D,L)
-.................
+%*! _distance(N,D,L)
+
 Distance between the real and hypothetical model.
 
 Args:
-    N : Identifier for the distance, each identifier will yield one penalization
-    D : Penalization value
-    L : Level of the distance. Higher levels will be prioritized
+    - N : Identifier for the distance, each identifier will yield one penalization
+    - D : Penalization value
+    - L : Level of the distance. Higher levels will be prioritized
 
 *%
-%* _query(T,A)
-.................
+%*! _query(T,A)
+
 Query that should hold in the hypothetical model
 
 Args:
-    T : type of query `include` or `exclude`
-    A : atom that the user wants to include or exclude
+    - T : type of query `include` or `exclude`
+    - A : atom that the user wants to include or exclude
 
 *%
-%* _model(T,A)
-.................
+%*! _model(T,A)
+
 Atoms that are part of the model
 
 Args:
-    T : type of model `real` or `hypothetical`
-    A : atom that is part of the model
+    - T : type of model `real` or `hypothetical`
+    - A : atom that is part of the model
 
 *%
 
@@ -56,10 +56,10 @@ Args:
 :- _query(exclude,Atom), _model(hypothetical,Atom).
 :- _query(include,Atom), not _model(hypothetical,Atom).
 
-%* world(W)
-.................
+%*! world(W)
+
 Args:
-    W : W is a world; either `real` or `hypothetical`
+    - W : W is a world; either `real` or `hypothetical`
 *%
 world(real;hypothetical).
 {_abduced(X,Atom)} :- _abducible(X,Atom).

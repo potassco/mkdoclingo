@@ -1,4 +1,4 @@
-"""This module prepares useful encoding information for rendering."""
+"""This module defines the RenderContext dataclass containing various rendering contexts for ASP documentation."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -14,6 +14,7 @@ from mkdocstrings_handlers.asp._internal.render.predicate_table_context import P
 
 @dataclass
 class RenderContext:
+    """Dataclass containing various rendering contexts for ASP documentation."""
     options: ASPOptions
     _documents: list[Document]
 
@@ -23,10 +24,6 @@ class RenderContext:
 
     @cached_property
     def predicate_table(self) -> PredicateTableContext:
-        print(f"table context from {len(self._predicates)}")
-        print(f"with {self.options}")
-        x = get_predicate_table_context(self._predicates, self.options)
-        print(len(x.predicates))
         return get_predicate_table_context(self._predicates, self.options)
 
     @cached_property

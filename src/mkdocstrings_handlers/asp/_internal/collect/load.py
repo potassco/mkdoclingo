@@ -64,11 +64,11 @@ def load_document(file_path: Path) -> Document:
                 statement = extract_statement(node)
                 document.statements.append(statement)
             case NodeKind.LINE_COMMENT:
-                comment = extract_line_comment(node)
-                document.line_comments.append(comment)
+                line_comment = extract_line_comment(node)
+                document.line_comments.append(line_comment)
             case NodeKind.BLOCK_COMMENT:
-                comment = extract_block_comment(node)
-                document.block_comments.append(comment)
+                block_comment = extract_block_comment(node)
+                document.block_comments.append(block_comment)
             case NodeKind.INCLUDE:
                 include = extract_include(node, file_path)
                 document.includes.append(include)

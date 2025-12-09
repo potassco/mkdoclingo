@@ -15,8 +15,42 @@ from mkdocstrings_handlers.asp._internal.domain import (
     ShowStatus,
     Statement,
 )
+from mkdocstrings_handlers.asp._internal.error import ExtractionError
 
-from mkdocstrings_handlers.asp._internal.domain import ArgumentDocumentation, BlockComment, Include, LineComment, Predicate, PredicateDocumentation, Show, ShowStatus, Statement
+
+def get_node_text(node: Node | None) -> str:
+    """
+    Safely extracts and decodes text from a Tree-sitter node.
+    Raises an error if the node is missing or has no text.
+    """
+    if node is None:
+        raise ExtractionError("Expected a node, but got None.")
+
+    if node.text is None:
+        # This usually happens with 'missing' nodes in Tree-sitter (syntax errors)
+        raise ExtractionError(f"Node {node.type} exists but has no text content.")
+
+    return node.text.decode("utf-8")
+
+
+def get_capture_text(captures: dict[str, list[Node]], key: str, index: int = 0) -> str:
+    """
+    Safely retrieves the text from a capture group.
+
+    Args:
+        captures: The dictionary of captured nodes.
+        key: The capture group name (e.g., "identifier").
+        index: Which item in the capture list to retrieve (default 0).
+    """
+    nodes = captures.get(key)
+
+    if not nodes:
+        raise ExtractionError(f"Required capture group '{key}' is missing or empty.")
+
+    if index >= len(nodes):
+        raise ExtractionError(f"Capture group '{key}' does not have an element at index {index}.")
+
+    return get_node_text(nodes[index])
 
 
 def extract_include(node: Node, parent_file_path: Path) -> Include:
@@ -37,7 +71,8 @@ def extract_include(node: Node, parent_file_path: Path) -> Include:
     # The second child of the file path is the file path
     # as a string fragment without the quotes.
     file_path_node = node.children[1]
-    file_path = Path(file_path_node.children[1].text.decode("utf-8"))
+
+    file_path = Path(get_node_text(file_path_node.children[1]))
 
     return Include((parent_file_path.parent / file_path).resolve())
 
@@ -46,7 +81,7 @@ def extract_predicate(node: Node) -> Predicate:
     captures = Queries.PREDICATE.captures(node)
 
     return Predicate(
-        identifier=captures["identifier"][0].text.decode("utf-8"),
+        identifier=get_node_text(captures["identifier"][0]),
         arity=len(captures.get("term", [])),
         negation=len(captures.get("negation", [])) > 0,
     )
@@ -59,8 +94,8 @@ def extract_show(node: Node) -> Show:
     raw_arity = captures.get("arity", [])
     raw_terms = captures.get("term", [])
 
-    identifier: str | None = raw_identifier[0].text.decode("utf-8") if raw_identifier else None
-    arity: int | None = int(raw_arity[0].text.decode("utf-8")) if raw_arity else None
+    identifier: str | None = get_node_text(raw_identifier[0]) if raw_identifier else None
+    arity: int | None = int(get_node_text(raw_arity[0])) if raw_arity else None
     predicate: Predicate | None = None
     status = ShowStatus.EXPLICIT
 
@@ -83,14 +118,14 @@ def extract_show(node: Node) -> Show:
 def extract_line_comment(node: Node) -> LineComment:
     return LineComment(
         row=node.start_point.row,
-        content=node.text.decode("utf-8").removeprefix("%"),
+        content=get_node_text(node).removeprefix("%"),
     )
 
 
 def extract_block_comment(node: Node) -> BlockComment:
     return BlockComment(
         row=node.start_point.row,
-        content=node.text.decode("utf-8").removeprefix("%*").removesuffix("*%"),
+        content=get_node_text(node).removeprefix("%*").removesuffix("*%"),
     )
 
 
@@ -118,7 +153,7 @@ def extract_statement(node: Node) -> Statement:
 
     return Statement(
         row=node.start_point.row,
-        content=node.text.decode("utf-8"),
+        content=get_node_text(node),
         provided_predicates=provided_predicates,
         needed_predicates=needed_predicates,
     )
@@ -127,8 +162,8 @@ def extract_statement(node: Node) -> Statement:
 def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
     captures = Queries.DOC_ARGUMENT.captures(node)
 
-    identifier = captures["identifier"][0].text.decode("utf-8")
-    description = captures.get("description")[0].text.decode("utf-8").strip() if captures.get("description") else ""
+    identifier = get_capture_text(captures, "identifier", 0)
+    description = get_node_text(captures["description"][0]).strip() if captures.get("description") else ""
 
     return ArgumentDocumentation(
         identifier=identifier,
@@ -139,10 +174,10 @@ def extract_argument_documentation(node: Node) -> ArgumentDocumentation:
 def extract_predicate_documentation(node: Node) -> PredicateDocumentation:
     captures = Queries.DOC_PREDICATE.captures(node)
 
-    identifier = captures["identifier"][0].text.decode("utf-8")
-    arguments = [arg.text.decode("utf-8") for arg in captures.get("argument", [])]
+    identifier = get_capture_text(captures, "identifier", 0)
+    arguments = [get_node_text(arg) for arg in captures.get("argument", [])]
     description = (
-        captures["description"][0].text.decode("utf-8").removeprefix("%*!").removesuffix("*%").strip()
+        get_node_text(captures["description"][0]).removeprefix("%*!").removesuffix("*%").strip()
         if captures.get("description")
         else ""
     )
@@ -152,7 +187,7 @@ def extract_predicate_documentation(node: Node) -> PredicateDocumentation:
 
     return PredicateDocumentation(
         row=node.start_point.row,
-        content=node.text.decode("utf-8"),
+        content=get_node_text(node),
         signature=f"{identifier}/{len(arguments)}",
         description=description,
         arguments=argument_documentations,

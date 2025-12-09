@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from markupsafe import Markup
 from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
@@ -17,7 +17,7 @@ class ASPHandler(BaseHandler):
     domain = "asp"
     name = "asp"
 
-    def get_options(self, local_options: dict) -> dict:
+    def get_options(self, local_options: Mapping[str, Any]) -> ASPOptions:
         """
         Merge global defaults with local options (from the markdown file).
 
@@ -25,9 +25,9 @@ class ASPHandler(BaseHandler):
             local_options: Options provided in the annotation.
 
         Returns:
-            Merged options dictionary.
+            The merged options.
         """
-        return ASPOptions.from_dict(local_options)
+        return ASPOptions.from_mapping(local_options)
 
     def collect(self, identifier: str, options: ASPOptions) -> list[Document]:
         """
@@ -46,7 +46,7 @@ class ASPHandler(BaseHandler):
 
         return load_documents([Path(identifier)])
 
-    def render(self, documents: list[Document], options: ASPOptions) -> str:
+    def render(self, data: list[Document], options: ASPOptions, **kwargs: Any) -> str:
         """
         Render the collected data into a format suitable for mkdocstrings.
 
@@ -58,7 +58,7 @@ class ASPHandler(BaseHandler):
             The rendered data as a dictionary.
         """
 
-        context = RenderContext(_documents=documents, options=options)
+        context = RenderContext(_documents=data, options=options)
 
         try:
             template = self.env.get_template("documentation.html.jinja")
@@ -80,13 +80,17 @@ class ASPHandler(BaseHandler):
         heading_level: int,
     ) -> Markup:
         old_headings = [e for e in self._headings]
+
+        if self._md is None:
+            raise RuntimeError("Markdown instance is not initialized.")
+
         treeprocessors = self._md.treeprocessors
-        treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = heading_level  # type: ignore[attr-defined]
+        treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = heading_level
 
         try:
             md = Markup(self._md.convert(text))
         finally:
-            treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = 0  # type: ignore[attr-defined]
+            treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = 0
             self._md.reset()
 
         self._headings = old_headings

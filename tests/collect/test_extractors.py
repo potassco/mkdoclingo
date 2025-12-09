@@ -30,6 +30,8 @@ def test_extract_include(tmp_path, parse_to_tree: Callable[[str], Tree]):
     tree = parse_to_tree(source)
 
     include_node = tree.root_node.child(0)
+    assert include_node is not None
+
     include = extract_include(include_node, parent_file_path=parent_file)
 
     assert include.path == included_file
@@ -40,7 +42,11 @@ def test_extract_predicate(parse_to_tree: Callable[[str], Tree]) -> None:
     tree = parse_to_tree(source)
 
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     literal_node = rule_node.child(0)
+    assert literal_node is not None
+
     predicate = extract_predicate(literal_node)
 
     assert predicate.identifier == "p"
@@ -53,7 +59,10 @@ def test_extract_predicate_without_terms(parse_to_tree: Callable[[str], Tree]) -
     tree = parse_to_tree(source)
 
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     literal_node = rule_node.child(0)
+    assert literal_node is not None
     predicate = extract_predicate(literal_node)
 
     assert predicate.identifier == "p"
@@ -65,7 +74,10 @@ def test_extract_predicate_negative(parse_to_tree: Callable[[str], Tree]) -> Non
     source = "not p(X, Y)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     literal_node = rule_node.child(0)
+    assert literal_node is not None
     predicate = extract_predicate(literal_node)
 
     assert predicate.identifier == "p"
@@ -77,8 +89,14 @@ def test_extract_predicate_from_body_literal(parse_to_tree: Callable[[str], Tree
     source = ":- not q(Y, Z)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     body_node = rule_node.child_by_field_name("body")
+    assert body_node is not None
+
     literal_node = body_node.child(0)
+    assert literal_node is not None
+
     predicate = extract_predicate(literal_node)
 
     assert predicate.identifier == "q"
@@ -90,6 +108,8 @@ def test_extract_line_comment(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "% This is a comment"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     line_comment = extract_line_comment(comment_node)
 
     assert line_comment.row == 0
@@ -100,6 +120,8 @@ def test_extract_block_comment(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "%* This\n is\n a\n block\n comment.*%"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     block_comment = extract_block_comment(comment_node)
 
     assert block_comment.row == 0
@@ -110,6 +132,8 @@ def test_extract_show_empty(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "#show ."
     tree = parse_to_tree(source)
     show_node = tree.root_node.child(0)
+    assert show_node is not None
+
     show = extract_show(show_node)
 
     assert show.predicate == None
@@ -120,8 +144,11 @@ def test_extract_show_signature(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "#show p/2."
     tree = parse_to_tree(source)
     show_node = tree.root_node.child(0)
+    assert show_node is not None
+
     show = extract_show(show_node)
 
+    assert show.predicate is not None
     assert show.predicate.identifier == "p"
     assert show.predicate.arity == 2
     assert show.status == ShowStatus.EXPLICIT
@@ -131,8 +158,11 @@ def test_extract_show_term_function(parse_to_tree: Callable[[str], Tree]) -> Non
     source = "#show p(1,2)."
     tree = parse_to_tree(source)
     show_node = tree.root_node.child(0)
+    assert show_node is not None
+
     show = extract_show(show_node)
 
+    assert show.predicate is not None
     assert show.predicate.identifier == "p"
     assert show.predicate.arity == 2
     assert show.status == ShowStatus.PARTIAL
@@ -142,6 +172,8 @@ def test_extract_statement_head_literal(parse_to_tree: Callable[[str], Tree]) ->
     source = "p(1)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -154,6 +186,8 @@ def test_extract_statement_head_disjunction(parse_to_tree: Callable[[str], Tree]
     source = "p(1); q(2)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -166,6 +200,8 @@ def test_extract_statement_head_conditional(parse_to_tree: Callable[[str], Tree]
     source = "p(1):q, not r(2)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -178,6 +214,8 @@ def test_extract_statement_with_body(parse_to_tree: Callable[[str], Tree]) -> No
     source = "p(X) :- q(X), not r(X)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -190,6 +228,8 @@ def test_extract_statement_with_body_aggregate(parse_to_tree: Callable[[str], Tr
     source = "p(X) :- X = #count { Y : q(Y), not r(Y) } > 2."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -202,6 +242,8 @@ def test_extract_statement_with_body_set_aggregate(parse_to_tree: Callable[[str]
     source = "p :- 0 < { q(Y) : not r(Y) }."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -214,6 +256,8 @@ def test_extract_statement_with_head_aggregate(parse_to_tree: Callable[[str], Tr
     source = "0 <#sum {X:p(X):q(X)}."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -226,6 +270,8 @@ def test_extract_statement_with_head_set_aggregate(parse_to_tree: Callable[[str]
     source = "1{p(X):q(X)}."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -238,6 +284,8 @@ def test_extract_statement_with_head_set_aggregate_and_body(parse_to_tree: Calla
     source = "1{p(X):q(X)} :- r(X)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -250,7 +298,10 @@ def test_extract_statement_with_head_set_aggregate_with_comparison(parse_to_tree
     source = "{ p(V) : V = Min..Max } = 1 :- q(Min,Max)."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
+
     assert statement.row == 0
     assert statement.content == source
     assert len(statement.provided_predicates) == 1
@@ -261,6 +312,8 @@ def test_extract_statement_with_comparison(parse_to_tree: Callable[[str], Tree])
     source = ":- q(X), r(Y), X!=Y."
     tree = parse_to_tree(source)
     rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
     statement = extract_statement(rule_node)
 
     assert statement.row == 0
@@ -272,8 +325,17 @@ def test_extract_statement_with_comparison(parse_to_tree: Callable[[str], Tree])
 def test_extract_argument_documentation(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "%*! some_predicate(X,Y)\n" "Args:\n" "   - X: first argument\n" "*%"
     tree = parse_to_tree(source)
-    argument_node = tree.root_node.child(0).child(2).child(1)
+    doc_comment_node = tree.root_node.child(0)
+    assert doc_comment_node is not None
+
+    arguments_node = doc_comment_node.child(2)
+    assert arguments_node is not None
+
+    argument_node = arguments_node.child(1)
+    assert argument_node is not None
+
     documentation = extract_argument_documentation(argument_node)
+
     assert documentation.identifier == "X"
     assert documentation.description == "first argument"
 
@@ -281,7 +343,14 @@ def test_extract_argument_documentation(parse_to_tree: Callable[[str], Tree]) ->
 def test_extract_argument_documentation_description_missing(parse_to_tree: Callable[[str], Tree]) -> None:
     source = "%*! some_predicate(X,Y)\n" "Args:\n" "   - X:" "*%"
     tree = parse_to_tree(source)
-    argument_node = tree.root_node.child(0).child(2).child(1)
+    doc_comment_node = tree.root_node.child(0)
+    assert doc_comment_node is not None
+
+    arguments_node = doc_comment_node.child(2)
+    assert arguments_node is not None
+
+    argument_node = arguments_node.child(1)
+    assert argument_node is not None
     documentation = extract_argument_documentation(argument_node)
     assert documentation.identifier == "X"
     assert documentation.description == ""
@@ -298,6 +367,8 @@ def test_extract_predicate_documentation(parse_to_tree: Callable[[str], Tree]) -
     )
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     documentation = extract_predicate_documentation(comment_node)
 
     assert documentation.signature == "some_predicate/2"
@@ -313,6 +384,8 @@ def test_extract_predicate_documentation_missing_description(parse_to_tree: Call
     source = "%*! some_predicate(X,Y)\n" "Args:\n" "   - X:" "   - Y: second argument\n" "*%"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     documentation = extract_predicate_documentation(comment_node)
 
     assert documentation.signature == "some_predicate/2"
@@ -335,6 +408,8 @@ def test_extract_predicate_documentation_missing_argument_description(parse_to_t
     )
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     documentation = extract_predicate_documentation(comment_node)
 
     assert documentation.signature == "some_predicate/2"
@@ -350,6 +425,8 @@ def test_extract_predicate_documentation_only_signature(parse_to_tree: Callable[
     source = "%*! some_predicate(X,Y)\n" "*%"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     documentation = extract_predicate_documentation(comment_node)
 
     assert documentation.signature == "some_predicate/2"
@@ -361,6 +438,8 @@ def test_extract_predicate_documentation_no_arguments(parse_to_tree: Callable[[s
     source = "%*! some_predicate()\n" "*%"
     tree = parse_to_tree(source)
     comment_node = tree.root_node.child(0)
+    assert comment_node is not None
+
     documentation = extract_predicate_documentation(comment_node)
 
     assert documentation.signature == "some_predicate/0"

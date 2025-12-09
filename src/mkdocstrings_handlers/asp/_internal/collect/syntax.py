@@ -68,7 +68,7 @@ class AspQuery:
         """Lazy load the query on first access."""
         if self._query is None:
             try:
-                with open(_QUERY_DIR / self.filename, "rb") as f:
+                with open(_QUERY_DIR / self.filename, "r") as f:
                     self._query = Query(_LANGUAGE, f.read())
             except FileNotFoundError:
                 raise RuntimeError(f"Missing SCM file: {self.filename}. ")

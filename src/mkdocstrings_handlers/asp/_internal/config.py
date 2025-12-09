@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Type
+from typing import Any, Dict, Mapping, Type
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
@@ -76,12 +76,12 @@ class ASPOptions(BaseModel):
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> ASPOptions:
+    def from_mapping(cls, data: Mapping[str, Any]) -> ASPOptions:
         """
         Create an ASPOptions instance from a dictionary.
 
         Args:
-            data: The input data dictionary.
+            data: The input data to create the instance from.
 
         Returns:
             An instance of ASPOptions.

@@ -17,7 +17,7 @@ class FileReference:
     """Represents one file tab in the glossary."""
 
     path: str
-    references: set[GlossaryReference] = field(default_factory=set)
+    references: list[GlossaryReference] = field(default_factory=list)
 
 
 @dataclass

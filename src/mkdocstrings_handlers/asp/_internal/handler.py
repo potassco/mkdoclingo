@@ -97,7 +97,7 @@ class ASPHandler(BaseHandler):
         return md
 
 
-def get_handler(theme: str, handler_config: dict, tool_config: dict, **kwargs):
+def get_handler(theme: str, handler_config: dict[str, Any], tool_config: dict[str, Any], **kwargs: Any) -> ASPHandler:
     """
     Return an instance of `ASPHandler`.
 

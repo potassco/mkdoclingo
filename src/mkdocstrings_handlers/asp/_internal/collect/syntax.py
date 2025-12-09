@@ -34,7 +34,7 @@ class NodeKind(Enum):
     SHOW_TERM = "show_term"
 
     @staticmethod
-    def from_grammar_name(grammar_name: str):
+    def from_grammar_name(grammar_name: str) -> NodeKind:
         """
         Create the node kind from the given grammar name.
 

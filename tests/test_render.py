@@ -5,7 +5,7 @@ from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.render.render_context import RenderContext
 
 
-def test_dependency_graph_structure(tmp_path: Path):
+def test_dependency_graph_structure(tmp_path: Path) -> None:
     """Test that the dependency graph context is built correctly."""
 
     file_path = tmp_path / "graph.lp"
@@ -23,7 +23,7 @@ def test_dependency_graph_structure(tmp_path: Path):
     assert ("r/1", "p/1") in graph.negatives
 
 
-def test_dependency_graph_classification(tmp_path: Path):
+def test_dependency_graph_classification(tmp_path: Path) -> None:
     """Test input, output and auxiliary classification in the graph."""
     file_path = tmp_path / "test.lp"
     file_path.write_text(
@@ -44,7 +44,7 @@ def test_dependency_graph_classification(tmp_path: Path):
     assert "internal_calc/1" in graph.auxiliaries
 
 
-def test_predicate_table_sorting(tmp_path: Path):
+def test_predicate_table_sorting(tmp_path: Path) -> None:
     """Test that the predicate table is sorted correctly."""
     file_path = tmp_path / "test.lp"
     file_path.write_text(
@@ -70,7 +70,7 @@ def test_predicate_table_sorting(tmp_path: Path):
     assert sorted_signatures == expected_order
 
 
-def test_predicate_table_not_show_hidden(tmp_path: Path):
+def test_predicate_table_not_show_hidden(tmp_path: Path) -> None:
     """Test that hidden predicates are excluded when the option is set."""
 
     file_path = tmp_path / "test.lp"
@@ -93,7 +93,7 @@ def test_predicate_table_not_show_hidden(tmp_path: Path):
     assert len(table.predicates) == 2
 
 
-def test_predicate_table_not_show_undocumented(tmp_path: Path):
+def test_predicate_table_not_show_undocumented(tmp_path: Path) -> None:
     """Test that hidden predicates are excluded when the option is set."""
 
     file_path = tmp_path / "test.lp"

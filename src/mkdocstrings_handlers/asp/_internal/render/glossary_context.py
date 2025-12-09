@@ -34,6 +34,16 @@ class GlossaryContext:
 
 
 def get_glossary_context(predicates: list[PredicateInfo], options: ASPOptions) -> GlossaryContext:
+    """
+    Build the glossary context from the given predicates and options.
+
+    Args:
+        predicates: The list of PredicateInfo objects to include in the glossary.
+        options: The ASPOptions containing glossary display settings.
+
+    Returns:
+        The constructed GlossaryContext.
+    """
     result: list[GlossaryPredicate] = []
 
     for predicate in predicates:
@@ -50,7 +60,10 @@ def get_glossary_context(predicates: list[PredicateInfo], options: ASPOptions) -
 
         file_row_map: dict[str, dict[int, GlossaryReference]] = {}
 
-        def add_reference(path: str, row: int, content: str, is_providing: bool):
+        def add_reference(path: str, row: int, content: str, is_providing: bool) -> None:
+            """
+            Add a reference to the file_row_map, avoiding duplicates.
+            """
             if path not in file_row_map:
                 file_row_map[path] = {}
 
@@ -85,6 +98,15 @@ def get_glossary_context(predicates: list[PredicateInfo], options: ASPOptions) -
         )
 
     def get_sort_priority(predicate: GlossaryPredicate) -> tuple[int, str]:
+        """
+        Determine the sort priority for a glossary predicate.
+
+        Args:
+            predicate: The GlossaryPredicate to evaluate.
+
+        Returns:
+            A tuple representing the sort priority.
+        """
         is_input = predicate.info.is_input
         is_hidden = predicate.info.show_status == ShowStatus.HIDDEN
         signature = predicate.info.signature
@@ -96,7 +118,7 @@ def get_glossary_context(predicates: list[PredicateInfo], options: ASPOptions) -
                 return (1, signature)
             case (False, False):
                 return (2, signature)
-            case (False, True):
+            case _:
                 return (3, signature)
 
     result.sort(key=get_sort_priority)

@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from enum import Enum, auto
 from functools import cached_property
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
-from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus
+from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus, Statement
 
 @dataclass
 class Occurrence:
@@ -42,10 +43,27 @@ class DependencyGraphContext:
     auxiliaries: list[str] = field(default_factory=list)
     inputs: list[str] = field(default_factory=list)
 
+
+class BlockType(Enum):
+    CODE = auto()
+    MARKDOWN = auto()
+
+@dataclass
+class EncodingBlock:
+    type: BlockType
+    content: str
+
+@dataclass
+class EncodingInfo:
+    path: str
+    source: str
+    blocks: list[EncodingBlock] = field(default_factory=list)
+
 @dataclass
 class RenderContext:
     options: ASPOptions
     _predicates: list[PredicateInfo] = field(default_factory=list)
+    _encodings: list[EncodingInfo] = field(default_factory=list)
 
     @cached_property
     def predicate_table(self) -> PredicateTableContext:
@@ -111,6 +129,10 @@ class RenderContext:
             auxiliaries=auxiliaries,
             inputs=inputs,
         )
+    
+    @cached_property
+    def encodings(self) -> list[EncodingInfo]:
+        return self._encodings
         
 
 def get_render_context(documents: list[Document], options: ASPOptions) -> RenderContext:
@@ -180,4 +202,55 @@ def get_render_context(documents: list[Document], options: ASPOptions) -> Render
         if info.show_status == ShowStatus.DEFAULT:
             info.show_status = default_show
 
-    return RenderContext(options=options, _predicates=list(registry.values()))
+    encodings = []
+
+    for document in documents:
+        ordered_elements = document.statements + document.line_comments + document.block_comments
+        ordered_elements.sort(key=lambda element: element.row)
+
+        encoding = EncodingInfo(path=str(document.path), source=document.content)
+
+        current_block_content = ""
+        current_block_type = BlockType.MARKDOWN
+
+        for element in ordered_elements:
+            if isinstance(element, Statement):
+                if current_block_type != BlockType.CODE:
+                    if current_block_content:
+                        encoding.blocks.append(
+                            EncodingBlock(
+                                type=current_block_type,
+                                content=current_block_content,
+                            )
+                        )
+                    current_block_content = ""
+                    current_block_type = BlockType.CODE
+
+                current_block_content += element.content + "\n"
+            
+            else:
+                if current_block_type != BlockType.MARKDOWN:
+                    if current_block_content:
+                        encoding.blocks.append(
+                            EncodingBlock(
+                                type=current_block_type,
+                                content=current_block_content,
+                            )
+                        )
+                    current_block_content = ""
+                    current_block_type = BlockType.MARKDOWN
+
+                current_block_content += element.content + "\n"
+        
+        if current_block_content:
+            encoding.blocks.append(
+                EncodingBlock(
+                    type=current_block_type,
+                    content=current_block_content,
+                )
+            )
+        
+        encodings.append(encoding)
+
+
+    return RenderContext(options=options, _predicates=list(registry.values()), _encodings=encodings)

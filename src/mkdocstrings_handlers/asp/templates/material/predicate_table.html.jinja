@@ -11,7 +11,7 @@
 {% endfilter %}
 {% set table = context.predicate_table %}
 {% if table.predicates %}
-<table>
+  <table>
     <thead>
       <tr>
         <th>Name</th>
@@ -21,17 +21,15 @@
     </thead>
     <tbody>
       {% for predicate in table.predicates %}
-          <tr>
-            <td>
-              <a href="#{{ predicate.identifier }}-{{ predicate.arity }}"><code>{{ predicate.signature }}</code></a>
-            </td>
-            <td>
-              {{ predicate.description | convert_markdown(5, html_id) }}
-            </td>
-            <td style="padding-top: 0; padding-bottom: 0;">
-              {{ input_icon_map[predicate.is_input] }} {{ show_icon_map[predicate.show_status] }}
-            </td>
-          </tr>
+        <tr>
+          <td>
+            <a href="#{{ predicate.identifier }}-{{ predicate.arity }}"><code>{{ predicate.signature }}</code></a>
+          </td>
+          <td>{{ predicate.description | convert_markdown(5, html_id) }}</td>
+          <td style="padding-top: 0; padding-bottom: 0;">
+            {{ input_icon_map[predicate.is_input] }} {{ show_icon_map[predicate.show_status] }}
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>

@@ -58,7 +58,7 @@ def load_document(file_path: Path) -> Document:
 
     for node in tree.root_node.children:
         match NodeKind.from_grammar_name(node.grammar_name):
-            case NodeKind.RULE:
+            case NodeKind.RULE | NodeKind.INTEGRITY_CONSTRAINT:
                 statement = extract_statement(node)
                 document.statements.append(statement)
             case NodeKind.LINE_COMMENT:

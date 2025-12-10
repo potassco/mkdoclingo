@@ -41,7 +41,7 @@ class EncodingInfo:
 class EncodingContext:
     """The encoding context containing all encoding infos."""
 
-    encodings: list[EncodingInfo] = field(default_factory=list)
+    entries: list[EncodingInfo] = field(default_factory=list)
     """ The list of encoding infos. """
 
 
@@ -105,4 +105,4 @@ def get_encoding_context(documents: list[Document]) -> EncodingContext:
 
         encodings.append(encoding)
 
-    return EncodingContext(encodings=encodings)
+    return EncodingContext(entries=encodings)

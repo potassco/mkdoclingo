@@ -17,8 +17,8 @@ def test_get_encodings_context(render_context: Callable[[str], RenderContext]) -
 
     context = render_context(source)
 
-    assert len(context.encodings.encodings) == 1
-    encoding_info = context.encodings.encodings[0]
+    assert len(context.encodings.entries) == 1
+    encoding_info = context.encodings.entries[0]
     assert encoding_info.source.splitlines() == source.splitlines()
     assert len(encoding_info.blocks) == 1
 
@@ -37,7 +37,7 @@ def test_get_encodings_context_with_comments(render_context: Callable[[str], Ren
 
     context = render_context(source)
 
-    assert len(context.encodings.encodings) == 1
-    encoding_info = context.encodings.encodings[0]
+    assert len(context.encodings.entries) == 1
+    encoding_info = context.encodings.entries[0]
     assert encoding_info.source.splitlines() == source.splitlines()
     assert len(encoding_info.blocks) == 4

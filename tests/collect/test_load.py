@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from mkdocstrings_handlers.asp._internal.collect.load import load_document, load_documents
+from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 
 
 def test_load_from_file(tmp_path: Path) -> None:
@@ -16,7 +17,8 @@ def test_load_from_file(tmp_path: Path) -> None:
         "   - X: This is a description of X\n"
         "*%\n"
         "q(X) :- p(X, Y).\n"
-        "#show q/1."
+        "#show q/1.\n"
+        "#show p(1,2)."
     )
     file_path.write_bytes(file_content.encode("utf-8"))
 
@@ -25,11 +27,13 @@ def test_load_from_file(tmp_path: Path) -> None:
     assert document.path == file_path
     assert document.content == file_content
     assert len(document.includes) == 0
-    assert len(document.statements) == 2
+    assert len(document.statements) == 3
     assert len(document.line_comments) == 0
     assert len(document.block_comments) == 0
     assert len(document.predicate_documentations) == 1
-    assert len(document.shows) == 1
+    assert len(document.shows) == 2
+    assert document.shows[0].status == ShowStatus.EXPLICIT
+    assert document.shows[1].status == ShowStatus.PARTIAL
 
 
 def test_load_from_file_empty(tmp_path: Path) -> None:

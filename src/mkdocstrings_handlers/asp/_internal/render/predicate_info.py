@@ -102,9 +102,6 @@ def _resolve_show_statuses(documents: list[Document], registry: dict[str, Predic
                 info = registry[sig]
                 info.show_status = ShowStatus(info.show_status | show.status)
 
-                if info.show_status > ShowStatus.HIDDEN:
-                    info.show_status = ShowStatus(info.show_status & ShowStatus.PARTIAL_AND_EXPLICIT)
-
     for info in registry.values():
         if info.show_status == ShowStatus.DEFAULT:
             info.show_status = default_show

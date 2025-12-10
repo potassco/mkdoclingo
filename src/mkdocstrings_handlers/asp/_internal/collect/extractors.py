@@ -255,20 +255,35 @@ def extract_predicate_documentation(node: Node) -> PredicateDocumentation:
     captures = Queries.DOC_PREDICATE.captures(node)
 
     identifier = get_capture_text(captures, "identifier", 0)
-    arguments = [get_node_text(arg) for arg in captures.get("argument", [])]
+
+    # For some reason the query does not return the arguments
+    # in the order they appear. So we order them by their start byte.
+    argument_nodes = captures.get("argument", [])
+    argument_nodes.sort(key=lambda n: n.start_byte)
+    arguments = [get_node_text(arg) for arg in argument_nodes]
+
+    explicit_docs_map = {}
+    for arg_node in captures.get("arg.documentation", []):
+        doc = extract_argument_documentation(arg_node)
+        explicit_docs_map[doc.identifier] = doc
+
+    final_arguments = []
+    for name in arguments:
+        if name in explicit_docs_map:
+            final_arguments.append(explicit_docs_map[name])
+        else:
+            final_arguments.append(ArgumentDocumentation(identifier=name, description=""))
+
     description = (
         get_node_text(captures["description"][0]).removeprefix("%*!").removesuffix("*%").strip()
         if captures.get("description")
         else ""
     )
-    argument_documentations = [
-        extract_argument_documentation(arg_node) for arg_node in captures.get("arg.documentation", [])
-    ]
 
     return PredicateDocumentation(
         row=node.start_point.row,
         content=get_node_text(node),
         signature=f"{identifier}/{len(arguments)}",
         description=description,
-        arguments=argument_documentations,
+        arguments=final_arguments,
     )

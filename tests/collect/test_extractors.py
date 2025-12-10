@@ -567,7 +567,8 @@ def test_extract_predicate_documentation_only_signature(parse_to_tree: Callable[
 
     assert documentation.signature == "some_predicate/2"
     assert documentation.description == ""
-    assert len(documentation.arguments) == 0
+    assert len(documentation.arguments) == 2
+    assert all(arg.description == "" for arg in documentation.arguments)
 
 
 def test_extract_predicate_documentation_no_arguments(parse_to_tree: Callable[[str], Tree]) -> None:

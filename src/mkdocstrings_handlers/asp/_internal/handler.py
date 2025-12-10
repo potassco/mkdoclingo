@@ -60,7 +60,7 @@ class ASPHandler(BaseHandler):
             The rendered data as a dictionary.
         """
 
-        context = RenderContext(_documents=data, options=options)
+        context = RenderContext(documents=data, options=options)
 
         template = self.env.get_template("documentation.html.jinja")
 

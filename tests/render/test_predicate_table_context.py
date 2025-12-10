@@ -2,7 +2,6 @@
 
 from typing import Callable
 
-from mkdocstrings_handlers.asp._internal.render.predicate_table_context import get_predicate_table_context
 from mkdocstrings_handlers.asp._internal.render.render_context import RenderContext
 
 
@@ -20,9 +19,7 @@ def test_get_predicate_table_context_sorting(render_context: Callable[[str], Ren
 
     context.options.predicate_table.include_hidden = True
 
-    table = get_predicate_table_context(context.predicates, context.options)
-
-    sorted_signatures = [pred.signature for pred in table.predicates]
+    sorted_signatures = [pred.signature for pred in context.predicate_table.predicates]
 
     expected_order = ["shown_input_pred/1", "hidden_input_pred/1", "output_pred/1", "internal_calc/1"]
 
@@ -41,9 +38,8 @@ def test_get_predicate_table_context_not_show_hidden(render_context: Callable[[s
     )
 
     context.options.predicate_table.include_hidden = False
-    table = get_predicate_table_context(context.predicates, context.options)
 
-    assert len(table.predicates) == 2
+    assert len(context.predicate_table.predicates) == 2
 
 
 def test_get_predicate_table_context_not_show_undocumented(render_context: Callable[[str], RenderContext]) -> None:
@@ -58,6 +54,5 @@ def test_get_predicate_table_context_not_show_undocumented(render_context: Calla
     )
 
     context.options.predicate_table.include_undocumented = False
-    table = get_predicate_table_context(context.predicates, context.options)
 
-    assert len(table.predicates) == 0
+    assert len(context.predicate_table.predicates) == 0

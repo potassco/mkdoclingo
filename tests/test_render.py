@@ -14,7 +14,7 @@ def test_dependency_graph_structure(tmp_path: Path) -> None:
     file_path.write_text("p(X) :- q(X), not r(X).", encoding="utf-8")
 
     documents = load_documents([file_path])
-    context = RenderContext(_documents=documents, options=ASPOptions())
+    context = RenderContext(documents=documents, options=ASPOptions())
 
     graph = context.dependency_graph
 
@@ -38,7 +38,7 @@ def test_dependency_graph_classification(tmp_path: Path) -> None:
     )
 
     documents = load_documents([file_path])
-    context = RenderContext(_documents=documents, options=ASPOptions())
+    context = RenderContext(documents=documents, options=ASPOptions())
     graph = context.dependency_graph
 
     assert "input_pred/1" in graph.inputs

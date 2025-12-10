@@ -35,7 +35,7 @@ class RenderContext:
     """ The list of collected ASP documents used in this context. """
 
     @cached_property
-    def _predicates(self) -> list[PredicateInfo]:
+    def predicates(self) -> list[PredicateInfo]:
         """Extract PredicateInfo objects from the documents."""
 
         return get_predicate_infos(self._documents)
@@ -44,13 +44,13 @@ class RenderContext:
     def predicate_table(self) -> PredicateTableContext:
         """Get the predicate table context."""
 
-        return get_predicate_table_context(self._predicates, self.options)
+        return get_predicate_table_context(self.predicates, self.options)
 
     @cached_property
     def dependency_graph(self) -> DependencyGraphContext:
         """Get the dependency graph context."""
 
-        return get_dependency_graph_context(self._predicates)
+        return get_dependency_graph_context(self.predicates)
 
     @cached_property
     def encodings(self) -> EncodingContext:
@@ -62,4 +62,4 @@ class RenderContext:
     def glossary(self) -> GlossaryContext:
         """Get the glossary context."""
 
-        return get_glossary_context(self._predicates, self.options)
+        return get_glossary_context(self.predicates, self.options)

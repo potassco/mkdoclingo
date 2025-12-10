@@ -1,9 +1,12 @@
 """This module tests the extractors for various ASP constructs."""
 
+import re
 from pathlib import Path
-from typing import Callable
+from typing import Callable, cast
+from unittest.mock import Mock
 
-from tree_sitter import Tree
+import pytest
+from tree_sitter import Node, Tree
 
 from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_argument_documentation,
@@ -14,8 +17,72 @@ from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_predicate_documentation,
     extract_show,
     extract_statement,
+    get_capture_text,
+    get_node_text,
 )
 from mkdocstrings_handlers.asp._internal.domain import ShowStatus
+from mkdocstrings_handlers.asp._internal.error import ExtractionError
+
+
+def test_get_node_text() -> None:
+    """Test getting text from a tree-sitter node."""
+
+    mock_node = Mock()
+    mock_node.text = b"some test text"
+
+    assert get_node_text(mock_node) == "some test text"
+
+
+def test_get_node_text_from_none() -> None:
+    """Test getting text from a None node raises ExtractionError."""
+
+    with pytest.raises(ExtractionError, match=re.escape("Expected a node, but got None.")):
+        get_node_text(None)
+
+
+def test_get_node_text_from_node_without_text() -> None:
+    """Test getting text from a None node raises ExtractionError."""
+
+    mock_node = Mock()
+    mock_node.text = None
+    mock_node.type = "test_type"
+
+    with pytest.raises(ExtractionError, match=re.escape("Node test_type exists but has no text content.")):
+        get_node_text(mock_node)
+
+
+def test_get_capture_text() -> None:
+    """Test getting text from a capture group."""
+
+    mock_node = Mock()
+    mock_node.text = b"captured text"
+
+    captures = {"identifier": [cast(Node, mock_node)]}
+
+    assert get_capture_text(captures, "identifier") == "captured text"
+
+
+def test_get_capture_text_out_of_bounds() -> None:
+    """Test getting text from a capture group."""
+
+    mock_node = Mock()
+    mock_node.text = b"captured text"
+
+    captures = {"identifier": [cast(Node, mock_node)]}
+
+    with pytest.raises(
+        ExtractionError, match=re.escape("Capture group 'identifier' does not have an element at index 1.")
+    ):
+        get_capture_text(captures, "identifier", index=1)
+
+
+def test_get_capture_text_missing_group() -> None:
+    """Test getting text from a missing capture group."""
+
+    captures: dict[str, list[Node]] = {}
+
+    with pytest.raises(ExtractionError, match=re.escape("Required capture group 'identifier' is missing or empty.")):
+        get_capture_text(captures, "identifier")
 
 
 def test_extract_include(tmp_path: Path, parse_to_tree: Callable[[str], Tree]) -> None:

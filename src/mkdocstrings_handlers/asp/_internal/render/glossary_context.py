@@ -61,14 +61,7 @@ def _add_reference_to_map(
     if path not in file_row_map:
         file_row_map[path] = {}
 
-    existing = file_row_map[path].get(row)
-
-    if existing:
-        # If we already have a reference for this row, only update it if
-        # the new one is a "Definition" (providing), as that takes precedence.
-        if is_providing and not existing.is_providing:
-            existing.is_providing = True
-    else:
+    if row not in file_row_map[path]:
         file_row_map[path][row] = GlossaryReference(row=row, content=content, is_providing=is_providing)
 
 

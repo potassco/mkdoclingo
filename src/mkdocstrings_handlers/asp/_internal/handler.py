@@ -1,8 +1,9 @@
 """This module defines the ASP handler for mkdocstrings."""
 
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence, cast
 
+from markdown import Extension
 from markupsafe import Markup
 from mkdocstrings import BaseHandler, HeadingShiftingTreeprocessor
 
@@ -81,7 +82,8 @@ class ASPHandler(BaseHandler):
         heading_level: int,
     ) -> Markup:
         """
-        Convert the given text from Markdown to HTML, shifting headings by the given level.
+        Convert the given text from Markdown to HTML based on a given
+        heading level without altering existing headings or affecting future headings.
 
         Args:
             text: The Markdown text to convert.
@@ -95,27 +97,34 @@ class ASPHandler(BaseHandler):
         if self._md is None:
             raise RuntimeError("Markdown instance is not initialized.")
 
-        treeprocessors = self._md.treeprocessors
-        treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = heading_level
+        processor = cast(HeadingShiftingTreeprocessor, self._md.treeprocessors[HeadingShiftingTreeprocessor.name])
+        processor.shift_by = heading_level
 
         try:
             md = Markup(self._md.convert(text))
         finally:
-            treeprocessors[HeadingShiftingTreeprocessor.name].shift_by = 0
+            processor.shift_by = 0
             self._md.reset()
 
         self._headings = old_headings
         return md
 
 
-def get_handler(theme: str, **kwargs: Any) -> ASPHandler:
+def get_handler(
+    theme: str,
+    custom_templates: str | None,
+    mdx: Sequence[str | Extension],
+    mdx_config: Mapping[str, Any],
+    **_kwargs: Any,
+) -> ASPHandler:
     """
     Return an instance of `ASPHandler`.
 
     This is required by mkdocstrings to load the handler.
     """
-    # For now, drop the configurations since we don't use them
-    kwargs.pop("handler_config", None)
-    kwargs.pop("tool_config", None)
-
-    return ASPHandler(theme=theme or "material", **kwargs)
+    return ASPHandler(
+        theme=theme or "material",
+        custom_templates=custom_templates,
+        mdx=mdx,
+        mdx_config=mdx_config,
+    )

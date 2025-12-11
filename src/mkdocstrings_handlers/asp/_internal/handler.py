@@ -20,6 +20,19 @@ class ASPHandler(BaseHandler):
     domain = "asp"
     name = "asp"
 
+    def __init__(
+        self,
+        *,
+        theme: str,
+        custom_templates: str | None,
+        mdx: Sequence[str | Extension],
+        mdx_config: Mapping[str, Any],
+        tool_config: Mapping[str, Any],
+    ):
+        super().__init__(theme=theme, custom_templates=custom_templates, mdx=mdx, mdx_config=mdx_config)
+
+        self._tool_config = tool_config
+
     def get_options(self, local_options: Mapping[str, Any]) -> ASPOptions:
         """
         Merge global defaults with local options (from the markdown file).
@@ -30,7 +43,15 @@ class ASPHandler(BaseHandler):
         Returns:
             The merged options.
         """
-        return ASPOptions.from_mapping(local_options)
+
+        options = dict(local_options)
+
+        repo_url = self._tool_config.get("repo_url")
+
+        if repo_url:
+            options["repo_url"] = repo_url
+
+        return ASPOptions.from_mapping(options)
 
     def collect(self, identifier: str, options: ASPOptions) -> list[Document]:
         """
@@ -115,6 +136,7 @@ def get_handler(
     custom_templates: str | None,
     mdx: Sequence[str | Extension],
     mdx_config: Mapping[str, Any],
+    tool_config: Mapping[str, Any],
     **_kwargs: Any,
 ) -> ASPHandler:
     """
@@ -127,4 +149,5 @@ def get_handler(
         custom_templates=custom_templates,
         mdx=mdx,
         mdx_config=mdx_config,
+        tool_config=tool_config,
     )

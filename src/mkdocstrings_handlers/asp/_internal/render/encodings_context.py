@@ -2,7 +2,9 @@
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from urllib.parse import urljoin
 
+from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document, Statement
 
 
@@ -29,6 +31,8 @@ class EncodingBlock:
 class EncodingInfo:
     """Information about an encoding file."""
 
+    repository_url: str | None
+    """ The repository URL of the encoding, if available. """
     path: str
     """ The path to the encoding file. """
     source: str
@@ -45,7 +49,7 @@ class EncodingContext:
     """ The list of encoding infos. """
 
 
-def get_encoding_context(documents: list[Document]) -> EncodingContext:
+def get_encoding_context(documents: list[Document], options: ASPOptions) -> EncodingContext:
     """
     Build the encoding context from the given documents.
 
@@ -61,7 +65,13 @@ def get_encoding_context(documents: list[Document]) -> EncodingContext:
         ordered_elements = document.statements + document.line_comments + document.block_comments
         ordered_elements.sort(key=lambda element: element.row)
 
-        encoding = EncodingInfo(path=str(document.path), source=document.content)
+        repository_url = None
+        if options.repo_url:
+            repository_url = urljoin(
+                urljoin(options.repo_url.rstrip("/") + "/", "tree/master/"), str(document.path.as_posix()).lstrip("/")
+            )
+
+        encoding = EncodingInfo(path=str(document.path), source=document.content, repository_url=repository_url)
 
         current_block_content = ""
         current_block_type = BlockType.MARKDOWN

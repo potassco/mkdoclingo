@@ -20,7 +20,7 @@ from mkdocstrings_handlers.asp._internal.handler import ASPHandler, get_handler
 def asp_handler_fixture() -> ASPHandler:
     """Fixture that provides an ASPHandler instance."""
 
-    return get_handler(theme="material", custom_templates=None, mdx=[], mdx_config={})
+    return get_handler(theme="material", custom_templates=None, mdx=[], mdx_config={}, tool_config={})
 
 
 def test_handler_get_options(asp_handler: ASPHandler) -> None:
@@ -31,6 +31,16 @@ def test_handler_get_options(asp_handler: ASPHandler) -> None:
     assert options.predicate_table.include_undocumented is True
     assert options.glossary.include_hidden is True
     assert options.glossary.include_undocumented is True
+
+
+def test_handler_get_options_with_repository_url(asp_handler: ASPHandler) -> None:
+    """Test that get_options includes repository_url from tool_config."""
+
+    repository_url = "https://example.com/repo"
+    asp_handler._tool_config = {"repo_url": repository_url}
+    options = asp_handler.get_options({})
+
+    assert options.repo_url == repository_url
 
 
 def test_handler_collect(asp_handler: ASPHandler) -> None:

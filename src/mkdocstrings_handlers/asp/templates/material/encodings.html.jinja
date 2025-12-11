@@ -27,8 +27,8 @@
     <code style="font-size: 0.6rem;">{{ encoding.path }}</code>
   {% endset %}
   {% filter heading(context.options.start_level+2, id=file_id, toc_label=file_sig) %}
-    {% if context.options.encodings.git_link %}
-      <a href="{{ project_url_tree }}{{ encoding.path }}"
+    {% if context.options.encodings.git_link and context.options.repo_url %}
+      <a href="{{ encoding.repository_url }}"
          target="_blank"
          rel="noopener noreferrer">{{ git_logo }}</a>
     {% endif %}

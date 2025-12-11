@@ -54,6 +54,7 @@ class ASPOptions(BaseModel):
     Main configuration with Runtime Validation.
     """
 
+    repo_url: str | None = None
     start_level: int = Field(default=1, ge=1)
     encodings: EncodingOptions = Field(default_factory=EncodingOptions)
     glossary: GlossaryOptions = Field(default_factory=GlossaryOptions)

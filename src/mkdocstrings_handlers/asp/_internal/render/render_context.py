@@ -65,7 +65,7 @@ class RenderContext:
     def encodings(self) -> EncodingContext:
         """Get the encoding context."""
 
-        return get_encoding_context(self._documents)
+        return get_encoding_context(self._documents, self.options)
 
     @cached_property
     def glossary(self) -> GlossaryContext:

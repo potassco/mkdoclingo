@@ -30,7 +30,7 @@ format = ["black", "isort", "autoflake"]
 lint_pylint = ["pylint", "djlint"]
 typecheck = ["types-setuptools", "mypy", "types-Markdown"]
 test = ["coverage[toml]", "pytest"]
-doc = ["mkdocstrings[python]"]
+doc = ["mkdocstrings[python]", "mkdocs-literate-nav"]
 dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
 
 [project.entry-points."mkdocstrings.handlers"]

@@ -102,3 +102,9 @@ files = "src"
 mypy_path = "src"
 namespace_packages = true
 explicit_package_bases = true
+
+[tool.pytest]
+minversion = "9.0"
+testpaths = [
+    "tests",
+]

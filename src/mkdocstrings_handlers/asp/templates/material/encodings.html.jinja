@@ -18,9 +18,7 @@
   </div>
 {% endset %}
 {% for encoding in context.encodings.entries %}
-  {% set file_id %}
-    {{ encoding.path }}
-  {% endset %}
+  {% set file_id = encoding.path %}
   {% set file_sig %}
     <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-encoding"
           style="font-size: 0.6rem"></code>

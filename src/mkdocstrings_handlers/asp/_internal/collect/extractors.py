@@ -88,10 +88,9 @@ def extract_include(node: Node, parent_file_path: Path) -> Include:
     # The second child of the file path is the file path
     # as a string fragment without the quotes.
     file_path_node = node.children[1]
-
     file_path = Path(get_node_text(file_path_node.children[1]))
 
-    return Include((parent_file_path.parent / file_path).resolve())
+    return Include((parent_file_path.parent / file_path))
 
 
 def extract_predicate(node: Node) -> Predicate:

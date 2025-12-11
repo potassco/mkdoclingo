@@ -57,7 +57,7 @@ def lint_pylint(session):
     Run pylint.
     """
     session.install("-e", ".[lint_pylint, test]")
-    session.run("pylint", "mkdoclingo", "tests")
+    session.run("pylint", "tests")
 
 
 @nox.session
@@ -66,7 +66,7 @@ def typecheck(session):
     Typecheck the code using mypy.
     """
     session.install("-e", ".[typecheck, test]")
-    session.run("mypy", "--strict", "-p", "mkdoclingo", "-p", "tests")
+    session.run("mypy", "--strict", "-p", "-p", "tests")
 
 
 @nox.session(python=PYTHON_VERSIONS)

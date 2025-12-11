@@ -80,7 +80,7 @@ variable-rgx = "^[a-z][a-z0-9]*((_[a-z0-9]+)*_?)?$"
 good-names = ["_"]
 
 [tool.coverage.run]
-source = ["src/mkdocstrings_handlers/asp", "tests"]
+source = ["mkdocstrings_handlers.asp", "tests"]
 
 [tool.coverage.paths]
 source = [

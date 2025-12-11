@@ -57,7 +57,7 @@ def lint_pylint(session):
     Run pylint.
     """
     session.install("-e", ".[lint_pylint, test]")
-    session.run("pylint", "tests")
+    session.run("pylint", "mkdocstrings_handlers.asp", "tests")
 
 
 @nox.session
@@ -66,7 +66,7 @@ def typecheck(session):
     Typecheck the code using mypy.
     """
     session.install("-e", ".[typecheck, test]")
-    session.run("mypy", "--strict", "-p", "-p", "tests")
+    session.run("mypy", "--strict", "-p", "mkdocstrings_handlers.asp", "-p", "tests")
 
 
 @nox.session(python=PYTHON_VERSIONS)
@@ -84,5 +84,5 @@ def test(session):
     if session.posargs:
         session.run("coverage", "run", "-m", "pytest", session.posargs[0], "-v")
     else:
-        session.run("coverage", "run", "-m", "pytest", "discover", "-v")
+        session.run("coverage", "run", "-m", "pytest", "-v")
         session.run("coverage", "report", "-m", "--fail-under=100")

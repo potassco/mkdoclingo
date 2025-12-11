@@ -82,6 +82,12 @@ good-names = ["_"]
 [tool.coverage.run]
 source = ["src/mkdocstrings_handlers/asp", "tests"]
 
+[tool.coverage.paths]
+source = [
+    "src/mkdocstrings_handlers/asp",
+    "*/site-packages/mkdocstrings_handlers/asp",
+]
+
 [tool.coverage.report]
 exclude_lines = ["assert", "nocoverage"]
 

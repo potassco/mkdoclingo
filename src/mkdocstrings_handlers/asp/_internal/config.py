@@ -2,12 +2,19 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Mapping, Type
+from typing import Any, Mapping
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
-class EncodingOptions(BaseModel):
+class FeatureConfig(BaseModel):
+    """Base class for feature configuration."""
+
+    enabled: bool = False
+    """Whether this feature is enabled."""
+
+
+class EncodingOptions(FeatureConfig):
     """Options for encoding outputs."""
 
     source: bool = False
@@ -20,7 +27,7 @@ class EncodingOptions(BaseModel):
     """
 
 
-class GlossaryOptions(BaseModel):
+class GlossaryOptions(FeatureConfig):
     """Options for glossary generation."""
 
     include_undocumented: bool = True
@@ -33,7 +40,7 @@ class GlossaryOptions(BaseModel):
     """ Whether to include navigation links in the glossary. """
 
 
-class PredicateTableOptions(BaseModel):
+class PredicateTableOptions(FeatureConfig):
     """Options for predicate table generation."""
 
     include_undocumented: bool = True
@@ -42,11 +49,8 @@ class PredicateTableOptions(BaseModel):
     """ Whether to include hidden predicates in the predicate table. """
 
 
-class DependencyGraphOptions(BaseModel):
+class DependencyGraphOptions(FeatureConfig):
     """Options for dependency graph generation."""
-
-    enable: bool = True
-    """ Whether to generate dependency graphs. """
 
 
 class ASPOptions(BaseModel):
@@ -68,7 +72,8 @@ class ASPOptions(BaseModel):
         Allow boolean shortcuts in the configuration.
 
         This allows the user to either enable a feature using its defaults
-        (by setting it to True) or disable it entirely (by setting it to False).
+        (by setting it to True) or disable it entirely (by setting it to False) without
+        using the `enabled` field.
 
         Args:
             data: The input data to validate.
@@ -79,24 +84,26 @@ class ASPOptions(BaseModel):
         if not isinstance(data, dict):
             return data
 
-        section_map: Dict[str, Type[BaseModel]] = {
-            "encodings": EncodingOptions,
-            "glossary": GlossaryOptions,
-            "predicate_table": PredicateTableOptions,
-            "dependency_graph": DependencyGraphOptions,
-        }
+        features = [
+            "encodings",
+            "glossary",
+            "predicate_table",
+            "dependency_graph",
+        ]
 
-        for field_name, model_cls in section_map.items():
-            if field_name in data:
-                value = data[field_name]
+        for feature in features:
+            if feature in data:
+                value = data[feature]
 
                 if value is True:
-                    data[field_name] = {}
+                    data[feature] = {"enabled": True}
 
                 elif value is False:
-                    disabled_config = {k: False for k in model_cls.model_fields.keys()}
-                    data[field_name] = disabled_config
+                    data[feature] = {"enabled": False}
 
+                elif isinstance(value, dict):
+                    if "enabled" not in value:
+                        value["enabled"] = True
         return data
 
     @classmethod

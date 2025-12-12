@@ -12,8 +12,12 @@ def test_from_mapping_valid() -> None:
     options = ASPOptions.from_mapping(data)
 
     assert options.start_level == 2
+    assert options.dependency_graph.enabled is False
+    assert options.predicate_table.enabled is False
+    assert options.encodings.enabled is True
     assert options.encodings.source is True
     assert options.encodings.git_link is False
+    assert options.glossary.enabled is True
     assert options.glossary.include_hidden is False
     assert options.glossary.include_undocumented is True
 
@@ -54,6 +58,7 @@ def test_boolean_shortcut_true() -> None:
     data = {"encodings": True, "glossary": True}
     options = ASPOptions.model_validate(data)
 
+    assert options.encodings.enabled is True
     assert options.encodings.source is False
     assert options.glossary.include_undocumented is True
 
@@ -64,8 +69,4 @@ def test_boolean_shortcut_false() -> None:
     data = {"glossary": False, "dependency_graph": False}
     options = ASPOptions.model_validate(data)
 
-    assert options.glossary.include_undocumented is False
-    assert options.glossary.include_hidden is False
-    assert options.glossary.include_references is False
-    assert options.glossary.include_navigation is False
-    assert options.dependency_graph.enable is False
+    assert options.glossary.enabled is False

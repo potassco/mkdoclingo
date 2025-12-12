@@ -20,7 +20,9 @@ from mkdocstrings_handlers.asp._internal.handler import ASPHandler, get_handler
 def asp_handler_fixture() -> ASPHandler:
     """Fixture that provides an ASPHandler instance."""
 
-    return get_handler(theme="material", custom_templates=None, mdx=[], mdx_config={}, tool_config={})
+    return get_handler(
+        theme="material", custom_templates=None, mdx=[], mdx_config={}, tool_config={}, handler_config={}
+    )
 
 
 def test_handler_get_options(asp_handler: ASPHandler) -> None:
@@ -31,6 +33,42 @@ def test_handler_get_options(asp_handler: ASPHandler) -> None:
     assert options.predicate_table.include_undocumented is True
     assert options.glossary.include_hidden is True
     assert options.glossary.include_undocumented is True
+
+
+def test_handler_get_options_merge_handler_config(asp_handler: ASPHandler) -> None:
+    """Test that get_options merges handler_config with local options.
+
+    The local options should override handler_config where specified,
+    while other settings should be preserved from handler_config.
+    """
+
+    asp_handler._handler_config = {
+        "options": {
+            "predicate_table": {
+                "include_hidden": False,
+                "include_undocumented": True,
+            },
+            "glossary": {
+                "include_undocumented": False,
+            },
+        }
+    }
+
+    local_options = {
+        "predicate_table": {
+            "include_undocumented": False,
+        },
+        "glossary": {
+            "include_hidden": True,
+        },
+    }
+
+    options = asp_handler.get_options(local_options)
+
+    assert options.predicate_table.include_hidden is False
+    assert options.predicate_table.include_undocumented is False
+    assert options.glossary.include_hidden is True
+    assert options.glossary.include_undocumented is False
 
 
 def test_handler_get_options_with_repository_url(asp_handler: ASPHandler) -> None:

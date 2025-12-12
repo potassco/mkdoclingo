@@ -1,5 +1,8 @@
 """This module defines the ASP handler for mkdocstrings."""
 
+# pylint: disable=too-many-positional-arguments
+
+import copy
 from pathlib import Path
 from typing import Any, Mapping, Sequence, cast
 
@@ -28,14 +31,16 @@ class ASPHandler(BaseHandler):
         mdx: Sequence[str | Extension],
         mdx_config: Mapping[str, Any],
         tool_config: Mapping[str, Any],
+        handler_config: Mapping[str, Any],
     ):
         super().__init__(theme=theme, custom_templates=custom_templates, mdx=mdx, mdx_config=mdx_config)
 
         self._tool_config = tool_config
+        self._handler_config = handler_config
 
     def get_options(self, local_options: Mapping[str, Any]) -> ASPOptions:
         """
-        Merge global defaults with local options (from the markdown file).
+        Merge global (from mkdocs.yml) with local (from the markdown file) options.
 
         Args:
             local_options: Options provided in the annotation.
@@ -45,13 +50,25 @@ class ASPHandler(BaseHandler):
         """
 
         options = dict(local_options)
+        merged_options = copy.deepcopy(self._handler_config.get("options", {}))
+
+        def deep_update(target: dict[str, Any], source: dict[str, Any]) -> None:
+            for k, v in source.items():
+                if isinstance(v, dict) and k in target and isinstance(target[k], dict):
+                    # Nested dictionaries should also be merged
+                    deep_update(target[k], v)
+                else:
+                    # Local configuration has higher priority
+                    target[k] = v
+
+        deep_update(merged_options, options)
 
         repo_url = self._tool_config.get("repo_url")
 
         if repo_url:
-            options["repo_url"] = repo_url
+            merged_options["repo_url"] = repo_url
 
-        return ASPOptions.from_mapping(options)
+        return ASPOptions.from_mapping(merged_options)
 
     def collect(self, identifier: str, options: ASPOptions) -> list[Document]:
         """
@@ -137,6 +154,7 @@ def get_handler(
     mdx: Sequence[str | Extension],
     mdx_config: Mapping[str, Any],
     tool_config: Mapping[str, Any],
+    handler_config: Mapping[str, Any],
     **_kwargs: Any,
 ) -> ASPHandler:
     """
@@ -150,4 +168,5 @@ def get_handler(
         mdx=mdx,
         mdx_config=mdx_config,
         tool_config=tool_config,
+        handler_config=handler_config,
     )

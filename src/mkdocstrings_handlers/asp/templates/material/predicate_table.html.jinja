@@ -21,9 +21,10 @@
     </thead>
     <tbody>
       {% for predicate in table.predicates %}
+        {% set predicate_id = predicate.signature | replace("/", "-") %}
         <tr>
           <td>
-            <a href="#{{ predicate.identifier }}-{{ predicate.arity }}"><code>{{ predicate.signature }}</code></a>
+            <a href="#{{ predicate_id }}"><code>{{ predicate.signature }}</code></a>
           </td>
           <td>{{ predicate.description | convert_markdown(5, html_id) }}</td>
           <td style="padding-top: 0; padding-bottom: 0;">

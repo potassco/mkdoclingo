@@ -17,6 +17,11 @@ Args:
 *%
 ```
 
+!!! improtant
+
+    Do not leave a space before the `:` of each argument
+
+
 ### Example
 
 !!! example

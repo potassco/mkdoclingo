@@ -31,7 +31,7 @@ lint_pylint = ["pylint", "djlint"]
 typecheck = ["types-setuptools", "mypy", "types-Markdown"]
 test = ["coverage[toml]", "pytest"]
 doc = ["mkdocstrings[python]", "mkdocs-literate-nav"]
-dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
+dev = ["mkdoclingo[test,typecheck,lint_pylint,doc]"]
 
 [project.entry-points."mkdocstrings.handlers"]
 clingo = "mkdocstrings_handlers.asp._internal.handler:ASPHandler"
@@ -105,6 +105,4 @@ explicit_package_bases = true
 
 [tool.pytest]
 minversion = "9.0"
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]

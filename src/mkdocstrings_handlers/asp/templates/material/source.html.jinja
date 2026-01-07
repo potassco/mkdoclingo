@@ -1,6 +1,8 @@
+{# djlint:off #}
 {% filter convert_markdown(0) %}
 ??? quote "Source"
     ```clingo
     {{ source | safe | indent(4) }}
     ```
 {% endfilter %}
+{# djlint:on #}

@@ -1,13 +1,5 @@
 """Entry point of the mkdocstrings handler module."""
 
-from .handler import ASPHandler
+from mkdocstrings_handlers.asp._internal.handler import get_handler
 
-
-def get_handler(**kwargs):
-    """
-    Return an instance of the ASPHandler class.
-
-    This is required by mkdocstrings to load the handler.
-    """
-
-    return ASPHandler(**kwargs)
+__all__ = ["get_handler"]

@@ -6,15 +6,16 @@ build-backend = "setuptools.build_meta"
 name = "mkdoclingo"
 authors = [{ name = "Potassco", email = "hahnmartinlu@uni-potsdam.de" }]
 description = "Mkdocs plugin to generate documentation from clingo files"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 readme = "README.md"
 dependencies = [
     "clingo",
-    "mkdocstrings>=0.30",
+    "mkdocstrings>=1.0.0",
     "tree-sitter",
-    "tomli; python_version < '3.11'",
+    "tree-sitter-clingo>=1.0.3",
+    "pydantic",
     "pygments_clingo",
     "mkdocs>=1.5",
     "mkdocs-material>=9.5",
@@ -26,24 +27,14 @@ Homepage = "https://github.com/potassco/mkdoclingo.git/"
 
 [project.optional-dependencies]
 format = ["black", "isort", "autoflake"]
-lint_pylint = ["pylint"]
-typecheck = ["types-setuptools", "mypy"]
-test = ["coverage[toml]"]
-doc = [
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocstrings[python]",
-    "tree-sitter",
-    "pygments_clingo",
-]
-dev = ["mkdoclingo[test,typecheck,lint_pylint]"]
-
-[project.scripts]
-mkdoclingo = "mkdoclingo.__main__:main"
+lint_pylint = ["pylint", "djlint"]
+typecheck = ["types-setuptools", "mypy", "types-Markdown"]
+test = ["coverage[toml]", "pytest"]
+doc = ["mkdocstrings[python]", "mkdocs-literate-nav"]
+dev = ["mkdoclingo[test,typecheck,lint_pylint,doc]"]
 
 [project.entry-points."mkdocstrings.handlers"]
-clingo = "mkdocstrings_handlers.asp.handler:ASPHandler"
-
+clingo = "mkdocstrings_handlers.asp._internal.handler:ASPHandler"
 
 [tool.setuptools.package-data]
 "mkdocstrings_handlers.asp" = ["templates/**/*.css"]
@@ -89,8 +80,29 @@ variable-rgx = "^[a-z][a-z0-9]*((_[a-z0-9]+)*_?)?$"
 good-names = ["_"]
 
 [tool.coverage.run]
-source = ["mkdoclingo", "tests"]
-omit = ["*/mkdoclingo/__main__.py"]
+source = ["mkdocstrings_handlers.asp", "tests"]
+
+[tool.coverage.paths]
+source = [
+    "src/mkdocstrings_handlers/asp",
+    "*/site-packages/mkdocstrings_handlers/asp",
+]
 
 [tool.coverage.report]
 exclude_lines = ["assert", "nocoverage"]
+
+[tool.djlint]
+profile = "jinja"
+indent = 2
+format_css = true
+format_js = true
+
+[tool.mypy]
+files = "src"
+mypy_path = "src"
+namespace_packages = true
+explicit_package_bases = true
+
+[tool.pytest]
+minversion = "9.0"
+testpaths = ["tests"]

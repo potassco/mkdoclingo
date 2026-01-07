@@ -1,0 +1,37 @@
+<details class="asp-doc-predicate-ref">
+  <summary>References</summary>
+  <div class="tabbed-set tabbed-alternate"
+       data-tabs="1:{{ glossary_predicate.files|length }}"
+       style="--md-indicator-x: 0px;
+              --md-indicator-width: 92px">
+    {% for file in glossary_predicate.files %}
+      <input {% if loop.first %}checked="checked"{% endif %}
+             id="__tabbed-{{ predicate_id }}-{{ loop.index }}"
+             name="__tabbed-{{ predicate_id }}"
+             type="radio">
+    {% endfor %}
+    <div class="tabbed-labels tabbed-labels--linked">
+      {% for file in glossary_predicate.files %}
+        <label for="__tabbed-{{ predicate_id }}-{{ loop.index }}">
+          <code>{{ file.filename }}</code>
+        </label>
+      {% endfor %}
+    </div>
+    <div class="tabbed-content">
+      {% for file in glossary_predicate.files %}
+        <div class="tabbed-block">
+          {% for reference in file.references %}
+            {% set hl_attr = ' hl_lines="1"' if reference.is_providing else '' %}
+            {{ ('```clingo linenums="' ~ (reference.row + 1) ~ '"' ~ hl_attr ~ '\n' ~ reference.content ~ '\n```') | convert_markdown(0) }}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="tabbed-control tabbed-control--prev" hidden="">
+      <button class="tabbed-button" tabindex="-1" aria-hidden="true"></button>
+    </div>
+    <div class="tabbed-control tabbed-control--next" hidden="">
+      <button class="tabbed-button" tabindex="-1" aria-hidden="true"></button>
+    </div>
+  </div>
+</details>

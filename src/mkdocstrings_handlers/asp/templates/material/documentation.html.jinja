@@ -1,17 +1,13 @@
-{% if config.predicate_table %}
-    {% include 'predicate_table.html.jinja' %}
+{% if context.options.predicate_table.enabled %}
+  {% include 'predicate_table.html.jinja' %}
 {% endif %}
-
-{% if config.dependency_graph %}
-    {% include 'dependency_graph.html.jinja' %}
+{% if context.options.dependency_graph.enabled %}
+  {% include 'dependency_graph.html.jinja' %}
 {% endif %}
-
-{% if config.encodings %}
-    {% include 'encodings.html.jinja' %}
+{% if context.options.encodings.enabled %}
+  {% include 'encodings.html.jinja' %}
 {% endif %}
-
-{% if config.glossary %}
-    {% include 'separator.html.jinja' %}
-
-    {% include 'glossary.html.jinja' %}
+{% if context.options.glossary.enabled %}
+  {% include 'separator.html.jinja' %}
+  {% include 'glossary.html.jinja' %}
 {% endif %}

@@ -6,38 +6,41 @@
 val(1..dim*dim).
 pos(X,Y) :- val(X), val(Y).
 
-% sudoku(X,Y,V)
-% .................
-% Describes a sudoku board. The value of cell (X,Y) is V.
-%
-% Args:
-%     X (int): the row of the cell
-%     Y (int): the column of the cell
-%     V (int): the value of the cell
+%*! sudoku(X,Y,V)
 
-%* initial(X,Y,V)
-.................
-Initial values of the sudoku board. The value of cell (X,Y) is V.
+Describes a sudoku board. The value of cell (X,Y) is V.
 
 Args:
-    X (int): the row of the cell
-    Y (int): the column of the cell
-    V (int): the value of the cell
+    - X: the row of the cell
+    - Y: the column of the cell
+    - V: the value of the cell
 *%
-%* pos(X,Y)
-...........
-The cell (X,Y) is in the sudoku board.
+
+%*! initial(X,Y,V)
+
+Describes initial values of the sudoku board. The value of cell (X,Y) is V.
 
 Args:
-    X (int): the row of the cell
-    Y (int): the column of the cell
+    - X: the row of the cell
+    - Y: the column of the cell
+    - V: the value of the cell
 *%
-%* val(V)
-.........
-The value V is a possible value for a cell.
+
+%*! pos(X,Y)
+
+Describes a cell (X,Y) in the sudoku board.
 
 Args:
-    V (int): the value
+    - X: the row of the cell
+    - Y: the column of the cell
+*%
+
+%*! val(V)
+
+Describes a possible value V for a cell.
+
+Args:
+    - V: the value
 *%
 
 

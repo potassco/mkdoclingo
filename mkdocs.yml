@@ -100,6 +100,8 @@ markdown_extensions:
 plugins:
   - search
   - autorefs
+  - literate-nav:
+      nav_file: SUMMARY.md
   - mkdocstrings:
       handlers:
         python:
@@ -110,7 +112,6 @@ plugins:
             show_symbol_type_heading: true
             show_symbol_type_toc: true
             show_signature_annotations: true
-            signature_cross_references: true
             show_source: false
             extra:
               show_inherited_detail: true
@@ -118,37 +119,3 @@ plugins:
               show_inherited_detail_tree: true
         # asp:
         # paths: [examples] # path to your ASP source files
-
-nav:
-  # - Home: index.md
-  - Getting Started:
-      - Installation: installation.md
-      - Quick Start:
-          - use/index.md
-  - Examples:
-      - examples/index.md
-      - examples/sudoku.md
-      - examples/config.md
-      - examples/asplain.md
-  - Reference:
-      - reference/index.md
-      - Sections:
-          - reference/sections/index.md
-          - Predicate table: reference/sections/predicate-table.md
-          - Dependency graph: reference/sections/dependency-graph.md
-          - Encodings: reference/sections/encodings.md
-          - Glossary: reference/sections/glossary.md
-      - Predicate Docstring: reference/predicate-docs.md
-      - Style: reference/style.md
-      - API:
-          - reference/api/index.md
-          - Handler: reference/api/handler.md
-          - Features: reference/api/features.md
-          - Semantics: reference/api/semantics.md
-  - Community:
-      - community/index.md
-      - Help: community/help.md
-      - Changes: community/CHANGES.md
-      - Contributing: community/CONTRIBUTING.md
-      - Development: community/DEVELOPMENT.md
-      - Deployment: community/DEPLOYMENT.md

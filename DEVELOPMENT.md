@@ -35,6 +35,27 @@ python -m pipx install pre-commit
 pre-commit install
 ```
 
+## Code structure
+
+```text
+src/mkdocstrings_handlers/asp/
+└── _internal/
+    ├── collect/                        # Parsing logic (Input)
+    │   ├── queries/                    # *.scm files with tree-sitter queries
+    │   ├── extractors.py               # Extract data from nodes using queries
+    │   ├── load.py                     # File loading and processing loop
+    │   └── syntax.py                   # Query wrappers and node definitions
+    ├── render/                         # View model generation (Processing)
+    │   ├── render_context.py           # Main rendering context
+    │   ├── dependency_graph_context.py # Dependency graph context
+    │   ├── encodings_context.py        # Encodings context
+    │   ├── glossary_context.py         # Glossary context
+    │   └── predicate_table_context.py  # Predicate table context
+    ├── config.py                       # Configuration options (using Pydantic)
+    ├── domain.py                       # Domain models (Document, Statement, etc.)
+    └── handler.py                      # MkDocstrings handler entry point
+```
+
 [editable]: https://setuptools.pypa.io/en/latest/userguide/development_mode.html
 [nox]: https://nox.thea.codes/en/stable/index.html
 [pipx]: https://pypa.github.io/pipx/

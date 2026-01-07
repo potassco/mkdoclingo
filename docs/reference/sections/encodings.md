@@ -12,22 +12,6 @@ This means that any markdown code can be rendered, including sections, admonitio
 
     If a comment can be interpreted by clingo as a valid statement, it will be ignored.
 
-    === ":material-code-block-tags: Usage"
-
-        ```clingo
-
-        % Will skip the next comment since it is parsable
-        % a:-b.
-        %% This is also skipped since it is a comment in clingo
-        c:-d,e.
-        % The next line prints a line separator
-        %----------------------
-        % The following lines will not be printed and can use in the encodings to separate sections
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%=================================
-        %%---------------------------------
-        ```
-
     === ":material-palette-outline: Output"
 
         Will skip the next comment
@@ -40,6 +24,21 @@ This means that any markdown code can be rendered, including sections, admonitio
         ----------------------
 
         The following lines will not be printed and can use in the encodings as separator
+
+    === ":material-code-block-tags: Usage"
+
+        ```clingo
+            % Will skip the next comment since it is parsable
+            % a:-b.
+            %% This is also skipped since it is a comment in clingo
+            c:-d,e.
+            % The next line prints a line separator
+            %----------------------
+            % The following lines will not be printed and can use in the encodings to separate sections
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %%=================================
+            %%---------------------------------
+        ```
 
 !!! warning "Markdown headers"
 

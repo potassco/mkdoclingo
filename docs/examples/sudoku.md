@@ -11,12 +11,6 @@ icon: material/grid
     Use the :material-file-eye-outline: icon in the top right to see the source code for this page.
 
 
-## Example instance
-
-```clingo
---8<-- "examples/sudoku/instance.lp"
-```
-
 ::: examples/sudoku/encoding.lp
     handler: asp
     options:
@@ -27,3 +21,10 @@ icon: material/grid
             git_link: true
             source: true
         start_level: 1
+
+
+## Example instance
+
+```clingo
+--8<-- "examples/sudoku/instance.lp"
+```

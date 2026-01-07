@@ -1,8 +1,4 @@
----
-icon: "material/rocket-launch"
----
-
-# Usage
+# Getting started
 
 To use the extension just write the following code inside your documentation
 and *mkdoclingo* will render the corresponding documentation in that place.
@@ -28,13 +24,4 @@ and *mkdoclingo* will render the corresponding documentation in that place.
 - `dependency-graph` See [**Dependency graph** section](../reference/sections/dependency-graph)
 - `start-level` The initial markdown level. By default is `1`
 
-
-
-<!-- ## TODO: Things to document
-
-- Predicate docs
-    - One predicate definiton per block comment
-
-- How to customize your mkdocs material to get a nice layout for the table
-
-- Comments of code are ignored in the encoding content. Make sure whatever is after your comment is not parsable by clingo if you want to show it -->
+Follow the guide in [**Quick start guide**](./quick-start) to learn how to include an encoding in your documentation step by step.

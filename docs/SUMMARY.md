@@ -1,11 +1,11 @@
 * Getting Started
-    * [Installation](installation.md)
-    * [Quick Start](use/index.md)
+    * [Getting Started](use/index.md)
+    * [Quick Start Guide](use/quick-start.md)
+    * [Installation](use/installation.md)
 * Examples
     * [Examples](examples/index.md)
     * [Sudoku](examples/sudoku.md)
     * [Product Configuration](examples/config.md)
-    * [Asplain](examples/asplain.md)
 * Reference
     * [Reference](reference/index.md)
     * Sections

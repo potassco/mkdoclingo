@@ -6,7 +6,7 @@ icon: "material/table"
 Generates a summary of the predicates used in all the included encodings.
 
 
-The definition is taken from the [predicate documentation](#predicate-documentation) ,
+The definition is taken from the [predicate documentation](../predicate-docs.md) ,
 and the type indicates the following:
 
 

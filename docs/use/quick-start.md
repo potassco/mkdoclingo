@@ -39,10 +39,10 @@ First you have to include the encoding in your mkdocs documentation using the `:
         start_level: 1
 ```
 
-More details about the available options can be found in [`reference`](../../reference).
+More details about the available options can be found in [`reference`](../reference/index.md).
 
 
-In this guide we will go step by step to showcase the features, the rendered documentation can be found in [`examples/sudoku`](../../examples/sudoku).
+In this guide we will go step by step to showcase the features, the rendered documentation can be found in [`examples/sudoku`](../examples/sudoku.md).
 To include the file anywhere in your mkdocs documentation, you can use the following syntax:
 
 
@@ -60,7 +60,7 @@ First we can add a title for the encoding by adding a comment at the top of the 
     ...
 ```
 
-Other comments in the encoding will be rendered as markdown text in the documentation of the encoding as shown in [`reference/sections/encodings`](../../reference/sections/encodings). Double comments `%%` and comments that are valid clingo code will be ignored.
+Other comments in the encoding will be rendered as markdown text in the documentation of the encoding as shown in [`reference/sections/encodings`](../reference/sections/encodings.md). Double comments `%%` and comments that are valid clingo code will be ignored.
 
 **Predicate docs**
 
@@ -79,8 +79,8 @@ We can add documentation for a predicate using a block comment like the followin
 ```
 
 This will generate a section in the predicate documentation for the predicate `sudoku/3` with the description and arguments rendered in markdown. It will also generate an entry in the predicate summary table at the start.
-For the full format, please refer to [`reference/predicate-docs`](../../reference/predicate-docs).
+For the full format, please refer to [`reference/predicate-docs`](../reference/predicate-docs.md).
 
 **Predicate types**
 
-Automatically, *mkdoclingo* will identify input and output predicates based on their usage in the encoding. In this case, `initial/3` will be marked as an input predicate  since it is not in the encoding, and `sudoku/3` as an output predicate in the predicate documentation since it is shown. This is rendered in the [`reference/sections/glossary`](../../reference/sections/glossary), the [`reference/sections/dependency-graph`](../../reference/sections/dependency-graph) and the [`reference/sections/predicate-table`](../../reference/sections/predicate-table).
+Automatically, *mkdoclingo* will identify input and output predicates based on their usage in the encoding. In this case, `initial/3` will be marked as an input predicate  since it is not in the encoding, and `sudoku/3` as an output predicate in the predicate documentation since it is shown. This is rendered in the [`reference/sections/glossary`](../reference/sections/glossary.md), the [`reference/sections/dependency-graph`](../reference/sections/dependency-graph.md) and the [`reference/sections/predicate-table`](../reference/sections/predicate-table.md).

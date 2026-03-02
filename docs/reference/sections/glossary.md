@@ -2,7 +2,7 @@
 icon: "material/format-list-bulleted-square"
 ---
 
-Generates a glossary with detailed information of all predicates using their predicate documentation. See the [predicate documentation](../../predicate-docs) section for more details.
+Generates a glossary with detailed information of all predicates using their predicate documentation. See the [predicate documentation](../predicate-docs.md) section for more details.
 
 Each predicate generates a section in the TOC.
 

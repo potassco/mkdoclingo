@@ -18,10 +18,10 @@ and *mkdoclingo* will render the corresponding documentation in that place.
 
 
 ## Configuration options
-- `encodings` See [**Encodings** section](../reference/sections/encodings)
-- `predicate-table` See [**Predicate table** section](../reference/sections/predicate-table)
-- `glossary` See [**Glossary** section](../reference/sections/glossary)
-- `dependency-graph` See [**Dependency graph** section](../reference/sections/dependency-graph)
+- `encodings` See [**Encodings** section](../reference/sections/encodings.md)
+- `predicate-table` See [**Predicate table** section](../reference/sections/predicate-table.md)
+- `glossary` See [**Glossary** section](../reference/sections/glossary.md)
+- `dependency-graph` See [**Dependency graph** section](../reference/sections/dependency-graph.md)
 - `start-level` The initial markdown level. By default is `1`
 
-Follow the guide in [**Quick start guide**](./quick-start) to learn how to include an encoding in your documentation step by step.
+Follow the guide in [**Quick start guide**](./quick-start.md) to learn how to include an encoding in your documentation step by step.

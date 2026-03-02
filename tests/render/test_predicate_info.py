@@ -67,3 +67,51 @@ def test_get_predicate_info_show_only(render_context: Callable[[str], RenderCont
     assert len(context._predicates) == 1
     predicate_info = context._predicates[0]
     assert predicate_info.signature == "some_predicate/2"
+
+
+def test_get_predicate_info_filter_unused(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that unused predicates are filtered out when the option is set."""
+
+    source = """
+    %*! only_documented
+    This predicate is documented, but not used anywhere.
+    *%
+    """
+
+    context = render_context(source)
+
+    context.options.predicate_info.include_unused = False
+
+    assert len(context._predicates) == 0
+
+
+def test_get_predicate_info_filter_undocumented(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that hidden predicates are excluded when the option is set."""
+
+    context = render_context(
+        """
+    output_pred(X) :- input_pred(X).
+    internal_calc(X) :- input_pred(X).
+    #show output_pred/1.
+    """
+    )
+
+    context.options.predicate_info.include_undocumented = False
+
+    assert len(context.glossary.predicates) == 0
+
+
+def test_get_predicate_info_filter_hidden(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that hidden predicates are excluded when the option is set."""
+
+    context = render_context(
+        """
+    output_pred(X) :- input_pred(X).
+    internal_calc(X) :- input_pred(X).
+    #show output_pred/1.
+    """
+    )
+
+    context.options.predicate_info.include_hidden = False
+
+    assert len(context.glossary.predicates) == 2

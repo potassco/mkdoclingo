@@ -51,6 +51,6 @@ def test_get_glossary_context_not_show_undocumented(render_context: Callable[[st
     """
     )
 
-    context.options.glossary.include_undocumented = False
+    context.options.predicate_info.include_undocumented = False
 
     assert len(context.glossary.predicates) == 0

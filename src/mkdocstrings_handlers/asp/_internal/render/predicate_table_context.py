@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 
-from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateInfo
 
@@ -15,28 +14,17 @@ class PredicateTableContext:
     """ The list of predicates to include in the table. """
 
 
-def get_predicate_table_context(predicates: list[PredicateInfo], options: ASPOptions) -> PredicateTableContext:
+def get_predicate_table_context(predicates: list[PredicateInfo]) -> PredicateTableContext:
     """
-    Build the predicate table context from the given predicates and options.
+    Build the predicate table context from the given predicates.
 
     Args:
         predicates: The list of PredicateInfo objects to include in the predicate table.
-        options: The ASPOptions containing predicate table display settings.
 
     Returns:
         The constructed PredicateTableContext.
     """
-    result: list[PredicateInfo] = []
-
-    for predicate in predicates:
-        is_hidden = predicate.show_status == ShowStatus.HIDDEN
-        is_undocumented = not predicate.description
-
-        allow_hidden = predicate.is_input or options.predicate_table.include_hidden
-        allow_undocumented = options.predicate_table.include_undocumented
-
-        if (not is_hidden or allow_hidden) and (not is_undocumented or allow_undocumented):
-            result.append(predicate)
+    result: list[PredicateInfo] = predicates
 
     def get_sort_priority(predicate: PredicateInfo) -> tuple[int, str]:
         """

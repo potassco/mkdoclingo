@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 
-from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateInfo
 
@@ -65,13 +64,12 @@ def _add_reference_to_map(
         file_row_map[path][row] = GlossaryReference(row=row, content=content, is_providing=is_providing)
 
 
-def get_glossary_context(predicates: list[PredicateInfo], options: ASPOptions) -> GlossaryContext:
+def get_glossary_context(predicates: list[PredicateInfo]) -> GlossaryContext:
     """
-    Build the glossary context from the given predicates and options.
+    Build the glossary context from the given predicates.
 
     Args:
         predicates: The list of PredicateInfo objects to include in the glossary.
-        options: The ASPOptions containing glossary display settings.
 
     Returns:
         The constructed GlossaryContext.
@@ -79,17 +77,6 @@ def get_glossary_context(predicates: list[PredicateInfo], options: ASPOptions) -
     result: list[GlossaryPredicate] = []
 
     for predicate in predicates:
-        is_hidden = predicate.show_status == ShowStatus.HIDDEN
-        is_undocumented = not predicate.description
-
-        allow_hidden = predicate.is_input or options.glossary.include_hidden
-        allow_undocumented = options.glossary.include_undocumented
-
-        should_show = (not is_hidden or allow_hidden) and (not is_undocumented or allow_undocumented)
-
-        if not should_show:
-            continue
-
         file_row_map: dict[str, dict[int, GlossaryReference]] = {}
 
         for definition in predicate.definitions:

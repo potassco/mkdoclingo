@@ -43,10 +43,9 @@ and the type indicates the following:
 
 ## Configuration options
 
-The option `predicate_table` can be further customized with the following options:
+The option `predicate_table` currently supports only enabling/disabling the section.
 
-- `include_undocumented` Boolean indicating if predicates that have no docstring should be included. Defaults to True.
-- `include_hidden` Boolean indicating if predicates that are not shown nor input should be included. Defaults to True.
+Predicate inclusion/exclusion (e.g. hidden or undocumented predicates) is configured globally via `predicate_info`.
 
 
 !!! example
@@ -58,7 +57,8 @@ The option `predicate_table` can be further customized with the following option
         ::: examples/sudoku/encoding.lp
             handler: asp
             options:
-                predicate_table:
+                predicate_table: true
+                predicate_info:
                     include_hidden: false
                 start_level: 3
 
@@ -68,7 +68,8 @@ The option `predicate_table` can be further customized with the following option
         ::: examples/sudoku/encoding.lp
             handler: asp
             options:
-                predicate_table:
+                predicate_table: true
+                predicate_info:
                     include_hidden: false
                 start_level: 3
         ```

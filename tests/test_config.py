@@ -8,7 +8,7 @@ from mkdocstrings_handlers.asp._internal.config import ASPOptions
 def test_from_mapping_valid() -> None:
     """Test loading from a standard dictionary."""
 
-    data = {"start_level": 2, "encodings": {"source": True}, "glossary": {"include_hidden": False}}
+    data = {"start_level": 2, "encodings": {"source": True}, "predicate_info": {"include_hidden": False}}
     options = ASPOptions.from_mapping(data)
 
     assert options.start_level == 2
@@ -17,9 +17,9 @@ def test_from_mapping_valid() -> None:
     assert options.encodings.enabled is True
     assert options.encodings.source is True
     assert options.encodings.git_link is False
-    assert options.glossary.enabled is True
-    assert options.glossary.include_hidden is False
-    assert options.glossary.include_undocumented is True
+    assert options.glossary.enabled is False
+    assert options.predicate_info.include_hidden is False
+    assert options.predicate_info.include_undocumented is True
 
 
 def test_validation_error_handling(capsys: CaptureFixture[str]) -> None:
@@ -60,7 +60,7 @@ def test_boolean_shortcut_true() -> None:
 
     assert options.encodings.enabled is True
     assert options.encodings.source is False
-    assert options.glossary.include_undocumented is True
+    assert options.predicate_info.include_undocumented is True
 
 
 def test_boolean_shortcut_false() -> None:

@@ -47,13 +47,13 @@ class RenderContext:
         Instead, the logic should be encapsulated in the specific contexts.
         """
 
-        return get_predicate_infos(self._documents)
+        return get_predicate_infos(self._documents, self.options)
 
     @cached_property
     def predicate_table(self) -> PredicateTableContext:
         """Get the predicate table context."""
 
-        return get_predicate_table_context(self._predicates, self.options)
+        return get_predicate_table_context(self._predicates)
 
     @cached_property
     def dependency_graph(self) -> DependencyGraphContext:
@@ -71,4 +71,4 @@ class RenderContext:
     def glossary(self) -> GlossaryContext:
         """Get the glossary context."""
 
-        return get_glossary_context(self._predicates, self.options)
+        return get_glossary_context(self._predicates)

@@ -19,9 +19,10 @@ and *mkdoclingo* will render the corresponding documentation in that place.
 
 ## Configuration options
 - `encodings` See [**Encodings** section](../reference/sections/encodings.md)
-- `predicate-table` See [**Predicate table** section](../reference/sections/predicate-table.md)
+- `predicate_table` See [**Predicate table** section](../reference/sections/predicate-table.md)
 - `glossary` See [**Glossary** section](../reference/sections/glossary.md)
-- `dependency-graph` See [**Dependency graph** section](../reference/sections/dependency-graph.md)
-- `start-level` The initial markdown level. By default is `1`
+- `dependency_graph` See [**Dependency graph** section](../reference/sections/dependency-graph.md)
+- `predicate_info` Predicate filtering shared by glossary/table/graph (documented in the section pages above)
+- `start_level` The initial markdown level. By default is `1`
 
 Follow the guide in [**Quick start guide**](./quick-start.md) to learn how to include an encoding in your documentation step by step.

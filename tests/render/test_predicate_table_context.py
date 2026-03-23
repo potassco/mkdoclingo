@@ -17,7 +17,7 @@ def test_get_predicate_table_context_sorting(render_context: Callable[[str], Ren
     """
     )
 
-    context.options.predicate_table.include_hidden = True
+    context.options.predicate_info.include_hidden = True
 
     sorted_signatures = [pred.signature for pred in context.predicate_table.predicates]
 
@@ -37,7 +37,7 @@ def test_get_predicate_table_context_not_show_hidden(render_context: Callable[[s
     """
     )
 
-    context.options.predicate_table.include_hidden = False
+    context.options.predicate_info.include_hidden = False
 
     assert len(context.predicate_table.predicates) == 2
 
@@ -53,6 +53,6 @@ def test_get_predicate_table_context_not_show_undocumented(render_context: Calla
     """
     )
 
-    context.options.predicate_table.include_undocumented = False
+    context.options.predicate_info.include_undocumented = False
 
     assert len(context.predicate_table.predicates) == 0

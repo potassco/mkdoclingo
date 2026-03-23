@@ -14,6 +14,17 @@ class FeatureConfig(BaseModel):
     """Whether this feature is enabled."""
 
 
+class PredicateInfoConfig(FeatureConfig):
+    """Options for predicate information in the documentation."""
+
+    include_undocumented: bool = True
+    """ Whether to include information about undocumented predicates. """
+    include_hidden: bool = True
+    """ Whether to include information about hidden predicates. """
+    include_unused: bool = True
+    """ Whether to include information about unused predicates. """
+
+
 class EncodingOptions(FeatureConfig):
     """Options for encoding outputs."""
 
@@ -30,10 +41,6 @@ class EncodingOptions(FeatureConfig):
 class GlossaryOptions(FeatureConfig):
     """Options for glossary generation."""
 
-    include_undocumented: bool = True
-    """ Whether to include undocumented predicates in the glossary. """
-    include_hidden: bool = True
-    """ Whether to include hidden predicates in the glossary. """
     include_references: bool = True
     """ Whether to include references in the glossary. """
     include_navigation: bool = True
@@ -42,11 +49,6 @@ class GlossaryOptions(FeatureConfig):
 
 class PredicateTableOptions(FeatureConfig):
     """Options for predicate table generation."""
-
-    include_undocumented: bool = True
-    """ Whether to include undocumented predicates in the predicate table. """
-    include_hidden: bool = True
-    """ Whether to include hidden predicates in the predicate table. """
 
 
 class DependencyGraphOptions(FeatureConfig):
@@ -60,6 +62,7 @@ class ASPOptions(BaseModel):
 
     repo_url: str | None = None
     start_level: int = Field(default=1, ge=1)
+    predicate_info: PredicateInfoConfig = Field(default_factory=PredicateInfoConfig)
     encodings: EncodingOptions = Field(default_factory=EncodingOptions)
     glossary: GlossaryOptions = Field(default_factory=GlossaryOptions)
     predicate_table: PredicateTableOptions = Field(default_factory=PredicateTableOptions)
@@ -85,6 +88,7 @@ class ASPOptions(BaseModel):
             return data
 
         features = [
+            "predicate_info",
             "encodings",
             "glossary",
             "predicate_table",

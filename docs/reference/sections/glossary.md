@@ -34,10 +34,10 @@ Each predicate section includes the references for each file where the predicate
 
 The option `glossary` can be further customized with the following options:
 
-- `include_undocumented` Boolean indicating if predicates that have no docstring should be included. Defaults to True.
-- `include_hidden` Boolean indicating if predicates that are not shown nor input should be included. Defaults to True.
 - `include_references` Boolean indicating if each predicate documentations should include a section with the references. Defaults to True.
-<!-- - `include_navigation` Boolean indicating if each predicate should generate a navigation entry displayed in the menu. Defaults to True. -->
+- `include_navigation` Boolean indicating if each predicate should generate a navigation entry displayed in the menu. Defaults to True.
+
+Predicate inclusion/exclusion (e.g. hidden or undocumented predicates) is configured globally via `predicate_info`.
 
 
 !!! example
@@ -50,6 +50,8 @@ The option `glossary` can be further customized with the following options:
             options:
                 glossary:
                     include_references: false
+                predicate_info:
+                    include_undocumented: false
                 start_level: 3
 
     === ":material-code-block-tags: Usage"
@@ -60,5 +62,7 @@ The option `glossary` can be further customized with the following options:
             options:
                 glossary:
                     include_references: false
+                predicate_info:
+                    include_undocumented: false
                 start_level: 3
         ```

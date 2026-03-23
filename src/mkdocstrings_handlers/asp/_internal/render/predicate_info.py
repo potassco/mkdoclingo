@@ -3,6 +3,7 @@
 import string
 from dataclasses import dataclass, field
 
+from mkdocstrings_handlers.asp._internal.config import ASPOptions
 from mkdocstrings_handlers.asp._internal.domain import Document, ShowStatus
 
 
@@ -107,12 +108,13 @@ def _resolve_show_statuses(documents: list[Document], registry: dict[str, Predic
             info.show_status = default_show
 
 
-def get_predicate_infos(documents: list[Document]) -> list[PredicateInfo]:
+def get_predicate_infos(documents: list[Document], options: ASPOptions) -> list[PredicateInfo]:
     """
     Build the list of PredicateInfo objects from the given documents.
 
     Args:
         documents: The list of Document objects representing ASP programs.
+        options: The ASP handler options.
 
     Returns:
         The list of constructed PredicateInfo objects.
@@ -166,4 +168,24 @@ def get_predicate_infos(documents: list[Document]) -> list[PredicateInfo]:
 
     _resolve_show_statuses(documents, registry)
 
-    return list(registry.values())
+    def info_filter(info: PredicateInfo) -> bool:
+        is_hidden = info.show_status == ShowStatus.HIDDEN
+        is_undocumented = not info.description
+        is_unused = len(info.definitions) == len(info.references) == 0
+
+        allow_hidden = info.is_input or options.predicate_info.include_hidden
+        allow_undocumented = options.predicate_info.include_undocumented
+        allow_unused = options.predicate_info.include_unused
+
+        if is_hidden and not allow_hidden:
+            return False
+
+        if is_undocumented and not allow_undocumented:
+            return False
+
+        if is_unused and not allow_unused:
+            return False
+
+        return True
+
+    return list(filter(info_filter, registry.values()))

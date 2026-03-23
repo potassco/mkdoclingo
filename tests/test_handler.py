@@ -29,10 +29,8 @@ def test_handler_get_options(asp_handler: ASPHandler) -> None:
     """Test that get_options returns correct default options."""
 
     options = asp_handler.get_options({})
-    assert options.predicate_table.include_hidden is True
-    assert options.predicate_table.include_undocumented is True
-    assert options.glossary.include_hidden is True
-    assert options.glossary.include_undocumented is True
+    assert options.predicate_info.include_hidden is True
+    assert options.predicate_info.include_undocumented is True
 
 
 def test_handler_get_options_merge_handler_config(asp_handler: ASPHandler) -> None:
@@ -44,31 +42,25 @@ def test_handler_get_options_merge_handler_config(asp_handler: ASPHandler) -> No
 
     asp_handler._handler_config = {
         "options": {
-            "predicate_table": {
+            "predicate_info": {
                 "include_hidden": False,
                 "include_undocumented": True,
-            },
-            "glossary": {
-                "include_undocumented": False,
+                "include_unused": True,
             },
         }
     }
 
     local_options = {
-        "predicate_table": {
-            "include_undocumented": False,
-        },
-        "glossary": {
-            "include_hidden": True,
+        "predicate_info": {
+            "include_unused": False,
         },
     }
 
     options = asp_handler.get_options(local_options)
 
-    assert options.predicate_table.include_hidden is False
-    assert options.predicate_table.include_undocumented is False
-    assert options.glossary.include_hidden is True
-    assert options.glossary.include_undocumented is False
+    assert options.predicate_info.include_hidden is False
+    assert options.predicate_info.include_undocumented is True
+    assert options.predicate_info.include_unused is False
 
 
 def test_handler_get_options_with_repository_url(asp_handler: ASPHandler) -> None:

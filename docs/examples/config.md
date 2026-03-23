@@ -15,10 +15,11 @@ where the documentation of predicates is in a separate file.
 ::: examples/config/encoding-base-clingo.lp
     handler: asp
     options:
-        source: true
+        encodings:
+            source: true
+        predicate_info:
+            include_undocumented: false
         glossary:
-            include_undocumented: false
             include_references: false
-        predicate_table:
-            include_undocumented: false
+        predicate_table: true
         start_level: 2

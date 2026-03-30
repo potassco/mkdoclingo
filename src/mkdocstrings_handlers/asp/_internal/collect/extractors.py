@@ -93,7 +93,7 @@ def extract_include(node: Node, parent_file_path: Path) -> Include:
     return Include((parent_file_path.parent / file_path))
 
 
-def extract_predicate(node: Node) -> Predicate:
+def extract_predicates(node: Node) -> list[Predicate]:
     """
     Extract a Predicate from a node.
 
@@ -105,11 +105,19 @@ def extract_predicate(node: Node) -> Predicate:
     """
     captures = Queries.PREDICATE.captures(node)
 
-    return Predicate(
-        identifier=get_node_text(captures["identifier"][0]),
-        arity=len(captures.get("term", [])),
-        negation=len(captures.get("negation", [])) > 0,
-    )
+    identifier = get_node_text(captures["identifier"][0])
+    is_negated = len(captures.get("negation", [])) > 0
+
+    if "term_group" not in captures:
+        return [Predicate(identifier=identifier, arity=0, negation=is_negated)]
+
+    predicates = []
+    for group_node in captures["term_group"]:
+        arity = group_node.named_child_count
+
+        predicates.append(Predicate(identifier=identifier, arity=arity, negation=is_negated))
+
+    return predicates
 
 
 def extract_show(node: Node) -> Show:
@@ -209,8 +217,8 @@ def extract_statement(node: Node) -> Statement:
         for key, nodes in body_captures.items():
             captures[key].extend(nodes)
 
-    provided_predicates = [extract_predicate(node) for node in captures.get("provided", [])]
-    needed_predicates = [extract_predicate(node) for node in captures.get("needed", [])]
+    provided_predicates = [pred for node in captures.get("provided", []) for pred in extract_predicates(node)]
+    needed_predicates = [pred for node in captures.get("needed", []) for pred in extract_predicates(node)]
 
     return Statement(
         row=node.start_point.row,

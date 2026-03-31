@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Mapping
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
@@ -67,6 +68,8 @@ class ASPOptions(BaseModel):
     glossary: GlossaryOptions = Field(default_factory=GlossaryOptions)
     predicate_table: PredicateTableOptions = Field(default_factory=PredicateTableOptions)
     dependency_graph: DependencyGraphOptions = Field(default_factory=DependencyGraphOptions)
+    extra_includes: list[Path] = Field(default_factory=list)
+    """ Additional files to include in the documentation. """
 
     @model_validator(mode="before")
     @classmethod

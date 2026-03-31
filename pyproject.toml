@@ -28,7 +28,7 @@ Homepage = "https://github.com/potassco/mkdoclingo.git/"
 [project.optional-dependencies]
 format = ["black", "isort", "autoflake"]
 lint_pylint = ["pylint", "djlint"]
-typecheck = ["types-setuptools", "mypy", "types-Markdown"]
+typecheck = ["types-setuptools", "mypy", "types-Markdown", "types-Pygments"]
 test = ["coverage[toml]", "pytest"]
 doc = ["mkdocstrings[python]", "mkdocs-literate-nav"]
 dev = ["mkdoclingo[test,typecheck,lint_pylint,doc]"]

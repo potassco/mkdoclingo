@@ -12,7 +12,7 @@
         (identifier) @identifier
         (terms
             (_) @term
-        )?
+        )? @term_group
     )
 )
 
@@ -24,6 +24,6 @@
         (identifier) @identifier
         (terms
             (_) @term
-        )?
+        )? @term_group
     )
 )

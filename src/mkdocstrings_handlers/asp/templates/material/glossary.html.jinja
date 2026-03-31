@@ -13,6 +13,8 @@
   {% set pred_sig %}
     <code class="doc-symbol doc-symbol-heading doc-clingo-symbol-predicate"
           style="font-size: 0.6rem"></code>
+    {{ input_icon_map[predicate.is_input]|safe }}
+    {{ show_icon_map[predicate.show_status]|safe }}
     <code style="font-size: 0.6rem;">{{ predicate }}</code>
   {% endset %}
   {% set predicate_id = predicate.signature | replace("/", "-") %}
@@ -25,7 +27,7 @@
             style="font-size: 0.6rem"></code>
       {{ input_icon_map[predicate.is_input]|safe }}
       {{ show_icon_map[predicate.show_status]|safe }}
-      <code style="font-size: 0.6rem;">{{ predicate }}</code>
+      <code style="font-size: 0.6rem;">{{ predicate.signature }}</code>
     </span>
   {% endset %}
   {% filter heading(context.options.start_level+2, id=predicate_id, toc_label=pred_toc) %}

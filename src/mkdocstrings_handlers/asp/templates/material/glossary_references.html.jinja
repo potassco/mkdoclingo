@@ -13,7 +13,7 @@
     <div class="tabbed-labels tabbed-labels--linked">
       {% for file in glossary_predicate.files %}
         <label for="__tabbed-{{ predicate_id }}-{{ loop.index }}">
-          <code>{{ file.filename }}</code>
+          <code>{{ file.path }}</code>
         </label>
       {% endfor %}
     </div>
@@ -21,8 +21,22 @@
       {% for file in glossary_predicate.files %}
         <div class="tabbed-block">
           {% for reference in file.references %}
-            {% set hl_attr = ' hl_lines="1"' if reference.is_providing else '' %}
-            {{ ('```clingo linenums="' ~ (reference.row + 1) ~ '"' ~ hl_attr ~ '\n' ~ reference.content ~ '\n```') | convert_markdown(0) }}
+            <div class="highlight">
+              <table class="highlighttable">
+                <tr>
+                  <td class="linenos">
+                    <div class="linenodiv">
+                      <pre><span>{{ reference.row + 1 }}</span></pre>
+                    </div>
+                  </td>
+                  <td class="code">
+                    <div class="highlight">
+                      <pre><code>{{ reference.html_content | safe }}</code></pre>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
           {% endfor %}
         </div>
       {% endfor %}

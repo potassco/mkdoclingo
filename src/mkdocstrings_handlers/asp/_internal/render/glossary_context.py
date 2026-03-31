@@ -1,6 +1,7 @@
 """This module defines the glossary context for rendering."""
 
 from dataclasses import dataclass, field
+from os.path import commonpath, dirname, relpath
 
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
@@ -85,6 +86,17 @@ def get_glossary_context(predicates: list[PredicateInfo]) -> GlossaryContext:
     Returns:
         The constructed GlossaryContext.
     """
+    unique_paths = {d.path for p in predicates for d in p.definitions}
+    unique_paths.update(r.path for p in predicates for r in p.references)
+
+    all_raw_paths = list(unique_paths)
+
+    project_root = ""
+    if len(all_raw_paths) > 1:
+        project_root = commonpath(all_raw_paths)
+    elif len(all_raw_paths) == 1:
+        project_root = dirname(all_raw_paths[0])
+
     result: list[GlossaryPredicate] = []
 
     for predicate in predicates:
@@ -101,7 +113,9 @@ def get_glossary_context(predicates: list[PredicateInfo]) -> GlossaryContext:
             references = list(row_map.values())
             references.sort(key=lambda ref: ref.row)
 
-            file_references.append(FileReference(path=path, references=references))
+            display_path = relpath(path, project_root).replace("\\", "/")
+
+            file_references.append(FileReference(path=display_path, references=references))
 
         file_references.sort(key=lambda file: file.path)
 

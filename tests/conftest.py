@@ -43,3 +43,21 @@ def render_context(tmp_path: Path) -> Callable[[str], RenderContext]:
         return RenderContext(documents=documents, options=options)
 
     return _render_context
+
+
+@pytest.fixture
+def multi_file_render_context(tmp_path: Path) -> Callable[[list[str]], RenderContext]:
+    """Helper to create a RenderContext from given file content."""
+
+    def _render_context(file_contents: list[str]) -> RenderContext:
+        file_paths = []
+        for i, content in enumerate(file_contents):
+            file_path = tmp_path / f"test_{i}.lp"
+            file_path.write_text(content, encoding="utf-8")
+            file_paths.append(file_path)
+
+        documents = load_documents(file_paths)
+        options = ASPOptions()
+        return RenderContext(documents=documents, options=options)
+
+    return _render_context

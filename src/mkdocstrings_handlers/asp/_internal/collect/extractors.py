@@ -89,8 +89,9 @@ def extract_include(node: Node, parent_file_path: Path) -> Include:
     # as a string fragment without the quotes.
     file_path_node = node.children[1]
     file_path = Path(get_node_text(file_path_node.children[1]))
+    resolved_path = parent_file_path.parent / file_path
 
-    return Include((parent_file_path.parent / file_path))
+    return Include(row=node.start_point.row, content=get_node_text(node), path=resolved_path)
 
 
 def extract_predicates(node: Node) -> list[Predicate]:
@@ -152,6 +153,8 @@ def extract_show(node: Node) -> Show:
         )
 
     return Show(
+        row=node.start_point.row,
+        content=get_node_text(node),
         predicate=predicate,
         status=status,
     )
@@ -186,6 +189,24 @@ def extract_block_comment(node: Node) -> BlockComment:
     return BlockComment(
         row=node.start_point.row,
         content=get_node_text(node).removeprefix("%*").removesuffix("*%"),
+    )
+
+
+def extract_bare_statement(node: Node) -> Statement:
+    """
+    Extract a Statement without predicate tracking.
+
+    Args:
+        node: A node representing the statement.
+
+    Returns:
+        The created Statement.
+    """
+    return Statement(
+        row=node.start_point.row,
+        content=get_node_text(node),
+        provided_predicates=[],
+        needed_predicates=[],
     )
 
 

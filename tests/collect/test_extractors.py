@@ -10,6 +10,7 @@ from tree_sitter import Node, Tree
 
 from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_argument_documentation,
+    extract_bare_statement,
     extract_block_comment,
     extract_include,
     extract_line_comment,
@@ -104,6 +105,8 @@ def test_extract_include(tmp_path: Path, parse_to_tree: Callable[[str], Tree]) -
 
     include = extract_include(include_node, parent_file_path=parent_file)
 
+    assert include.row == 0
+    assert include.content == source
     assert include.path == included_file
 
 
@@ -242,6 +245,8 @@ def test_extract_show_empty(parse_to_tree: Callable[[str], Tree]) -> None:
 
     show = extract_show(show_node)
 
+    assert show.row == 0
+    assert show.content == source
     assert show.predicate is None
     assert show.status == ShowStatus.EXPLICIT
 
@@ -256,6 +261,8 @@ def test_extract_show_signature(parse_to_tree: Callable[[str], Tree]) -> None:
 
     show = extract_show(show_node)
 
+    assert show.row == 0
+    assert show.content == source
     assert show.predicate is not None
     assert show.predicate.identifier == "p"
     assert show.predicate.arity == 2
@@ -272,6 +279,8 @@ def test_extract_show_term_function(parse_to_tree: Callable[[str], Tree]) -> Non
 
     show = extract_show(show_node)
 
+    assert show.row == 0
+    assert show.content == source
     assert show.predicate is not None
     assert show.predicate.identifier == "p"
     assert show.predicate.arity == 2
@@ -452,6 +461,22 @@ def test_extract_statement_with_comparison(parse_to_tree: Callable[[str], Tree])
     assert statement.content == source
     assert len(statement.provided_predicates) == 0
     assert len(statement.needed_predicates) == 2
+
+
+def test_extract_bare_statement_for_unsupported_directive(parse_to_tree: Callable[[str], Tree]) -> None:
+    """Test extracting a bare Statement from an unsupported directive."""
+
+    source = "#external p(X) : q(X)."
+    tree = parse_to_tree(source)
+    directive_node = tree.root_node.child(0)
+    assert directive_node is not None
+
+    statement = extract_bare_statement(directive_node)
+
+    assert statement.row == 0
+    assert statement.content == source
+    assert len(statement.provided_predicates) == 0
+    assert len(statement.needed_predicates) == 0
 
 
 def test_extract_argument_documentation(parse_to_tree: Callable[[str], Tree]) -> None:

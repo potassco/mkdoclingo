@@ -68,6 +68,48 @@ def test_get_encodings_context_with_ignored_content(render_context: Callable[[st
     assert len(encoding_info.blocks) == 4
 
 
+def test_get_encodings_context_with_unsupported_directives(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that unsupported directives still appear in the encoding code blocks."""
+
+    source = """
+    #const n=3.
+    #external p(X) : q(X).
+    r(X) :- q(X).
+    """
+
+    context = render_context(source)
+
+    assert len(context.encodings.entries) == 1
+    encoding_info = context.encodings.entries[0]
+    assert len(encoding_info.blocks) == 1
+    assert encoding_info.blocks[0].content.splitlines() == [
+        "#const n=3.",
+        "#external p(X) : q(X).",
+        "r(X) :- q(X).",
+    ]
+
+
+def test_get_encodings_context_with_include_and_show(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that includes render as code and shows remain part of the code block."""
+
+    source = """
+    #include "parts/base.lp".
+    p(X) :- q(X).
+    #show p/1.
+    """
+
+    context = render_context(source)
+
+    assert len(context.encodings.entries) == 1
+    encoding_info = context.encodings.entries[0]
+    assert len(encoding_info.blocks) == 1
+    assert encoding_info.blocks[0].content.splitlines() == [
+        '#include "parts/base.lp".',
+        "p(X) :- q(X).",
+        "#show p/1.",
+    ]
+
+
 @pytest.mark.parametrize(
     ("repo_url", "file_path", "expected_url"),
     [

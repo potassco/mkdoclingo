@@ -5,7 +5,12 @@ from enum import Enum, auto
 from urllib.parse import urljoin
 
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
-from mkdocstrings_handlers.asp._internal.domain import BlockComment, Document, LineComment, Statement
+from mkdocstrings_handlers.asp._internal.domain import (
+    Document,
+    Include,
+    LocatedContent,
+    Statement,
+)
 
 
 class BlockType(Enum):
@@ -62,7 +67,9 @@ def get_encoding_context(documents: list[Document], options: ASPOptions) -> Enco
     encodings = []
 
     for document in documents:
-        ordered_elements: list[Statement | LineComment | BlockComment] = list(document.statements)
+        ordered_elements: list[LocatedContent] = list(document.includes)
+
+        ordered_elements.extend(document.statements)
 
         ordered_elements.extend(document.block_comments)
 
@@ -86,7 +93,7 @@ def get_encoding_context(documents: list[Document], options: ASPOptions) -> Enco
         current_block_type = BlockType.MARKDOWN
 
         for element in ordered_elements:
-            if isinstance(element, Statement):
+            if isinstance(element, (Statement, Include)):
                 if current_block_type != BlockType.CODE:
                     if current_block_content:
                         encoding.blocks.append(

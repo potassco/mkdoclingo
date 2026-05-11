@@ -47,6 +47,27 @@ def test_get_encodings_context_with_comments(render_context: Callable[[str], Ren
     assert len(encoding_info.blocks) == 4
 
 
+def test_get_encodings_context_with_ignored_content(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that the encodings context is built correctly with ignored content."""
+
+    source = """
+    % rules
+    output_pred(X) :- shown_input_pred(X).
+    % % This should be ignored
+    internal_calc(X) :- hidden_input_pred(X).
+    % show statements
+    #show output_pred/1.
+    #show shown_input_pred/1.
+    """
+
+    context = render_context(source)
+
+    assert len(context.encodings.entries) == 1
+    encoding_info = context.encodings.entries[0]
+    assert encoding_info.source.splitlines() == source.splitlines()
+    assert len(encoding_info.blocks) == 4
+
+
 @pytest.mark.parametrize(
     ("repo_url", "file_path", "expected_url"),
     [

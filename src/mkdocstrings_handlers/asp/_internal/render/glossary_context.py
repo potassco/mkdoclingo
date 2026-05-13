@@ -1,9 +1,16 @@
 """This module defines the glossary context for rendering."""
 
 from dataclasses import dataclass, field
+from os.path import commonpath, dirname, relpath
+
+from pygments import highlight
+from pygments.formatters.html import HtmlFormatter
+from pygments.lexers import get_lexer_by_name
 
 from mkdocstrings_handlers.asp._internal.domain import ShowStatus
 from mkdocstrings_handlers.asp._internal.render.predicate_info import PredicateInfo
+
+LEXER = get_lexer_by_name("clingo")
 
 
 @dataclass
@@ -16,6 +23,7 @@ class GlossaryReference:
     """ The content of the line where the reference is found. """
     is_providing: bool
     """ Whether this reference is a definition (providing) or just a usage (not providing). """
+    html_content: str = ""
 
 
 @dataclass
@@ -60,8 +68,12 @@ def _add_reference_to_map(
     if path not in file_row_map:
         file_row_map[path] = {}
 
+    formatter = HtmlFormatter(nowrap=True, hl_lines=[1] if is_providing else [])
     if row not in file_row_map[path]:
-        file_row_map[path][row] = GlossaryReference(row=row, content=content, is_providing=is_providing)
+        highlighted = highlight(content, LEXER, formatter)
+        file_row_map[path][row] = GlossaryReference(
+            row=row, content=content, is_providing=is_providing, html_content=highlighted
+        )
 
 
 def get_glossary_context(predicates: list[PredicateInfo]) -> GlossaryContext:
@@ -74,6 +86,17 @@ def get_glossary_context(predicates: list[PredicateInfo]) -> GlossaryContext:
     Returns:
         The constructed GlossaryContext.
     """
+    unique_paths = {d.path for p in predicates for d in p.definitions}
+    unique_paths.update(r.path for p in predicates for r in p.references)
+
+    all_raw_paths = list(unique_paths)
+
+    project_root = ""
+    if len(all_raw_paths) > 1:
+        project_root = commonpath(all_raw_paths)
+    elif len(all_raw_paths) == 1:
+        project_root = dirname(all_raw_paths[0])
+
     result: list[GlossaryPredicate] = []
 
     for predicate in predicates:
@@ -90,7 +113,9 @@ def get_glossary_context(predicates: list[PredicateInfo]) -> GlossaryContext:
             references = list(row_map.values())
             references.sort(key=lambda ref: ref.row)
 
-            file_references.append(FileReference(path=path, references=references))
+            display_path = relpath(path, project_root).replace("\\", "/")
+
+            file_references.append(FileReference(path=display_path, references=references))
 
         file_references.sort(key=lambda file: file.path)
 

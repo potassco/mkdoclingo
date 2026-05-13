@@ -36,6 +36,11 @@ class PredicateInfo:
 
     signature: str
     """ The signature of the predicate, e.g., "parent/2". """
+    summary: str = ""
+    """ A short summary of the predicate.
+
+    This is the first line of the description, up to the first period.
+    """
     description: str = ""
     """ The description of the predicate. """
     arguments: list[ArgumentInfo] = field(default_factory=list)
@@ -131,6 +136,7 @@ def get_predicate_infos(documents: list[Document], options: ASPOptions) -> list[
         for documentation in document.predicate_documentations:
             predicate_info = get_info(documentation.signature)
 
+            predicate_info.summary = documentation.description.split(".")[0] if documentation.description else ""
             predicate_info.description = documentation.description
             predicate_info.arguments = [
                 ArgumentInfo(

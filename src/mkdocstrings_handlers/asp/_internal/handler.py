@@ -85,7 +85,10 @@ class ASPHandler(BaseHandler):
             The collected data as a dictionary.
         """
 
-        return load_documents([Path(identifier)])
+        document_paths = options.extra_includes
+        document_paths.append(Path(identifier))
+
+        return load_documents(document_paths)
 
     def render(self, data: list[Document], options: ASPOptions, **_kwargs: Any) -> str:
         """

@@ -32,6 +32,7 @@ def test_load_from_file(tmp_path: Path) -> None:
     assert len(document.block_comments) == 0
     assert len(document.predicate_documentations) == 1
     assert len(document.shows) == 2
+    assert [show.content for show in document.shows] == ["#show q/1.", "#show p(1,2)."]
     assert document.shows[0].status == ShowStatus.EXPLICIT
     assert document.shows[1].status == ShowStatus.PARTIAL
 
@@ -52,6 +53,25 @@ def test_load_from_file_empty(tmp_path: Path) -> None:
     assert len(document.line_comments) == 0
     assert len(document.block_comments) == 0
     assert len(document.predicate_documentations) == 0
+
+
+def test_load_from_file_with_unsupported_directives(tmp_path: Path) -> None:
+    """Test that unsupported directives are preserved as bare statements."""
+
+    file_path = tmp_path / "directives.lp"
+    file_content = "#const n=3.\n#external p(X) : q(X).\nr(X) :- q(X).\n"
+    file_path.write_text(file_content, encoding="utf-8")
+
+    document = load_document(file_path)
+
+    assert [statement.content for statement in document.statements] == [
+        "#const n=3.",
+        "#external p(X) : q(X).",
+        "r(X) :- q(X).",
+    ]
+    assert len(document.statements) == 3
+    assert len(document.statements[2].provided_predicates) == 1
+    assert len(document.statements[2].needed_predicates) == 1
 
 
 def test_load_from_files(tmp_path: Path) -> None:
@@ -90,6 +110,7 @@ def test_load_from_files(tmp_path: Path) -> None:
     assert len(document.line_comments) == 2
     assert len(document.block_comments) == 1
     assert len(document.predicate_documentations) == 0
+    assert document.includes[0].content == '#include "includes/included_file.lp".'
     assert document.includes[0].path == included_file_path
 
     included_document = next(doc for doc in documents if doc.path == included_file_path)

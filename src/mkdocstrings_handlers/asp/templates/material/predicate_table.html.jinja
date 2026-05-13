@@ -26,7 +26,7 @@
           <td>
             <a href="#{{ predicate_id }}"><code>{{ predicate.signature }}</code></a>
           </td>
-          <td>{{ predicate.description | convert_markdown(5, html_id) }}</td>
+          <td>{{ predicate.summary | convert_markdown(5, html_id) }}</td>
           <td style="padding-top: 0; padding-bottom: 0;">
             {{ input_icon_map[predicate.is_input] }} {{ show_icon_map[predicate.show_status] }}
           </td>

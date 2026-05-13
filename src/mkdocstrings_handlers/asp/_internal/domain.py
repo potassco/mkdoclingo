@@ -8,7 +8,17 @@ from pathlib import Path
 
 
 @dataclass
-class Include:
+class LocatedContent:
+    """Source content tracked with its row in the file."""
+
+    row: int
+    """ The row in the source file where the fragment is located. """
+    content: str
+    """ The original content of the fragment. """
+
+
+@dataclass
+class Include(LocatedContent):
     """An include directive in an ASP document."""
 
     path: Path
@@ -31,7 +41,7 @@ class ShowStatus(IntFlag):
 
 
 @dataclass
-class Show:
+class Show(LocatedContent):
     """A show directive in an ASP document."""
 
     predicate: Predicate | None
@@ -66,33 +76,19 @@ class Predicate:
 
 
 @dataclass
-class LineComment:
+class LineComment(LocatedContent):
     """A line comment in an ASP program."""
 
-    row: int
-    """ The row in the source file where the comment is located."""
-    content: str
-    """ The content of the line comment."""
-
 
 @dataclass
-class BlockComment:
+class BlockComment(LocatedContent):
     """A block comment in an ASP program."""
 
-    row: int
-    """ The row in the source file where the comment starts."""
-    content: str
-    """ The content of the block comment."""
-
 
 @dataclass
-class Statement:
+class Statement(LocatedContent):
     """A statement in an ASP program."""
 
-    row: int
-    """The row in the source file where the statement is located."""
-    content: str
-    """The content of the statement."""
     provided_predicates: list[Predicate]
     """The predicates provided by the statement."""
     needed_predicates: list[Predicate]
@@ -110,13 +106,9 @@ class ArgumentDocumentation:
 
 
 @dataclass
-class PredicateDocumentation:
+class PredicateDocumentation(LocatedContent):
     """Documentation for a predicate."""
 
-    row: int
-    """ The row in the source file where the documentation is located. """
-    content: str
-    """ The entire content of the documentation. """
     signature: str
     """ The signature of the predicate being documented. """
     description: str

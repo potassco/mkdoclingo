@@ -5,6 +5,7 @@ from collections import deque
 from pathlib import Path
 
 from mkdocstrings_handlers.asp._internal.collect.extractors import (
+    extract_bare_statement,
     extract_block_comment,
     extract_include,
     extract_line_comment,
@@ -84,5 +85,8 @@ def load_document(file_path: Path) -> Document:
             case NodeKind.DOC_COMMENT:
                 predicate_documentation = extract_predicate_documentation(node)
                 document.predicate_documentations.append(predicate_documentation)
+            case _:
+                statement = extract_bare_statement(node)
+                document.statements.append(statement)
 
     return document

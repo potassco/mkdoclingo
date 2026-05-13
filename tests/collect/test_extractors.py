@@ -10,11 +10,12 @@ from tree_sitter import Node, Tree
 
 from mkdocstrings_handlers.asp._internal.collect.extractors import (
     extract_argument_documentation,
+    extract_bare_statement,
     extract_block_comment,
     extract_include,
     extract_line_comment,
-    extract_predicate,
     extract_predicate_documentation,
+    extract_predicates,
     extract_show,
     extract_statement,
     get_capture_text,
@@ -104,6 +105,8 @@ def test_extract_include(tmp_path: Path, parse_to_tree: Callable[[str], Tree]) -
 
     include = extract_include(include_node, parent_file_path=parent_file)
 
+    assert include.row == 0
+    assert include.content == source
     assert include.path == included_file
 
 
@@ -119,11 +122,11 @@ def test_extract_predicate(parse_to_tree: Callable[[str], Tree]) -> None:
     literal_node = rule_node.child(0)
     assert literal_node is not None
 
-    predicate = extract_predicate(literal_node)
+    predicates = extract_predicates(literal_node)
 
-    assert predicate.identifier == "p"
-    assert predicate.arity == 5
-    assert predicate.negation is False
+    assert predicates[0].identifier == "p"
+    assert predicates[0].arity == 5
+    assert predicates[0].negation is False
 
 
 def test_extract_predicate_without_terms(parse_to_tree: Callable[[str], Tree]) -> None:
@@ -137,11 +140,33 @@ def test_extract_predicate_without_terms(parse_to_tree: Callable[[str], Tree]) -
 
     literal_node = rule_node.child(0)
     assert literal_node is not None
-    predicate = extract_predicate(literal_node)
+    predicates = extract_predicates(literal_node)
 
-    assert predicate.identifier == "p"
-    assert predicate.arity == 0
-    assert predicate.negation is False
+    assert predicates[0].identifier == "p"
+    assert predicates[0].arity == 0
+    assert predicates[0].negation is False
+
+
+def test_extract_predicate_with_pool(parse_to_tree: Callable[[str], Tree]) -> None:
+    """Test extracting a Predicate with a pool of terms from a literal node."""
+
+    source = "p(a,b;c,d,e)."
+    tree = parse_to_tree(source)
+
+    rule_node = tree.root_node.child(0)
+    assert rule_node is not None
+
+    literal_node = rule_node.child(0)
+    assert literal_node is not None
+    predicate = extract_predicates(literal_node)
+
+    assert predicate[0].identifier == "p"
+    assert predicate[0].arity == 2
+    assert predicate[0].negation is False
+
+    assert predicate[1].identifier == "p"
+    assert predicate[1].arity == 3
+    assert predicate[1].negation is False
 
 
 def test_extract_predicate_negative(parse_to_tree: Callable[[str], Tree]) -> None:
@@ -154,11 +179,11 @@ def test_extract_predicate_negative(parse_to_tree: Callable[[str], Tree]) -> Non
 
     literal_node = rule_node.child(0)
     assert literal_node is not None
-    predicate = extract_predicate(literal_node)
+    predicates = extract_predicates(literal_node)
 
-    assert predicate.identifier == "p"
-    assert predicate.arity == 2
-    assert predicate.negation is True
+    assert predicates[0].identifier == "p"
+    assert predicates[0].arity == 2
+    assert predicates[0].negation is True
 
 
 def test_extract_predicate_from_body_literal(parse_to_tree: Callable[[str], Tree]) -> None:
@@ -175,11 +200,11 @@ def test_extract_predicate_from_body_literal(parse_to_tree: Callable[[str], Tree
     literal_node = body_node.child(0)
     assert literal_node is not None
 
-    predicate = extract_predicate(literal_node)
+    predicates = extract_predicates(literal_node)
 
-    assert predicate.identifier == "q"
-    assert predicate.arity == 2
-    assert predicate.negation is True
+    assert predicates[0].identifier == "q"
+    assert predicates[0].arity == 2
+    assert predicates[0].negation is True
 
 
 def test_extract_line_comment(parse_to_tree: Callable[[str], Tree]) -> None:
@@ -220,6 +245,8 @@ def test_extract_show_empty(parse_to_tree: Callable[[str], Tree]) -> None:
 
     show = extract_show(show_node)
 
+    assert show.row == 0
+    assert show.content == source
     assert show.predicate is None
     assert show.status == ShowStatus.EXPLICIT
 
@@ -234,6 +261,8 @@ def test_extract_show_signature(parse_to_tree: Callable[[str], Tree]) -> None:
 
     show = extract_show(show_node)
 
+    assert show.row == 0
+    assert show.content == source
     assert show.predicate is not None
     assert show.predicate.identifier == "p"
     assert show.predicate.arity == 2
@@ -250,6 +279,8 @@ def test_extract_show_term_function(parse_to_tree: Callable[[str], Tree]) -> Non
 
     show = extract_show(show_node)
 
+    assert show.row == 0
+    assert show.content == source
     assert show.predicate is not None
     assert show.predicate.identifier == "p"
     assert show.predicate.arity == 2
@@ -430,6 +461,22 @@ def test_extract_statement_with_comparison(parse_to_tree: Callable[[str], Tree])
     assert statement.content == source
     assert len(statement.provided_predicates) == 0
     assert len(statement.needed_predicates) == 2
+
+
+def test_extract_bare_statement_for_unsupported_directive(parse_to_tree: Callable[[str], Tree]) -> None:
+    """Test extracting a bare Statement from an unsupported directive."""
+
+    source = "#external p(X) : q(X)."
+    tree = parse_to_tree(source)
+    directive_node = tree.root_node.child(0)
+    assert directive_node is not None
+
+    statement = extract_bare_statement(directive_node)
+
+    assert statement.row == 0
+    assert statement.content == source
+    assert len(statement.provided_predicates) == 0
+    assert len(statement.needed_predicates) == 0
 
 
 def test_extract_argument_documentation(parse_to_tree: Callable[[str], Tree]) -> None:

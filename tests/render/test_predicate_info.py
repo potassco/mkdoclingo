@@ -115,3 +115,20 @@ def test_get_predicate_info_filter_hidden(render_context: Callable[[str], Render
     context.options.predicate_info.include_hidden = False
 
     assert len(context.glossary.predicates) == 2
+
+
+def test_get_predicate_info_with_pools(render_context: Callable[[str], RenderContext]) -> None:
+    """Test that predicates with pools are handled correctly."""
+
+    context = render_context(
+        """
+    some_predicate(a,b;c,d,e).
+    """
+    )
+
+    context.options.predicate_info.include_hidden = True
+
+    predicate_info = context._predicates[0]
+    assert predicate_info.signature == "some_predicate/2"
+    predicate_info = context._predicates[1]
+    assert predicate_info.signature == "some_predicate/3"

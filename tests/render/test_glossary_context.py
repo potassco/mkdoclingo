@@ -54,3 +54,24 @@ def test_get_glossary_context_not_show_undocumented(render_context: Callable[[st
     context.options.predicate_info.include_undocumented = False
 
     assert len(context.glossary.predicates) == 0
+
+
+def test_get_glossary_context_predicate_in_multiple_files(
+    multi_file_render_context: Callable[[list[str]], RenderContext],
+) -> None:
+    """Test that predicates defined in multiple files are handled correctly."""
+
+    context = multi_file_render_context(
+        [
+            """
+            q(1).
+            """,
+            """
+            q(2).
+            """,
+        ]
+    )
+
+    assert len(context.glossary.predicates) == 1
+    assert context.glossary.predicates[0].files[0].path == "test_0.lp"
+    assert context.glossary.predicates[0].files[1].path == "test_1.lp"

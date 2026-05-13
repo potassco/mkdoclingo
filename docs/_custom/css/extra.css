@@ -3,19 +3,6 @@
     --md-primary-fg-color--light: #4378dc;
     --md-primary-fg-color--dark: #4378dc;
 
-}
-
-[data-md-color-scheme="slate"] {
-    --md-typeset-a-color: #4378dc;
-    --md-primary-fg-color: #253758;
-    --md-primary-fg-color--dark: #253758;
-}
-
-[data-md-color-scheme="default"] {
-    --md-primary-fg-color: #4378dc;
-    --md-primary-fg-color--light: #4378dc;
-    --md-primary-fg-color--dark: #4378dc;
-
     /* Code colors – light background */
     --md-code-hl-number-color: hsl(11, 80%, 40%);
     --md-code-hl-special-color: hsl(340, 75%, 45%);

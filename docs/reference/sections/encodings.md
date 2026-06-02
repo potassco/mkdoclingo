@@ -86,6 +86,7 @@ For each encoding, a section in the table of content will be created.
 
 The option `encodings` can be further customized with the following options:
 
+- `include_title` Boolean indicating if the section should be preceded by a header title which will be included in the table of contents. Defaults to True.
 - `source` Boolean indicating if the full source code should be included as a standalone code block. Defaults to False.
 - `git_link` Boolean indicating if a repository link should be added in the encoding title. Defaults to False (requires `repo_url`, usually taken from `mkdocs.yml`).
 

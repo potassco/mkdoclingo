@@ -1,14 +1,16 @@
 {% from 'icons.html.jinja' import show_icon_map, input_icon_map %}
-{% set toc_label %}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 4v4h6V8zm8 0v4h6V8zm-8 6v4h6v-4zm8 0v4h6v-4z">
-    </path>
-  </svg>
-  <span class="md-ellipsis" style="vertical-align: top;">Predicate Summary</span>
-{% endset %}
-{% filter heading(context.options.start_level+1, id="predicate_summary", toc_label=toc_label) %}
-  <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-table:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Predicate Summary</span>
-{% endfilter %}
+{% if context.options.predicate_table.include_title %}
+  {% set toc_label %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 4v4h6V8zm8 0v4h6V8zm-8 6v4h6v-4zm8 0v4h6v-4z">
+      </path>
+    </svg>
+    <span class="md-ellipsis" style="vertical-align: top;">Predicate Summary</span>
+  {% endset %}
+  {% filter heading(context.options.start_level+1, id="predicate_summary", toc_label=toc_label) %}
+    <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-table:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Predicate Summary</span>
+  {% endfilter %}
+{% endif %}
 {% set table = context.predicate_table %}
 {% if table.predicates %}
   <table>

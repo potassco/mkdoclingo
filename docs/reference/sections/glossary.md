@@ -34,6 +34,7 @@ Each predicate section includes the references for each file where the predicate
 
 The option `glossary` can be further customized with the following options:
 
+- `include_title` Boolean indicating if the section should be preceded by a header title which will be included in the table of contents. Defaults to True.
 - `include_references` Boolean indicating if each predicate documentations should include a section with the references. Defaults to True.
 - `include_navigation` Boolean indicating if each predicate should generate a navigation entry displayed in the menu. Defaults to True.
 

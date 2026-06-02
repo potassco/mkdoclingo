@@ -1,13 +1,15 @@
 {% from 'icons.html.jinja' import show_icon_map, input_icon_map %}
-{% set toc_label %}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <path d="M3 4h4v4H3zm6 1v2h12V5zm-6 5h4v4H3zm6 1v2h12v-2zm-6 5h4v4H3zm6 1v2h12v-2z"></path>
-  </svg>
-  <span class="md-ellipsis" style="vertical-align: top;">Glossary</span>
-{% endset %}
-{% filter heading(context.options.start_level+1, id="glossary", toc_label=toc_label) %}
-  <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Glossary</span>
-{% endfilter %}
+{% if context.options.glossary.include_title %}
+  {% set toc_label %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M3 4h4v4H3zm6 1v2h12V5zm-6 5h4v4H3zm6 1v2h12v-2zm-6 5h4v4H3zm6 1v2h12v-2z"></path>
+    </svg>
+    <span class="md-ellipsis" style="vertical-align: top;">Glossary</span>
+  {% endset %}
+  {% filter heading(context.options.start_level+1, id="glossary", toc_label=toc_label) %}
+    <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-format-list-bulleted-square:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Glossary</span>
+  {% endfilter %}
+{% endif %}
 {% for glossary_predicate in context.glossary.predicates %}
   {% set predicate = glossary_predicate.info %}
   {% set pred_sig %}

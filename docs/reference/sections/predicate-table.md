@@ -43,7 +43,10 @@ and the type indicates the following:
 
 ## Configuration options
 
-The option `predicate_table` currently supports only enabling/disabling the section.
+The option `predicate_table` can be further customized with the following options:
+
+- `include_title` Boolean indicating if the section should be preceded by a header title which will be included in the table of contents. Defaults to True.
+
 
 Predicate inclusion/exclusion (e.g. hidden or undocumented predicates) is configured globally via `predicate_info`.
 

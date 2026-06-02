@@ -13,8 +13,8 @@ and the type indicates the following:
 | Title                  | Icon                                                                 |
 |------------------------|----------------------------------------------------------------------|
 | Input (Not defined by any rule)                  | <span style="color:#9178C6; padding-top: 0; padding-bottom: 0;" title="Input" class="twemoji">:material-arrow-right-bold:</span> |
-| Shown Explicitly (using `predicate/arity`)      | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown Explicitly" class="twemoji">:material-eye:</span> |
-| Shown Partially (using a conditional statement)       | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown Partially" class="twemoji">:material-eye-plus:</span> |
+| Shown Explicitly (using `predicate/arity`)      | <span style="color:#A8AD00; padding-top: 0; padding-bottom: 0;" title="Shown Explicitly" class="twemoji">:material-eye:</span> |
+| Shown Partially (using a conditional statement)       | <span style="color:#A8AD00; padding-top: 0; padding-bottom: 0;" title="Shown Partially" class="twemoji">:material-eye-plus:</span> |
 | Hidden                 | <span style="color:#88888850; padding-top: 0; padding-bottom: 0;" title="Hidden" class="twemoji">:material-eye-off:</span> |
 
 

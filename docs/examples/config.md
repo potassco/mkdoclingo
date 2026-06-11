@@ -4,7 +4,7 @@ icon: material/motorbike
 
 # Product Configuration
 
-Documentation generated automatically, showcasing the use of `mkdoclingo` for a large project
+Documentation generated automatically, showcasing the use of `clindocs` for a large project
 where the documentation of predicates is in a separate file.
 
 !!! tip

@@ -9,5 +9,5 @@ icon: "material/wrench"
 ### Using `pip`
 
 ```console
-pip install mkdoclingo
+pip install clindocs
 ```

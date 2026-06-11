@@ -26,7 +26,7 @@ Consider the following sudoku encoding.
     #show sudoku/3.
 ```
 
-First you have to include the encoding in your mkdocs documentation using the `::: <path-to-file>` syntax provided by *mkdoclingo*. You must specify the `handler: asp` to indicate that it is an ASP encoding. You can also pass options to customize the rendering of the documentation. For example, to enable the glossary, predicate table and dependency graph, you can use the following configuration:
+First you have to include the encoding in your mkdocs documentation using the `::: <path-to-file>` syntax provided by *clindocs*. You must specify the `handler: asp` to indicate that it is an ASP encoding. You can also pass options to customize the rendering of the documentation. For example, to enable the glossary, predicate table and dependency graph, you can use the following configuration:
 
 ```markdown
 ::: examples/sudoku/encoding.lp
@@ -83,4 +83,4 @@ For the full format, please refer to [`reference/predicate-docs`](../reference/p
 
 **Predicate types**
 
-Automatically, *mkdoclingo* will identify input and output predicates based on their usage in the encoding. In this case, `initial/3` will be marked as an input predicate  since it is not in the encoding, and `sudoku/3` as an output predicate in the predicate documentation since it is shown. This is rendered in the [`reference/sections/glossary`](../reference/sections/glossary.md), the [`reference/sections/dependency-graph`](../reference/sections/dependency-graph.md) and the [`reference/sections/predicate-table`](../reference/sections/predicate-table.md).
+Automatically, *clindocs* will identify input and output predicates based on their usage in the encoding. In this case, `initial/3` will be marked as an input predicate  since it is not in the encoding, and `sudoku/3` as an output predicate in the predicate documentation since it is shown. This is rendered in the [`reference/sections/glossary`](../reference/sections/glossary.md), the [`reference/sections/dependency-graph`](../reference/sections/dependency-graph.md) and the [`reference/sections/predicate-table`](../reference/sections/predicate-table.md).

@@ -31,4 +31,4 @@ Your participation keeps our project thriving. Thank you for being part of our
 community!
 
 !!! info
-    *mkdoclingo* is part of the [Potassco](https://potassco.org) suite.
+    *clindocs* is part of the [Potassco](https://potassco.org) suite.

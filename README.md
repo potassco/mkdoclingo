@@ -16,4 +16,4 @@ the creation of high-quality documentation with the following features:
 - **Dependency graphs**: Visualize dependencies between predicates and files.
 
 For installation instructions and detailed usage, visit our
-[official documentation](https://potassco.org/clindocs/).
+[official documentation](https://potassco.org/clindocs/docs).

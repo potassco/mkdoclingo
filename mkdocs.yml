@@ -1,9 +1,10 @@
 site_name: clindocs
-site_url: https://potassco.org/systems/clindocs
-site_description:
+site_url: https://potassco.org/clindocs/docs
+site_description: Automated documentation tool for Answer Set Programming (ASP) code
 repo_name: potassco/clindocs
 repo_url: https://github.com/potassco/clindocs
-copyright: Copyright &copy; 2024 Potassco
+copyright: Copyright &copy; 2026 Potassco
+site_dir: site/docs
 
 extra_css:
   - _custom/css/extra.css

@@ -10,7 +10,7 @@ This means that any markdown code can be rendered, including sections, admonitio
 
 !!! note "Commented clingo code"
 
-    If a comment can be interpreted by clingo as a valid statement, it will be ignored.
+    If a comment starts with %% it will be treated as a comment in clingo and will not be rendered as markdown.
 
     === ":material-palette-outline: Output"
 
@@ -29,7 +29,7 @@ This means that any markdown code can be rendered, including sections, admonitio
 
         ```clingo
             % Will skip the next comment since it is parsable
-            % a:-b.
+            %% a:-b.
             %% This is also skipped since it is a comment in clingo
             c:-d,e.
             % The next line prints a line separator

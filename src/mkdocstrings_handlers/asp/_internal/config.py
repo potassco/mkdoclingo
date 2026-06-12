@@ -13,6 +13,8 @@ class FeatureConfig(BaseModel):
 
     enabled: bool = False
     """Whether this feature is enabled."""
+    include_title: bool = True
+    """Whether to include a title for this feature in the documentation."""
 
 
 class PredicateInfoConfig(FeatureConfig):

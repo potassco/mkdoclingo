@@ -1,8 +1,8 @@
-site_name: mkdoclingo
-site_url: https://potassco.org/systems/mkdoclingo
+site_name: clindocs
+site_url: https://potassco.org/systems/clindocs
 site_description:
-repo_name: potassco/mkdoclingo
-repo_url: https://github.com/potassco/mkdoclingo
+repo_name: potassco/clindocs
+repo_url: https://github.com/potassco/clindocs
 copyright: Copyright &copy; 2024 Potassco
 
 extra_css:
@@ -62,7 +62,7 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/potassco/mkdoclingo
+      link: https://github.com/potassco/clindocs
     - icon: potassco-logo
       link: https://potassco.org
   generator: false

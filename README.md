@@ -1,6 +1,6 @@
-# mkdoclingo
+# clindocs
 
-**mkdoclingo** is an automated documentation tool tailored for **Answer Set
+**clindocs** is an automated documentation tool tailored for **Answer Set
 Programming (ASP)** code. Built on [MkDocs](https://www.mkdocs.org/) and
 [mkdocs-material](https://squidfunk.github.io/mkdocs-material/), it streamlines
 the creation of high-quality documentation with the following features:
@@ -16,4 +16,4 @@ the creation of high-quality documentation with the following features:
 - **Dependency graphs**: Visualize dependencies between predicates and files.
 
 For installation instructions and detailed usage, visit our
-[official documentation](https://potassco.org/mkdoclingo/).
+[official documentation](https://potassco.org/clindocs/).

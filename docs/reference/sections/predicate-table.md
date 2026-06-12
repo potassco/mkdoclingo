@@ -13,8 +13,8 @@ and the type indicates the following:
 | Title                  | Icon                                                                 |
 |------------------------|----------------------------------------------------------------------|
 | Input (Not defined by any rule)                  | <span style="color:#9178C6; padding-top: 0; padding-bottom: 0;" title="Input" class="twemoji">:material-arrow-right-bold:</span> |
-| Shown Explicitly (using `predicate/arity`)      | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown Explicitly" class="twemoji">:material-eye:</span> |
-| Shown Partially (using a conditional statement)       | <span style="color:#52BF54; padding-top: 0; padding-bottom: 0;" title="Shown Partially" class="twemoji">:material-eye-plus:</span> |
+| Shown Explicitly (using `predicate/arity`)      | <span style="color:#A8AD00; padding-top: 0; padding-bottom: 0;" title="Shown Explicitly" class="twemoji">:material-eye:</span> |
+| Shown Partially (using a conditional statement)       | <span style="color:#A8AD00; padding-top: 0; padding-bottom: 0;" title="Shown Partially" class="twemoji">:material-eye-plus:</span> |
 | Hidden                 | <span style="color:#88888850; padding-top: 0; padding-bottom: 0;" title="Hidden" class="twemoji">:material-eye-off:</span> |
 
 
@@ -43,7 +43,10 @@ and the type indicates the following:
 
 ## Configuration options
 
-The option `predicate_table` currently supports only enabling/disabling the section.
+The option `predicate_table` can be further customized with the following options:
+
+- `include_title` Boolean indicating if the section should be preceded by a header title which will be included in the table of contents. Defaults to True.
+
 
 Predicate inclusion/exclusion (e.g. hidden or undocumented predicates) is configured globally via `predicate_info`.
 

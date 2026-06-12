@@ -10,7 +10,7 @@ This means that any markdown code can be rendered, including sections, admonitio
 
 !!! note "Commented clingo code"
 
-    If a comment can be interpreted by clingo as a valid statement, it will be ignored.
+    If a comment starts with %% it will be treated as a comment in clingo and will not be rendered as markdown.
 
     === ":material-palette-outline: Output"
 
@@ -29,7 +29,7 @@ This means that any markdown code can be rendered, including sections, admonitio
 
         ```clingo
             % Will skip the next comment since it is parsable
-            % a:-b.
+            %% a:-b.
             %% This is also skipped since it is a comment in clingo
             c:-d,e.
             % The next line prints a line separator
@@ -86,6 +86,7 @@ For each encoding, a section in the table of content will be created.
 
 The option `encodings` can be further customized with the following options:
 
+- `include_title` Boolean indicating if the section should be preceded by a header title which will be included in the table of contents. Defaults to True.
 - `source` Boolean indicating if the full source code should be included as a standalone code block. Defaults to False.
 - `git_link` Boolean indicating if a repository link should be added in the encoding title. Defaults to False (requires `repo_url`, usually taken from `mkdocs.yml`).
 

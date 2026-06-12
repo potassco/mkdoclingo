@@ -1,7 +1,7 @@
 # Getting started
 
 To use the extension just write the following code inside your documentation
-and *mkdoclingo* will render the corresponding documentation in that place.
+and *clindocs* will render the corresponding documentation in that place.
 
 !!! example
 
@@ -13,7 +13,7 @@ and *mkdoclingo* will render the corresponding documentation in that place.
     ```
 
 -  `relative-path-to-file.lp` is a relative path to an ASP encoding from the project root
--  `handler: asp` indicates that *mkdoclingo* will be used
+-  `handler: asp` indicates that *clindocs* will be used
 -  `options` customize each section that can be included.
 
 

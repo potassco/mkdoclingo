@@ -30,4 +30,6 @@ Generates a dependency graph between predicates. Input predicates are shown purp
 
 ## Configuration options
 
+- `include_title` Boolean indicating if the section should be preceded by a header title which will be included in the table of contents. Defaults to True.
+
 <!-- - `include-undocumented` Boolean indicating if predicates that have no docstring should be included. Defaults to True. -->

@@ -2,6 +2,7 @@
     * [Getting Started](use/index.md)
     * [Quick Start Guide](use/quick-start.md)
     * [Installation](use/installation.md)
+    * [Help](use/help.md)
 * Examples
     * [Examples](examples/index.md)
     * [Sudoku](examples/sudoku.md)
@@ -18,7 +19,6 @@
     * [Style](reference/style.md)
 * Community
     * [Community](community/index.md)
-    * [Help](community/help.md)
     * [Changes](community/CHANGES.md)
     * [Contributing](community/CONTRIBUTING.md)
     * [Development](community/DEVELOPMENT.md)

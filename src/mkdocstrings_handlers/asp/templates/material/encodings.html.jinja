@@ -1,13 +1,15 @@
-{% set toc_label %}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z">
-    </path>
-  </svg>
-  <span class="md-ellipsis" style="vertical-align: top;">Encodings</span>
-{% endset %}
-{% filter heading(context.options.start_level+1, id="encodings", toc_label=toc_label) %}
-  <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-file-code:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Encodings</span>
-{% endfilter %}
+{% if context.options.encodings.include_title %}
+  {% set toc_label %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z">
+      </path>
+    </svg>
+    <span class="md-ellipsis" style="vertical-align: top;">Encodings</span>
+  {% endset %}
+  {% filter heading(context.options.start_level+1, id="encodings", toc_label=toc_label) %}
+    <span class="md-icon" style="vertical-align: middle; display: inline-block">{{ ":material-file-code:"|convert_markdown(3) }}</span><span style="vertical-align: middle;">Encodings</span>
+  {% endfilter %}
+{% endif %}
 {% set git_logo %}
   <div class="md-source__icon md-icon git-logo">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">

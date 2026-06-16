@@ -39,6 +39,8 @@ class EncodingOptions(FeatureConfig):
 
     This requires a repository link to be set.
     """
+    include_path: bool = False
+    """ Whether to include the full path of the encoding in the section title. Defaults to False. """
 
 
 class GlossaryOptions(FeatureConfig):

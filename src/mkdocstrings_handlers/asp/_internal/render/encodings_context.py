@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from pathlib import PurePath, PureWindowsPath
 from urllib.parse import urljoin
 
 from mkdocstrings_handlers.asp._internal.config import ASPOptions
@@ -45,6 +46,10 @@ class EncodingInfo:
     blocks: list[EncodingBlock] = field(default_factory=list)
     """ The content split into blocks. """
 
+    @property
+    def name(self) -> str:
+        """The name of the encoding, derived from the path."""
+        return PurePath(self.path).name if PurePath(self.path).name != self.path else PureWindowsPath(self.path).name
 
 @dataclass
 class EncodingContext:

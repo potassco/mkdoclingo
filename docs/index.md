@@ -17,9 +17,3 @@ hide:
 
 !!! info
     *clindocs* is part of the [Potassco](https://potassco.org) suite.
-
-
-<!-- Potassco technologies logo -->
-<p align="center" style="margin-top: 80pt;">
-  <img src="assets/images/pt_rgb_green_digital.svg" alt="Logo" width="300" class="logo" />
-</p>

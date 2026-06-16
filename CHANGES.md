@@ -1,5 +1,9 @@
 # Changes
 
+## v1.5.2
+
+- Option to include_path in encoding section titles added, refer to the docs for details.
+
 ## v1.5.0
 
 - Name changed to clindocs

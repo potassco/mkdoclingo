@@ -133,3 +133,5 @@ def test_get_encodings_context_contains_repo_url(
     assert len(context.encodings.entries) == 1
     encoding_info = context.encodings.entries[0]
     assert encoding_info.repository_url == expected_url
+    print(encoding_info.name)
+    assert encoding_info.name == Path(file_path).name

@@ -30,4 +30,3 @@ explore the latest changes, or find support, we’ve got you covered.
 - **Development:** Dive into the technical details of how our system works.
 - **Deployment:** Get guidance on setting up and deploying the system in
   various environments.
-

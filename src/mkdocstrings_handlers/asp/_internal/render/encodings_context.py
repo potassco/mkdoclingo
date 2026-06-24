@@ -51,6 +51,7 @@ class EncodingInfo:
         """The name of the encoding, derived from the path."""
         return PurePath(self.path).name if PurePath(self.path).name != self.path else PureWindowsPath(self.path).name
 
+
 @dataclass
 class EncodingContext:
     """The encoding context containing all encoding infos."""
